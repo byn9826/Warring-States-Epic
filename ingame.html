@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-cmn">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="author" content="Baozier">
+		<title>Warring States Epic</title>
+		<link rel="stylesheet" type="text/css" href="public/general.css" >
+		<link rel="stylesheet" type="text/css" href="vendor/font-awesome/css/font-awesome.min.css" >
+    </head>
+	<body>
+		<script>
+			var data = {
+				state: [
+					{color: "darkred"},
+					{color: "darkred"},
+					{color: "darkred"},
+					{color: "darkred"},
+				],
+				city: [
+					{occupy: 3, army: [0]}
+				],
+			};
+		</script>
+		<div v-cloak id="app">
+		    <main>
+		    	<template v-for="(c, index) in getCitiesInfo()">
+		    		<city-info 
+		    			v-bind:definition="c" 
+		    			v-bind:data="city[index]"
+		    			v-bind:state="state[city[index].occupy]"
+		    		></city-info>
+		    	</template>
+		    </main>
+		    <div id="map"></div>
+		</div>
+		<script type="text/javascript" src="vendor/vue.js"></script>
+		<script type="text/javascript" src="source/definition/state.js"></script>
+		<script type="text/javascript" src="source/definition/city.js"></script>
+		<script type="text/javascript" src="source/component/city-info.js"></script>
+		<script type="text/javascript" src="source/epic.js"></script>
+	</body>
+</html>
