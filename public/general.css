@@ -17,6 +17,6 @@ main, #map{
 #map {
   background-image: url('../public/map.jpg');
   background-size: cover;
-  opacity: 0.5;
+  opacity: 0.6;
   z-index: -1;   
 }

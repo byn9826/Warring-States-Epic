@@ -12,14 +12,43 @@
 	<body>
 		<script>
 			var data = {
-				state: [
-					{color: "darkred"},
-					{color: "darkred"},
-					{color: "darkred"},
-					{color: "darkred"},
-				],
-				city: [
-					{occupy: 3, army: [0]}
+				cities: [
+					{occupy: 0, army: []},
+					{occupy: 0, army: []},
+					{occupy: 4, army: [0]},
+					{occupy: 0, army: []},
+					{occupy: 4, army: [4, 8]},
+					{occupy: 0, army: []},
+					{occupy: 0, army: []},
+					{occupy: 3, army: [3, 8]},
+					{occupy: 3, army: [0]},
+					{occupy: 0, army: []},
+					{occupy: 0, army: []},
+					{occupy: 7, army: [0]},
+					{occupy: 0, army: []},
+					{occupy: 0, army: []},
+					{occupy: 7, army: [7, 8]},
+					{occupy: 0, army: []},
+					{occupy: 0, army: []},
+					{occupy: 0, army: []},
+					{occupy: 6, army: [0]},
+					{occupy: 6, army: [6, 8]},
+					{occupy: 0, army: []},
+					{occupy: 1, army: [1, 8]},
+					{occupy: 0, army: []},
+					{occupy: 1, army: [0]},
+					{occupy: 0, army: []},
+					{occupy: 0, army: []},
+					{occupy: 0, army: []},
+					{occupy: 5, army: [0]},
+					{occupy: 5, army: [5, 8]},
+					{occupy: 0, army: []},
+					{occupy: 8, army: [0, 0]},
+					{occupy: 0, army: []},
+					{occupy: 0, army: []},
+					{occupy: 2, army: [2, 8]},
+					{occupy: 0, army: []},
+					{occupy: 2, army: [0]}
 				],
 			};
 		</script>
@@ -28,8 +57,8 @@
 		    	<template v-for="(c, index) in getCitiesInfo()">
 		    		<city-info 
 		    			v-bind:definition="c" 
-		    			v-bind:data="city[index]"
-		    			v-bind:state="state[city[index].occupy]"
+		    			v-bind:data="cities[index]"
+		    			v-bind:state="getStatesInfo()[cities[index].occupy]"
 		    		></city-info>
 		    	</template>
 		    </main>
@@ -38,6 +67,7 @@
 		<script type="text/javascript" src="vendor/vue.js"></script>
 		<script type="text/javascript" src="source/definition/state.js"></script>
 		<script type="text/javascript" src="source/definition/city.js"></script>
+		<script type="text/javascript" src="source/definition/army.js"></script>
 		<script type="text/javascript" src="source/component/city-info.js"></script>
 		<script type="text/javascript" src="source/epic.js"></script>
 	</body>

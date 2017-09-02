@@ -1,8 +1,7 @@
 var app = new Vue({
     el: '#app',
     data: {
-        state: data.state,
-        city: data.city
+        cities: data.cities
     },
     methods: {
 
