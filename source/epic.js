@@ -3,7 +3,8 @@ var app = new Vue({
     data: {
         cities: data.cities,
         player: data.player,
-        power: data.power
+        power: data.power,
+        hero: data.hero
     },
     computed: {
         statesInfo: function() {
@@ -24,18 +25,6 @@ var app = new Vue({
                 states[city.occupy].army = states[city.occupy].army.concat(city.army);
             }.bind(this));
             return states;
-            
-    
-            var total = 0;
-            this.cities.forEach(function(c) {
-                if (c.occupy === this.definition.code) {
-                    total += c.army.length;
-                }
-            }.bind(this));
-            return total;
-
-            
-            
         }
     }
 });

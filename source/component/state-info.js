@@ -1,5 +1,5 @@
 Vue.component("state-info", {
-    props: ["definition", "player", "data", "power"],
+    props: ["definition", "player", "data", "power", "hero"],
     template: `
         <div v-bind:style="cardStyle">
             <div v-bind:style="headerStyle">
@@ -18,10 +18,20 @@ Vue.component("state-info", {
                     </span>
                 </span>
             </div>
+            <div v-bind:style="strengthStyle">
+                <span v-bind:style="armyStyle">
+                    主将 {{getActiveHeroCount()}}/{{hero.length}}
+                </span>
+            </div>
         </div>
     `,
     methods: {
-        getArmyDetail() {
+        getActiveHeroCount: function () {
+            return this.hero.filter(function(value) {
+                return value !== 1;
+            }).length;
+        },
+        getArmyDetail: function () {
             var a = 0, b = 0, c = 0, d = 0;
             this.data.army.forEach(function(type) {
                 switch(type) {

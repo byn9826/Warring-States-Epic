@@ -14,6 +14,10 @@
 			var data = {
 				player: [0, 1, 1, 1, 1, 1, 2, 1, 0],
 				power: [0, 5, 5, 5, 5, 5, 5, 5, 0],
+				hero: [
+					[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1],
+					[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1],
+				],
 				cities: [
 					{code: 0, occupy: 0, army: []},
 					{code: 1, occupy: 0, army: []},
@@ -73,6 +77,7 @@
 			    		v-bind:player="player[index]===2"
 			    		v-bind:data="statesInfo[index]"
 			    		v-bind:power="power"
+			    		v-bind:hero="hero"
 			    	>
 			    	</state-info>
 		    	</template>
