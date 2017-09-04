@@ -1,5 +1,5 @@
 Vue.component("supply-info", {
-    props: ["data"],
+    props: ["data", "player"],
     template: `
         <div v-bind:style="cardStyle">
             <div v-for="(supply, i) in getSupplyInfo()" v-bind:style="supplyStyle">
@@ -29,11 +29,10 @@ Vue.component("supply-info", {
         getSupplyMatches: function(i) {
             var matches = "";
             this.data.forEach(function(d, index) {
-               if (d.supply === i && index !== 0) {
+               if (d.supply === i && this.player[index] === 1) {
                    matches += this.getStatesInfo()[index].name + " ";
                } 
             }.bind(this));
-            console.log(matches);
             return matches;
         }
     },

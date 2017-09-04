@@ -25,7 +25,7 @@ Vue.mixin({
                 {code: 20, name: "饶安", position: [720, 170], resource: [1], type: 2},
                 {code: 21, name: "临淄", position: [790, 220], resource: [0,1], type: 0},
                 {code: 22, name: "定陶", position: [705, 285], resource: [1], type: 2},
-                {code: 23, name: "琅琊", position: [810, 300], resource: [0], type: 2},
+                {code: 23, name: "莒", position: [810, 300], resource: [0], type: 2},
                 {code: 24, name: "即墨", position: [935, 220], resource: [0], type: 1},
                 {code: 25, name: "渑池", position: [380, 295], resource: [0], type: 2},
                 {code: 26, name: "商", position: [355, 385], resource: [1], type: 2},

@@ -14,7 +14,7 @@ Vue.component("state-info", {
                 <span v-bind:style="armyStyle">
                     兵力{{data.army.length}}
                     <span v-if="player">
-                        - {{getArmyDetail()}}
+                        {{"- " + getArmyDetail()}}
                     </span>
                 </span>
             </div>
@@ -49,10 +49,10 @@ Vue.component("state-info", {
                         break;
                 }
             }.bind(this));
-            return this.getArmyInfo()[0].name + " " + a + " " 
-                + this.getArmyInfo()[8].name + " " + b + " " 
-                + this.getArmyInfo()[9].name + " " + c + " "
-                + this.getArmyInfo()[this.definition.code].name + " " + d;
+            return this.getArmyInfo()[0].name + a + " " 
+                + this.getArmyInfo()[8].name + b + " " 
+                + this.getArmyInfo()[9].name + c + " "
+                + this.getArmyInfo()[this.definition.code].name + d;
         }
     },
     data: function() {

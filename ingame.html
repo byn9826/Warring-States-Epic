@@ -12,7 +12,10 @@
 	<body>
 		<script>
 			var data = {
-				player: [0, 1, 1, 1, 1, 1, 2, 1, 0],
+				active: 1,
+				round: 0,
+				stage: 0,
+				player: [0, 2, 1, 1, 1, 1, 1, 1, 0],
 				power: [0, 5, 5, 5, 5, 5, 5, 5, 0],
 				hero: [
 					[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1],
@@ -64,7 +67,13 @@
 			};
 		</script>
 		<div v-cloak id="app">
-		    <main>
+			<decision-board
+				v-bind:stage="stage" 
+				v-bind:player="player"
+				v-bind:active="active"
+				v-bind:state="statesInfo"
+			></decision-board>
+		    <main id="main">
 		    	<template v-for="(c, index) in getCitiesInfo()">
 		    		<city-info 
 		    			v-bind:definition="c" 
@@ -84,9 +93,13 @@
 						></rank-info>
 					</template>
 		    	</div>
-		    	<supply-info v-bind:data="statesInfo"></supply-info>
+		    	<supply-info 
+		    		v-bind:data="statesInfo"
+		    		v-bind:player="player"
+		    	></supply-info>
 		    </section>
-		    <aside>
+		    <aside id="aside">
+		    	<h4>回合: {{round + 1}}</h4>
 		    	<h4>战国七雄</h4>
 		    	<template v-for="(s, index) in getStatesInfo()" v-if="player[index]!==0">
 			    	<state-info
@@ -104,10 +117,13 @@
 		<script type="text/javascript" src="source/definition/state.js"></script>
 		<script type="text/javascript" src="source/definition/city.js"></script>
 		<script type="text/javascript" src="source/definition/army.js"></script>
+		<script type="text/javascript" src="source/definition/stage.js"></script>
 		<script type="text/javascript" src="source/component/city-info.js"></script>
 		<script type="text/javascript" src="source/component/state-info.js"></script>
 		<script type="text/javascript" src="source/component/rank-info.js"></script>
 		<script type="text/javascript" src="source/component/supply-info.js"></script>
+		<script type="text/javascript" src="source/ai/ally.js"></script>
+		<script type="text/javascript" src="source/component/decision-board.js"></script>
 		<script type="text/javascript" src="source/epic.js"></script>
 	</body>
 </html>

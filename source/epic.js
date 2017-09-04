@@ -5,7 +5,10 @@ var app = new Vue({
         player: data.player,
         power: data.power,
         hero: data.hero,
-        rank: data.rank
+        rank: data.rank,
+        round: data.round,
+        stage: data.stage,
+        active: data.active
     },
     computed: {
         statesInfo: function() {
@@ -14,6 +17,7 @@ var app = new Vue({
                 states[i] = {
                     capital: [],
                     city: [],
+                    occupy: [],
                     army: [],
                     supply: 0
                 }
@@ -24,6 +28,7 @@ var app = new Vue({
                 } else if (this.getCitiesInfo()[city.code].type === 1) {
                     states[city.occupy].city.push(city.code);
                 }
+                states[city.occupy].occupy.push(city.code);
                 states[city.occupy].army = states[city.occupy].army.concat(city.army);
                 this.getCitiesInfo()[city.code].resource.forEach(function(r) {
                     if (r === 1) {

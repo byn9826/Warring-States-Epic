@@ -5,7 +5,7 @@ body{
     margin: 0;
 }
 
-main, #map{
+#main, #map{
     width: 1136px;
     height: 680px;
     position: absolute;
@@ -38,7 +38,7 @@ main, #map{
     vertical-align: top;
 }
 
-aside{
+#aside{
     position: absolute;
     min-width: 210px;
     background-color: brown;
@@ -48,7 +48,10 @@ aside{
     right: 0px;
 }
 
-aside h4{
+#aside>:first-child{
+    border-bottom: 1px solid lightgrey;
+}
+#aside h4{
     text-align: center;
     color: white;
     font-size: 14px;
