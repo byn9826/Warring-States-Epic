@@ -5,7 +5,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="author" content="Baozier">
-		<title>Warring States Epic</title>
+		<title>战国史诗</title>
 		<link rel="stylesheet" type="text/css" href="public/general.css" >
 		<link rel="stylesheet" type="text/css" href="vendor/font-awesome/css/font-awesome.min.css" >
     </head>
@@ -17,6 +17,11 @@
 				hero: [
 					[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1],
 					[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1],
+				],
+				rank: [
+					[1, 2, 6, 7, 4, 3, 5],
+					[6, 4, 7, 5, 1, 2, 3],
+					[7, 4, 3, 2, 1, 6, 5]
 				],
 				cities: [
 					{code: 0, occupy: 0, army: []},
@@ -69,8 +74,20 @@
 		    	</template>
 		    </main>
 		    <div id="map"></div>
+		    <section id="rank">
+		    	<div id="rank-fame">
+		    		<template v-for="(r, index) in rank">
+						<rank-info
+							v-bind:data="r"
+							v-bind:type="index"
+							v-bind:player="player.indexOf(2)"
+						></rank-info>
+					</template>
+		    	</div>
+		    	<supply-info v-bind:data="statesInfo"></supply-info>
+		    </section>
 		    <aside>
-		    	<h4>States Info</h4>
+		    	<h4>战国七雄</h4>
 		    	<template v-for="(s, index) in getStatesInfo()" v-if="player[index]!==0">
 			    	<state-info
 			    		v-bind:definition="s"
@@ -89,6 +106,8 @@
 		<script type="text/javascript" src="source/definition/army.js"></script>
 		<script type="text/javascript" src="source/component/city-info.js"></script>
 		<script type="text/javascript" src="source/component/state-info.js"></script>
+		<script type="text/javascript" src="source/component/rank-info.js"></script>
+		<script type="text/javascript" src="source/component/supply-info.js"></script>
 		<script type="text/javascript" src="source/epic.js"></script>
 	</body>
 </html>

@@ -22,6 +22,22 @@ main, #map{
   z-index: -1;   
 }
 
+#rank{
+    left: 0;
+    top: 688px;
+    width: 1096px;
+    position: absolute;
+    background-color: lightgrey;
+    border-left: 4px solid darkslategrey;
+    border-right: 4px solid darkslategrey;
+    border-bottom: 4px solid darkslategrey;
+    padding: 20px;
+}
+#rank-fame{
+    display: inline-block;
+    vertical-align: top;
+}
+
 aside{
     position: absolute;
     min-width: 210px;

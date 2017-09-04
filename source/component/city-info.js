@@ -21,7 +21,7 @@ Vue.component("city-info", {
         return {
             cardStyle: {
                 position: "absolute",
-                width: "60px",
+                width: "65px",
                 backgroundColor: "lightgray",
                 left: this.definition.position[0] + "px",
                 top: this.definition.position[1] + "px",
@@ -46,7 +46,8 @@ Vue.component("city-info", {
                 height: "18px",
                 lineHeight: "18px",
                 textAlign: "center",
-                verticalAlign: "middle"
+                verticalAlign: "middle",
+                fontSize: "11px"
             },
             cityStyle: {
                 display: "block",
