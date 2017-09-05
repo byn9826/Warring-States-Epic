@@ -16,6 +16,9 @@
 				round: 0,
 				stage: 0,
 				player: [0, 2, 1, 1, 1, 1, 1, 1, 0],
+				allies: [
+					[1, 2], [7, 1], [6, 5]
+				],
 				power: [0, 5, 5, 5, 5, 5, 5, 5, 0],
 				hero: [
 					[1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1], [1, 1, 1, 1, 1, 1],
@@ -72,6 +75,7 @@
 				v-bind:player="player"
 				v-bind:active="active"
 				v-bind:state="statesInfo"
+				v-bind:total="playersTotal"
 			></decision-board>
 		    <main id="main">
 		    	<template v-for="(c, index) in getCitiesInfo()">

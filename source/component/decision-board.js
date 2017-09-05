@@ -1,51 +1,51 @@
 Vue.component("decision-board", {
-    props: ["stage", "active", "player", "state"],
+    props: ["stage", "active", "player", "state", "total"],
     template: `
         <div v-bind:style="cardStyle">
-            <header v-bind:style="roundStyle">{{getStageName(stage)}}</header>
+            <header v-bind:style="roundStyle">
+                {{getStageName(stage)}} 盟友:{{getAllyName}}
+            </header>
             <div v-bind:style="descStyle">请选择想要向其递交盟书的国家</div>
             <div v-bind:style="lineStyle">
                 <select v-model="allyState" v-bind:style="selectStyle">
                     <option disabled selected value="">-国家-</option>
-                    <option v-for="(s, i) in getStatesInfo()" v-bind:value="i" v-if="player[i]!==0 && player[i]!==2" key="i">
+                    <option 
+                        v-for="(s, i) in getStatesInfo()" v-bind:value="i"
+                        v-if="player[i]!==0 && player[i]!==2 && state[player.indexOf(2)].ally.indexOf(s.code) === -1" 
+                    >
                         {{s.name}}
                     </option>
                 </select>
-                <select v-model="allyLocation" v-if="allyState!==''" v-bind:style="selectStyle">
-                    <option disabled selected value="">选择需要援军的地区</option>
-                    <option v-for="(s, i) in state[allyState].occupy" key="i" v-bind:value="s">
-                        {{getCitiesInfo()[s].name}}
-                    </option>
-                </select>
-            </div>
-            <div v-bind:style="descStyle" v-if="allyLocation!==''">
-                用一点国力换取{{getStatesInfo()[allyState].name}}在{{getCitiesInfo()[allyLocation].name}}的援军
-            </div>
-            <div v-bind:style="lineStyle">
-                <input v-bind:style="buttonStyle" type="button" value="递交盟书" v-on:click="submitAlly()" />
+                <input 
+                    v-show="allyState!==''" v-bind:style="buttonStyle" 
+                    type="button" value="递交盟书" v-on:click="submitAlly()" 
+                />
             </div>
         </div>
     `,
     updated: function() {
-        console.log(this.allyLocation);
+        //console.log(this.playersTotal);
     },
-    watch:{
-        allyState: function() {
-            this.allyLocation = "";
-        }
+    computed: {
+        getAllyName: function() {
+            var allies = "";
+            this.state[this.player.indexOf(2)].ally.forEach(function(a) {
+                allies += " " + this.getStatesInfo()[a].name;
+            }.bind(this));
+            return allies;
+        }  
     },
     methods: {
         submitAlly: function() {
-            if (this.allyLocation === "") {
+            if (this.allyState === "") {
                 return false;
             }
-            console.log(this.AIacceptAllyOrNot());
+            this.AIacceptAllyOrNot(this.player.indexOf(2), this.allyState, this.state, this.total);
         }
     },
     data: function() {
         return {
             allyState: "",
-            allyLocation: "",
             cardStyle: {
                 position: "absolute",
                 left: "10px",

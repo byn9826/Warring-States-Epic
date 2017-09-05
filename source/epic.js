@@ -8,9 +8,19 @@ var app = new Vue({
         rank: data.rank,
         round: data.round,
         stage: data.stage,
-        active: data.active
+        active: data.active,
+        allies: data.allies
     },
     computed: {
+        playersTotal: function() {
+            var total = 1;
+            this.player.forEach(function(p) {
+               if (p === 1) {
+                   total += 1;
+               }
+            });
+            return total;
+        },
         statesInfo: function() {
             var states = [], i = 0;
             for (i; i < this.getStatesInfo().length; i++) {
@@ -19,9 +29,14 @@ var app = new Vue({
                     city: [],
                     occupy: [],
                     army: [],
-                    supply: 0
+                    supply: 0,
+                    ally: []
                 }
             }
+            this.allies.forEach(function(ally) {
+                states[ally[0]].ally.push(ally[1]);
+                states[ally[1]].ally.push(ally[0]);
+            }.bind(this));
             this.cities.forEach(function(city) {
                 if (this.getCitiesInfo()[city.code].type === 0) {
                     states[city.occupy].capital.push(city.code);
