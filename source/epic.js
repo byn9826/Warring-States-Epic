@@ -9,17 +9,14 @@ var app = new Vue({
         round: data.round,
         stage: data.stage,
         active: data.active,
-        allies: data.allies
+        allies: data.allies,
+        relations: data.relations
     },
     computed: {
         playersTotal: function() {
-            var total = 1;
-            this.player.forEach(function(p) {
-               if (p === 1) {
-                   total += 1;
-               }
-            });
-            return total;
+            return this.player.filter(function(p) {
+                return p !== 0;
+            }).length;
         },
         statesInfo: function() {
             var states = [], i = 0;

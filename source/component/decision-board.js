@@ -1,5 +1,5 @@
 Vue.component("decision-board", {
-    props: ["stage", "active", "player", "state", "total"],
+    props: ["stage", "active", "player", "state", "total", "relations"],
     template: `
         <div v-bind:style="cardStyle">
             <header v-bind:style="roundStyle">
@@ -40,7 +40,7 @@ Vue.component("decision-board", {
             if (this.allyState === "") {
                 return false;
             }
-            this.AIacceptAllyOrNot(this.player.indexOf(2), this.allyState, this.state, this.total);
+            this.AIacceptAllyOrNot(this.player.indexOf(2), this.allyState, this.state, this.total, this.relations);
         }
     },
     data: function() {
