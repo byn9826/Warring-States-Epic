@@ -13,5 +13,27 @@ Vue.mixin({
                 {code: 8, name: "周", color: "darkgrey"}
             ];
         },
+        getStatesAllies: function(state) {
+            if (state.ally.length === 0) {
+                return null;
+            }
+            var allies = "盟友: ";
+            state.ally.forEach(function(a) {
+                allies += " " + this.getStatesInfo()[a].name;
+            }.bind(this));
+            return allies;
+        },
+        getStatesSupply: function() {
+            return [
+                [2, 2],
+                [3, 2],
+                [3, 2, 2],
+                [3, 2, 2, 2],
+                [3, 3, 2, 2],
+                [4, 3, 2, 2],
+                [4, 3, 2, 2, 2],
+                [4, 3, 3, 2, 2]
+            ];
+        },
     }
 });

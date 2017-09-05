@@ -12,6 +12,12 @@ var app = new Vue({
         allies: data.allies,
         relations: data.relations
     },
+    created: function() {
+        console.log("current rank: ");
+        console.log(this.currentRank);
+        console.log("state data: ");
+        console.log(this.statesInfo);
+    },
     computed: {
         playersTotal: function() {
             return this.player.filter(function(p) {
@@ -27,7 +33,8 @@ var app = new Vue({
                     occupy: [],
                     army: [],
                     supply: 0,
-                    ally: []
+                    ally: [],
+                    code: i
                 }
             }
             this.allies.forEach(function(ally) {
@@ -49,6 +56,30 @@ var app = new Vue({
                 });
             }.bind(this));
             return states;
+        },
+        currentRank: function() {
+            var occupied = [];
+            this.statesInfo.forEach(function(state, index) {
+                if (this.player[index] !== 0) {
+                    occupied.push({
+                        cities: state.capital.length + state.city.length,
+                        code: state.code
+                    });
+                }
+            }.bind(this));
+            occupied.sort(function(a, b) {
+                if (b.cities - a.cities > 0) {
+                    return true;
+                } else if ((b.cities - a.cities) === 0) {
+                    if ((this.rank[0].indexOf(a.code) - this.rank[0].indexOf(b.code)) > 0) {
+                        return true;
+                    }
+                    return false;
+                } else {
+                    return false;
+                }
+            }.bind(this));
+            return occupied;
         }
     }
 });

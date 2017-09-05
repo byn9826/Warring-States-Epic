@@ -1,9 +1,9 @@
 Vue.component("decision-board", {
-    props: ["stage", "active", "player", "state", "total", "relations"],
+    props: ["stage", "active", "player", "state", "total", "relations", "rank"],
     template: `
         <div v-bind:style="cardStyle">
             <header v-bind:style="roundStyle">
-                {{getStageName(stage)}} 盟友:{{getAllyName}}
+                {{getStageName(stage)}} {{getStatesAllies(state[player.indexOf(2)])}}
             </header>
             <div v-bind:style="descStyle">请选择想要向其递交盟书的国家</div>
             <div v-bind:style="lineStyle">
@@ -23,24 +23,15 @@ Vue.component("decision-board", {
             </div>
         </div>
     `,
-    updated: function() {
-        //console.log(this.playersTotal);
-    },
-    computed: {
-        getAllyName: function() {
-            var allies = "";
-            this.state[this.player.indexOf(2)].ally.forEach(function(a) {
-                allies += " " + this.getStatesInfo()[a].name;
-            }.bind(this));
-            return allies;
-        }  
-    },
     methods: {
         submitAlly: function() {
             if (this.allyState === "") {
                 return false;
             }
-            this.AIacceptAllyOrNot(this.player.indexOf(2), this.allyState, this.state, this.total, this.relations);
+            var result = this.AIacceptAllyOrNot(
+                this.player.indexOf(2), this.allyState, this.state, this.total, this.relations, this.rank
+            );
+            console.log(result);
         }
     },
     data: function() {
@@ -86,7 +77,8 @@ Vue.component("decision-board", {
             buttonStyle: {
                 display: "inline-block",
                 verticalAlign: "middle",
-                cursor: "pointer"
+                cursor: "pointer",
+                fontSize: "11px"
             }
         }  
     },

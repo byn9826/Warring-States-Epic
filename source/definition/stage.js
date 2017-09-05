@@ -5,6 +5,6 @@ Vue.mixin({
                 case 0:
                     return "缔盟阶段";
             }
-        },
+        }
     }
 });

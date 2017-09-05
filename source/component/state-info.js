@@ -1,5 +1,5 @@
 Vue.component("state-info", {
-    props: ["definition", "player", "data", "power", "hero", "relations"],
+    props: ["definition", "player", "data", "power", "hero", "relations", "rank"],
     template: `
         <div v-bind:style="cardStyle">
             <div v-bind:style="headerStyle">
@@ -14,18 +14,33 @@ Vue.component("state-info", {
                 <span v-bind:style="armyStyle">
                     兵力{{data.army.length}}
                     <span v-if="player">
-                        {{"- " + getArmyDetail()}}
+                        {{"- " + getArmyDetail}}
                     </span>
                 </span>
             </div>
             <div v-bind:style="strengthStyle">
                 <span v-bind:style="armyStyle">
-                    主将 {{getActiveHeroCount()}}/{{hero.length}}
+                    主将 {{getActiveHeroCount}}/{{hero.length}}
+                </span>
+            </div>
+            <div v-bind:style="strengthStyle">
+                <span v-bind:style="armyStyle">
+                    排名 {{getCurrentRank}} {{getStatesAllies(data)}}
                 </span>
             </div>
         </div>
     `,
-    methods: {
+    computed: {
+        getCurrentRank: function() {
+            var rank, i = 0;
+            for (i; i < this.rank.length; i++) {
+                if (this.rank[i].code === this.definition.code) {
+                    rank = i;
+                    break;
+                }
+            }
+            return rank + 1;
+        },
         getActiveHeroCount: function () {
             return this.hero.filter(function(value) {
                 return value === 1;
@@ -57,7 +72,6 @@ Vue.component("state-info", {
     },
     data: function() {
         return {
-            control: [],
             cardStyle: {
                 display: "block",
                 padding: "3px",

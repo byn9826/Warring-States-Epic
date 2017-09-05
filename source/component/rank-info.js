@@ -3,39 +3,33 @@ Vue.component("rank-info", {
     template: `
         <div v-bind:style="cardStyle">
             <div v-bind:style="typeStyle">
-                <i v-bind:style="iconStyle" class="fa" v-bind:class="getRankIcon(type)" aria-hidden="true"></i>
-                <div v-bind:style="titleStyle">{{getRankName(type)}}</div>
+                <i v-bind:style="iconStyle" class="fa" v-bind:class="getRankIcon" aria-hidden="true"></i>
+                <div v-bind:style="titleStyle">{{getRankName}}</div>
             </div>
             <div v-for="d in data" v-bind:style="stateStyle">
                 <div v-bind:style="player!==d?nameStyle:activeStyle">{{getStatesInfo()[d].name}}</div>
             </div>
         </div>
     `,
-    methods: {
+    computed: {
         getRankName: function() {
             switch (this.type) {
                 case 0:
-                    return "霸权"
-                    break;
+                    return "霸权";
                 case 1:
-                    return "军威"
-                    break;
+                    return "军威";
                 case 2:
-                    return "言路"
-                    break;
+                    return "言路";
             }
         },
         getRankIcon: function() {
             switch (this.type) {
                 case 0:
-                    return "fa-certificate"
-                    break;
+                    return "fa-certificate";
                 case 1:
-                    return "fa-flag"
-                    break;
+                    return "fa-flag";
                 case 2:
-                    return "fa-user-circle"
-                    break;
+                    return "fa-user-circle";
             }
         },
     },
