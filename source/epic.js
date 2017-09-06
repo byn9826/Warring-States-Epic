@@ -8,15 +8,17 @@ var app = new Vue({
         rank: data.rank,
         round: data.round,
         stage: data.stage,
-        active: data.active,
         allies: data.allies,
         relations: data.relations
     },
     created: function() {
-        console.log("current rank: ");
-        console.log(this.currentRank);
-        console.log("state data: ");
-        console.log(this.statesInfo);
+        //console.log(this.currentRank);
+        //console.log(this.statesInfo);
+    },
+    methods: {
+        addNewAlly: function(request, target) {
+            this.allies.push([request, target]);
+        }
     },
     computed: {
         playersTotal: function() {

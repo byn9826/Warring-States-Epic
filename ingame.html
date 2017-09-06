@@ -12,12 +12,11 @@
 	<body>
 		<script>
 			var data = {
-				active: 1,
 				round: 0,
 				stage: 0,
-				player: [0, 2, 1, 1, 1, 1, 1, 1, 0],
+				player: [0, 1, 2, 1, 1, 1, 1, 1, 0],
 				allies: [
-					//[1, 2], [7, 1], [6, 5]
+					[1, 2], [7, 1], [6, 5]
 				],
 				relations: [
 					[],
@@ -89,13 +88,15 @@
 		</script>
 		<div v-cloak id="app">
 			<decision-board
+				v-bind:key="round + '' + stage"
 				v-bind:stage="stage" 
 				v-bind:player="player"
-				v-bind:active="active"
 				v-bind:state="statesInfo"
 				v-bind:total="playersTotal"
 				v-bind:relations="relations"
 				v-bind:rank="currentRank"
+				v-bind:orders="rank"
+				@addNewAlly="addNewAlly"
 			></decision-board>
 		    <main id="main">
 		    	<template v-for="(c, index) in getCitiesInfo()">

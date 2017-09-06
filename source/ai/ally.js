@@ -2,7 +2,7 @@ Vue.mixin({
     methods: {
         AIacceptAllyOrNot: function(request, receive, states, playerTotal, relations, rank) {
             var chance = this.acceptAllyRatio(request, receive, states, playerTotal, relations, rank);
-            chance = (Math.random() * 0.30 + 0.7) * chance * 1.5;
+            chance = (Math.random() * 0.30 + 0.7) * chance;
             dice = Math.random();
             if (chance >= dice) {
                 return true;
@@ -25,7 +25,7 @@ Vue.mixin({
             }
             //chance of accept ally based on rank
             var rankRatio = (requestRank + 1) / rank.length;
-            return relationRatio * alliesRatio * rankRatio;
+            return 0.5 * (relationRatio + rankRatio) * alliesRatio;
         }
     }
 });
