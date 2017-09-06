@@ -9,7 +9,8 @@ var app = new Vue({
         round: data.round,
         stage: data.stage,
         allies: data.allies,
-        relations: data.relations
+        relations: data.relations,
+        settings: data.settings
     },
     created: function() {
         //console.log(this.currentRank);

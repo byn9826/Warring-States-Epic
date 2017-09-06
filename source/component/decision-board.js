@@ -1,12 +1,12 @@
 Vue.component("decision-board", {
-    props: ["stage", "player", "state", "total", "relations", "rank", "orders", "addnewally"],
+    props: ["stage", "player", "state", "total", "relations", "rank", "orders", "settings", "addnewally"],
     template: `
         <div v-bind:style="cardStyle">
             <header v-bind:style="roundStyle">
                 {{getStageName(stage)}} 
             </header>
             <section v-if="stage === 0 && player[orders[0][active]] === 2">
-                <div v-bind:style="descStyle">现有{{getStatesAllies(state[activeState.code])}}</div>
+                <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
                 <div v-bind:style="descStyle">请选择想要递交盟书的国家</div>
                 <div v-bind:style="lineStyle">
                     <select v-model="allyTarget" v-bind:style="selectStyle">
@@ -33,7 +33,16 @@ Vue.component("decision-board", {
     computed: {
         activeState: function() {
             return this.getStatesInfo()[this.orders[0][this.active]];
-        }    
+        },
+        playerList: function() {
+            var list = [];
+            this.player.forEach(function(p, i) {
+                if (p !== 0) {
+                    list.push(i);
+                } 
+            });
+            return list;
+        }
     },
     created: function() {
         this.active = 0;  
@@ -42,23 +51,32 @@ Vue.component("decision-board", {
         active: function (newVal) {
             this.$nextTick(function () {
                 if (this.player[this.orders[0][newVal]] !== 2 && this.active < (this.orders[0].length - 1)) {
-                    this.allyTarget = 2;
-                    setTimeout(function () {
-                        var result;
-                        if (this.player[this.allyTarget] !== 2) {
-                            result = this.AIacceptAllyOrNot(
-                                this.orders[0][this.active], this.allyTarget, this.state, this.total, 
-                                this.relations, this.rank
-                            );
-                        } else {
-                            result = confirm(this.activeState.name + "国想与你结盟,是否同意?");
-                        }
-                        this.allyProcess(result);
-                    }.bind(this), 3000);
+                    this.allyTarget = this.AIrequestAllyOrNot(
+                        this.orders[0][this.active], this.state, this.total, this.relations, this.rank, 
+                        this.playerList
+                    );
+                    if (this.allyTarget !== "") {
+                        setTimeout(function () {
+                            var result;
+                            if (this.player[this.allyTarget] !== 2) {
+                                result = this.AIacceptAllyOrNot(
+                                    this.orders[0][this.active], this.allyTarget, this.state, this.total, 
+                                    this.relations, this.rank
+                                );
+                            } else {
+                                result = confirm(this.activeState.name + "国想与你结盟,是否同意?");
+                            }
+                            this.allyProcess(result);
+                        }.bind(this), this.settings.delay);
+                    } else {
+                        setTimeout(function () {
+                            this.info = this.activeState.name + "国选择不缔盟";
+                            this.active += 1;
+                        }.bind(this), this.settings.delay);
+                    }
                 } else {
                     this.allyTarget = "";
                 }
-              //now, DOM will have been updated.
             }.bind(this));
         }  
     },
@@ -136,6 +154,6 @@ Vue.component("decision-board", {
                 fontSize: "11px",
                 padding: "3px 0"
             }
-        }  
-    },
+        };
+    }
 });

@@ -12,11 +12,14 @@
 	<body>
 		<script>
 			var data = {
+				settings: {
+					delay: 1000	
+				},
 				round: 0,
 				stage: 0,
 				player: [0, 1, 2, 1, 1, 1, 1, 1, 0],
 				allies: [
-					[1, 2], [7, 1], [6, 5]
+					//[1, 2], [7, 1], [6, 5]
 				],
 				relations: [
 					[],
@@ -96,6 +99,7 @@
 				v-bind:relations="relations"
 				v-bind:rank="currentRank"
 				v-bind:orders="rank"
+				v-bind:settings="settings"
 				@addNewAlly="addNewAlly"
 			></decision-board>
 		    <main id="main">
