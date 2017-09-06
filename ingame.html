@@ -17,6 +17,7 @@
 				},
 				round: 0,
 				stage: 0,
+				history: [],
 				player: [0, 1, 2, 1, 1, 1, 1, 1, 0],
 				allies: [
 					//[1, 2], [7, 1], [6, 5]
@@ -101,6 +102,7 @@
 				v-bind:orders="rank"
 				v-bind:settings="settings"
 				@addNewAlly="addNewAlly"
+				@addNewHistory="addNewHistory"
 			></decision-board>
 		    <main id="main">
 		    	<template v-for="(c, index) in getCitiesInfo()">
@@ -129,7 +131,7 @@
 		    </section>
 		    <aside id="aside">
 		    	<h4>回合: {{round + 1}}</h4>
-		    	<h4>战国七雄</h4>
+		    	<h5>战国七雄</h5>
 		    	<template v-for="(s, index) in getStatesInfo()" v-if="player[index]!==0">
 			    	<state-info
 			    		v-bind:definition="s"
@@ -141,6 +143,13 @@
 			    	>
 			    	</state-info>
 		    	</template>
+		    	<h5>战国七雄</h5>
+		    	<div id="aside-history">
+		    		<section class="history-round" v-for="(h, i) in history">
+		    			<header>回合: {{i + 1}}</header>
+		    			<div v-for="r in h">{{r}}</div>
+		    		</section>
+		    	</div>
 		    </aside>
 		</div>
 		<script type="text/javascript" src="vendor/vue.js"></script>

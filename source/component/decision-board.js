@@ -1,5 +1,8 @@
 Vue.component("decision-board", {
-    props: ["stage", "player", "state", "total", "relations", "rank", "orders", "settings", "addnewally"],
+    props: [
+        "stage", "player", "state", "total", "relations", "rank", "orders", "settings", "addnewally",
+        "addnewhistory"
+    ],
     template: `
         <div v-bind:style="cardStyle">
             <header v-bind:style="roundStyle">
@@ -21,6 +24,10 @@ Vue.component("decision-board", {
                     <input 
                         v-show="allyTarget!==''" v-bind:style="buttonStyle" 
                         type="button" value="递交盟书" v-on:click="submitAlly()" 
+                    />
+                    <input 
+                        v-bind:style="buttonStyle" 
+                        type="button" value="不缔盟" v-on:click="skipAlly()" 
                     />
                 </div>
             </section>
@@ -50,7 +57,7 @@ Vue.component("decision-board", {
     watch: {
         active: function (newVal) {
             this.$nextTick(function () {
-                if (this.player[this.orders[0][newVal]] !== 2 && this.active < (this.orders[0].length - 1)) {
+                if (this.player[this.orders[0][newVal]] !== 2 && this.active < this.orders[0].length) {
                     this.allyTarget = this.AIrequestAllyOrNot(
                         this.orders[0][this.active], this.state, this.total, this.relations, this.rank, 
                         this.playerList
@@ -70,8 +77,7 @@ Vue.component("decision-board", {
                         }.bind(this), this.settings.delay);
                     } else {
                         setTimeout(function () {
-                            this.info = this.activeState.name + "国选择不缔盟";
-                            this.active += 1;
+                            this.skipAlly();
                         }.bind(this), this.settings.delay);
                     }
                 } else {
@@ -81,6 +87,12 @@ Vue.component("decision-board", {
         }  
     },
     methods: {
+        skipAlly: function() {
+            this.info = this.activeState.name + "国选择不缔盟";
+            if (this.active < (this.playerList.length - 1)) {
+                this.active += 1; 
+            }
+        },
         submitAlly: function() {
             if (this.allyTarget === "") {
                 return false;
@@ -93,11 +105,14 @@ Vue.component("decision-board", {
         allyProcess: function(result) {
             if (result) {
                 this.info = this.getStatesInfo()[this.allyTarget].name + this.activeState.name + "两国结成同盟";
+                this.$emit("addnewhistory", this.info);
                 this.$emit("addnewally", this.orders[0][this.active], this.allyTarget);
             } else {
-                this.info = this.getStatesInfo()[this.allyTarget].name + "国拒绝与" + this.activeState.name + "国的同盟";
+                this.info = this.getStatesInfo()[this.allyTarget].name + "国拒绝与" + this.activeState.name + "国缔盟";
             }
-            this.active += 1;
+            if (this.active < (this.playerList.length - 1)) {
+                this.active += 1; 
+            }
         },
     },
     data: function() {

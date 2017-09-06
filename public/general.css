@@ -5,6 +5,20 @@ body{
     margin: 0;
 }
 
+h4{
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}
+
+h5{
+    font-size: 12px;
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}
+
 #main, #map{
     width: 1136px;
     height: 680px;
@@ -51,13 +65,28 @@ body{
 #aside>:first-child{
     border-bottom: 1px solid lightgrey;
 }
-#aside h4{
+
+#aside h4, h5{
     text-align: center;
     color: white;
-    font-size: 14px;
-    font-weight: normal;
     background-color: black;
     display: block;
     padding: 5px 0;
-    margin: 0;
 }
+
+#aside-history{
+    display: block;
+    background-color: beige;
+    width: 100%;
+    height: 73px;
+    border-bottom: 4px solid darkslategrey;
+    overflow-y: scroll;
+}
+
+.history-round{
+    font-size: 11px;
+    display: block;
+    text-align: center;
+    border-bottom-style: ridge;
+}
+

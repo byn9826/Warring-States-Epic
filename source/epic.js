@@ -10,7 +10,8 @@ var app = new Vue({
         stage: data.stage,
         allies: data.allies,
         relations: data.relations,
-        settings: data.settings
+        settings: data.settings,
+        history: data.history
     },
     created: function() {
         //console.log(this.currentRank);
@@ -19,6 +20,9 @@ var app = new Vue({
     methods: {
         addNewAlly: function(request, target) {
             this.allies.push([request, target]);
+        },
+        addNewHistory: function(i) {
+            this.history[this.round]?this.history[this.round].push(i):this.history[this.round] = [i];
         }
     },
     computed: {
