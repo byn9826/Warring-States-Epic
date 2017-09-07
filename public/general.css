@@ -45,7 +45,7 @@ h5{
     border-left: 4px solid darkslategrey;
     border-right: 4px solid darkslategrey;
     border-bottom: 4px solid darkslategrey;
-    padding: 20px;
+    padding: 30px 20px;
 }
 
 #rank-fame{
@@ -84,7 +84,7 @@ h5{
     display: block;
     background-color: beige;
     width: 100%;
-    height: 73px;
+    height: 87px;
     border-bottom: 4px solid darkslategrey;
     overflow-y: scroll;
 }

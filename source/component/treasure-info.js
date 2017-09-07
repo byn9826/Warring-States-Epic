@@ -16,8 +16,6 @@ Vue.component("treasure-info", {
                     return "九鼎";
                 case 1:
                     return "干将";
-                case 2:
-                    return "张仪";
             }
         },
         getTreasureIcon: function() {
@@ -26,8 +24,6 @@ Vue.component("treasure-info", {
                     return "fa-bell";
                 case 1:
                     return "fa-tint";
-                case 2:
-                    return "fa-user";
             }
         },
     },

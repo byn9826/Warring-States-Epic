@@ -45,11 +45,8 @@
 					[1, 1, 1, 1, 1, 1],
 					[]
 				],
-				rank: [
-					[1, 2, 6, 7, 4, 3, 5],
-					[6, 4, 7, 5, 1, 2, 3]
-				],
-				treasure: 7,
+				fame: [1, 2, 6, 7, 4, 3, 5],
+				treasure: 2,
 				cities: [
 					{code: 0, occupy: 0, army: []},
 					{code: 1, occupy: 0, army: []},
@@ -96,10 +93,9 @@
 				v-bind:stage="stage" 
 				v-bind:player="player"
 				v-bind:state="statesInfo"
-				v-bind:total="playersTotal"
 				v-bind:relations="relations"
-				v-bind:rank="currentRank"
-				v-bind:orders="rank"
+				v-bind:rank="rank"
+				v-bind:orders="fame"
 				v-bind:settings="settings"
 				@addNewAlly="addNewAlly"
 				@removeAlly="removeAlly"
@@ -118,21 +114,16 @@
 		    <div id="map"></div>
 		    <section id="rank">
 		    	<div id="rank-fame">
-		    		<template v-for="(r, index) in rank">
-						<rank-info
-							v-bind:data="r"
-							v-bind:type="index"
-							v-bind:player="player.indexOf(2)"
-						></rank-info>
-					</template>
+					<fame-info
+						v-bind:data="fame"
+						v-bind:player="player.indexOf(2)"
+					></fame-info>
 					<div id="rank-treasure">
-						<template v-for="(r, index) in rank">
-							<treasure-info 
-								v-bind:occupy="getStatesInfo()[r[0]].name" v-bind:type="index">
-							</treasure-info>
-						</template>
 						<treasure-info 
-							v-bind:occupy="getStatesInfo()[treasure].name" v-bind:type="2">
+							v-bind:occupy="getStatesInfo()[fame[0]].name" v-bind:type="0">
+						</treasure-info>
+						<treasure-info 
+							v-bind:occupy="getStatesInfo()[treasure].name" v-bind:type="1">
 						</treasure-info>
 					</div>
 		    	</div>
@@ -151,7 +142,7 @@
 			    		v-bind:data="statesInfo[index]"
 			    		v-bind:power="power"
 			    		v-bind:hero="hero[index]"
-			    		v-bind:rank="currentRank"
+			    		v-bind:rank="rank"
 			    	>
 			    	</state-info>
 		    	</template>
@@ -171,7 +162,7 @@
 		<script type="text/javascript" src="source/definition/stage.js"></script>
 		<script type="text/javascript" src="source/component/city-info.js"></script>
 		<script type="text/javascript" src="source/component/state-info.js"></script>
-		<script type="text/javascript" src="source/component/rank-info.js"></script>
+		<script type="text/javascript" src="source/component/fame-info.js"></script>
 		<script type="text/javascript" src="source/component/supply-info.js"></script>
 		<script type="text/javascript" src="source/component/treasure-info.js"></script>
 		<script type="text/javascript" src="source/ai/ally.js"></script>

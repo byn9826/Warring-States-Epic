@@ -1,6 +1,6 @@
 Vue.component("decision-board", {
     props: [
-        "stage", "player", "state", "total", "relations", "rank", "orders", "settings", "addnewally",
+        "stage", "player", "state", "relations", "rank", "orders", "settings", "addnewally",
         "addnewhistory", "tonextstage", "removeally"
     ],
     template: `
@@ -8,7 +8,7 @@ Vue.component("decision-board", {
             <header v-bind:style="roundStyle">
                 {{getStageName(stage)}} 
             </header>
-            <section v-if="stage === 0 && player[orders[0][active]] === 2">
+            <section v-if="stage === 0 && player[orders[active]] === 2">
                 <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
                 <div v-bind:style="descStyle">请选择想要缔盟的国家</div>
                 <div v-bind:style="lineStyle">
@@ -31,10 +31,10 @@ Vue.component("decision-board", {
                     />
                 </div>
             </section>
-            <section v-else-if="stage === 0 && player[orders[0][active]] !== 2">
+            <section v-else-if="stage === 0 && player[orders[active]] !== 2">
                 <div v-bind:style="descStyle">{{activeState.name}}国正在进行缔盟 ...</div>
             </section>
-            <section v-if="stage === 1 && player[orders[0][active]] === 2">
+            <section v-if="stage === 1 && player[orders[active]] === 2">
                 <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
                 <div v-bind:style="descStyle">请选择想要毁约的国家</div>
                 <div v-bind:style="lineStyle">
@@ -56,7 +56,7 @@ Vue.component("decision-board", {
                     />
                 </div>
             </section>
-            <section v-else-if="stage === 1 && player[orders[0][active]] !== 2">
+            <section v-else-if="stage === 1 && player[orders[active]] !== 2">
                 <div v-bind:style="descStyle">{{activeState.name}}国正在密谋毁约 ...</div>
             </section>
             <div v-show="info" v-bind:style="infoStyle">{{info}}</div>
@@ -64,7 +64,7 @@ Vue.component("decision-board", {
     `,
     computed: {
         activeState: function() {
-            return this.getStatesInfo()[this.orders[0][this.active]];
+            return this.getStatesInfo()[this.orders[this.active]];
         },
         playerList: function() {
             var list = [];
@@ -87,10 +87,10 @@ Vue.component("decision-board", {
             this.$nextTick(function () {
                 if (this.stage === 0) {
                 //缔盟阶段
-                    if (this.player[this.orders[0][newVal]] !== 2 && this.active < this.orders[0].length) {
+                    if (this.player[this.orders[newVal]] !== 2 && this.active < this.orders.length) {
                     //AI流程
                         this.allyTarget = this.AIrequestAllyOrNot(
-                            this.activeState.code, this.state, this.total, this.relations, this.rank, 
+                            this.activeState.code, this.state, this.relations, this.rank, 
                             this.playerList
                         );
                         setTimeout(function () {
@@ -100,8 +100,7 @@ Vue.component("decision-board", {
                                 if (this.player[this.allyTarget] !== 2) {
                                 //缔盟目标为AI
                                     result = this.AIacceptAllyOrNot(
-                                        this.activeState.code, this.allyTarget, this.state, this.total, 
-                                        this.relations, this.rank
+                                        this.activeState.code, this.allyTarget, this.state, this.relations, this.rank
                                     );
                                 } else {
                                 //缔盟目标为玩家
@@ -121,7 +120,7 @@ Vue.component("decision-board", {
                     }
                 } else if (this.stage === 1) {
                 //毁约阶段
-                    if (this.player[this.orders[0][newVal]] !== 2 && this.active < this.orders[0].length) {
+                    if (this.player[this.orders[newVal]] !== 2 && this.active < this.orders.length) {
                     //AI流程
                         this.allyTarget = this.AIbreachAllyOrNot(
                             this.activeState.code, this.state[this.activeState.code].ally, this.state,
@@ -180,7 +179,7 @@ Vue.component("decision-board", {
                 return false;
             }
             var result = this.AIacceptAllyOrNot(
-                this.activeState.code, this.allyTarget, this.state, this.total, this.relations, this.rank
+                this.activeState.code, this.allyTarget, this.state, this.relations, this.rank
             );
             this.allyProcess(result);
         },

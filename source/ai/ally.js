@@ -1,6 +1,7 @@
 Vue.mixin({
     methods: {
-        AIacceptAllyOrNot: function(request, receive, states, playerTotal, relations, rank) {
+        AIacceptAllyOrNot: function(request, receive, states, relations, rank) {
+            var playerTotal = rank.length;
             var alliesTotal = states[receive].ally.length;
             var alliesRatio = (playerTotal - 1 - alliesTotal) / (playerTotal - 1);
             var relationRatio = (playerTotal - 1 - relations[receive].indexOf(request)) / (playerTotal - 1);
@@ -20,7 +21,8 @@ Vue.mixin({
             }
             return false;
         },
-        AIrequestAllyOrNot: function(active, states, playerTotal, relations, rank, players) {
+        AIrequestAllyOrNot: function(active, states, relations, rank, players) {
+            var playerTotal = rank.length;
             var alliesTotal = states[active].ally.length;
             var alliesRatio = (Math.random() * 0.1 + 0.9) * (playerTotal - 1 - alliesTotal) / (playerTotal - 1);
             var dice = Math.random();

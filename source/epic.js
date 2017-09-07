@@ -5,18 +5,16 @@ var app = new Vue({
         player: data.player,
         power: data.power,
         hero: data.hero,
-        rank: data.rank,
         round: data.round,
         stage: data.stage,
         allies: data.allies,
         relations: data.relations,
         settings: data.settings,
         history: data.history,
-        treasure: data.treasure
+        treasure: data.treasure,
+        fame: data.fame
     },
     created: function() {
-        //console.log(this.currentRank);
-        //console.log(this.statesInfo);
     },
     methods: {
         toNextStage: function() {
@@ -86,7 +84,7 @@ var app = new Vue({
             }.bind(this));
             return states;
         },
-        currentRank: function() {
+        rank: function() {
             var occupied = [];
             this.statesInfo.forEach(function(state, index) {
                 if (this.player[index] !== 0) {
@@ -100,7 +98,7 @@ var app = new Vue({
                 if (b.cities - a.cities > 0) {
                     return true;
                 } else if ((b.cities - a.cities) === 0) {
-                    if ((this.rank[0].indexOf(a.code) - this.rank[0].indexOf(b.code)) > 0) {
+                    if ((this.fame.indexOf(a.code) - this.fame.indexOf(b.code)) > 0) {
                         return true;
                     }
                     return false;

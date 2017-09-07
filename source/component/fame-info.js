@@ -1,39 +1,21 @@
-Vue.component("rank-info", {
-    props: ["data", "type", "player"],
+Vue.component("fame-info", {
+    props: ["data", "player"],
     template: `
         <div v-bind:style="cardStyle">
             <div v-bind:style="typeStyle">
-                <i v-bind:style="iconStyle" class="fa" v-bind:class="getRankIcon" aria-hidden="true"></i>
-                <div v-bind:style="titleStyle">{{getRankName}}</div>
+                <i v-bind:style="iconStyle" class="fa fa-certificate" aria-hidden="true"></i>
+                <div v-bind:style="titleStyle">霸业</div>
             </div>
             <div v-for="d in data" v-bind:style="stateStyle">
                 <div v-bind:style="player!==d?nameStyle:activeStyle">{{getStatesInfo()[d].name}}</div>
             </div>
         </div>
     `,
-    computed: {
-        getRankName: function() {
-            switch (this.type) {
-                case 0:
-                    return "霸权";
-                case 1:
-                    return "军威";
-            }
-        },
-        getRankIcon: function() {
-            switch (this.type) {
-                case 0:
-                    return "fa-certificate";
-                case 1:
-                    return "fa-flag";
-            }
-        },
-    },
     data: function() {
         return {
             cardStyle: {
                 display: "block",
-                marginBottom: this.type!==2?"5px":"0"
+                marginBottom: "5px"
             },
             typeStyle: {
                 display: "inline-block",
