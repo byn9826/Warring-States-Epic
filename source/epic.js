@@ -11,7 +11,8 @@ var app = new Vue({
         allies: data.allies,
         relations: data.relations,
         settings: data.settings,
-        history: data.history
+        history: data.history,
+        treasure: data.treasure
     },
     created: function() {
         //console.log(this.currentRank);

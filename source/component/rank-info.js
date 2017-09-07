@@ -18,8 +18,6 @@ Vue.component("rank-info", {
                     return "霸权";
                 case 1:
                     return "军威";
-                case 2:
-                    return "言路";
             }
         },
         getRankIcon: function() {
@@ -28,8 +26,6 @@ Vue.component("rank-info", {
                     return "fa-certificate";
                 case 1:
                     return "fa-flag";
-                case 2:
-                    return "fa-user-circle";
             }
         },
     },

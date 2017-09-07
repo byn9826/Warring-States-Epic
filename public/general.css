@@ -47,9 +47,15 @@ h5{
     border-bottom: 4px solid darkslategrey;
     padding: 20px;
 }
+
 #rank-fame{
     display: inline-block;
     vertical-align: top;
+}
+
+#rank-treasure{
+    display: block;
+    margin-top: 20px;
 }
 
 #aside{
