@@ -16,11 +16,11 @@
 					delay: 1000	
 				},
 				round: 0,
-				stage: 0,
+				stage: 1,
 				history: [],
-				player: [0, 1, 2, 1, 1, 1, 1, 1, 0],
+				player: [0, 2, 1, 1, 1, 1, 1, 1, 0],
 				allies: [
-					//[1, 2], [7, 1], [6, 5]
+					[1, 2], [7, 1], [6, 5]
 				],
 				relations: [
 					[],
@@ -92,7 +92,7 @@
 		</script>
 		<div v-cloak id="app">
 			<decision-board
-				v-bind:key="round + '' + stage"
+				v-bind:key="round"
 				v-bind:stage="stage" 
 				v-bind:player="player"
 				v-bind:state="statesInfo"
@@ -102,7 +102,9 @@
 				v-bind:orders="rank"
 				v-bind:settings="settings"
 				@addNewAlly="addNewAlly"
+				@removeAlly="removeAlly"
 				@addNewHistory="addNewHistory"
+				@toNextStage="toNextStage"
 			></decision-board>
 		    <main id="main">
 		    	<template v-for="(c, index) in getCitiesInfo()">
@@ -162,6 +164,7 @@
 		<script type="text/javascript" src="source/component/rank-info.js"></script>
 		<script type="text/javascript" src="source/component/supply-info.js"></script>
 		<script type="text/javascript" src="source/ai/ally.js"></script>
+		<script type="text/javascript" src="source/ai/breach.js"></script>
 		<script type="text/javascript" src="source/component/decision-board.js"></script>
 		<script type="text/javascript" src="source/epic.js"></script>
 	</body>

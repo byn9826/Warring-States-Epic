@@ -78,7 +78,7 @@ Vue.component("rank-info", {
             activeStyle: {
                 border: "1px solid lightgrey",
                 backgroundColor: this.getStatesInfo()[this.player].color,
-                color: "black",
+                color: "white",
                 minWidth: "20px",
                 height: "20px",
                 lineHeight: "20px",

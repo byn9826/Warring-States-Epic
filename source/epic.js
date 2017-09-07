@@ -18,8 +18,24 @@ var app = new Vue({
         //console.log(this.statesInfo);
     },
     methods: {
+        toNextStage: function() {
+            this.stage += 1;  
+        },
         addNewAlly: function(request, target) {
             this.allies.push([request, target]);
+        },
+        removeAlly: function(request, target) {
+            var i = 0, index;
+            for (i; i < this.allies.length; i++) {
+                if (
+                    (this.allies[i][0] === request && this.allies[i][1] === target) || 
+                    (this.allies[i][0] === target && this.allies[i][1] === request)
+                ) {
+                    index = i;
+                    break;
+                }
+            }
+            this.allies.splice(i, 1);
         },
         addNewHistory: function(i) {
             this.history[this.round]?this.history[this.round].push(i):this.history[this.round] = [i];
@@ -41,7 +57,8 @@ var app = new Vue({
                     army: [],
                     supply: 0,
                     ally: [],
-                    code: i
+                    code: i,
+                    nearby: []
                 }
             }
             this.allies.forEach(function(ally) {
@@ -56,6 +73,11 @@ var app = new Vue({
                 }
                 states[city.occupy].occupy.push(city.code);
                 states[city.occupy].army = states[city.occupy].army.concat(city.army);
+                states[city.occupy].nearby = [...new Set([...states[city.occupy].nearby ,...this.getCitiesInfo()[city.code].nearby])];
+                states[city.occupy].nearby = states[city.occupy].nearby.filter(function(a) {
+                    return this.cities[a].occupy !== city.occupy;
+                }.bind(this));
+                //states[city.occupy].nearby = states[city.occupy].nearby.concat(this.getCitiesInfo()[city.code].nearby);
                 this.getCitiesInfo()[city.code].resource.forEach(function(r) {
                     if (r === 1) {
                         states[city.occupy].supply += 1;
