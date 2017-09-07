@@ -77,7 +77,6 @@ var app = new Vue({
                 states[city.occupy].nearby = states[city.occupy].nearby.filter(function(a) {
                     return this.cities[a].occupy !== city.occupy;
                 }.bind(this));
-                //states[city.occupy].nearby = states[city.occupy].nearby.concat(this.getCitiesInfo()[city.code].nearby);
                 this.getCitiesInfo()[city.code].resource.forEach(function(r) {
                     if (r === 1) {
                         states[city.occupy].supply += 1;

@@ -41,7 +41,7 @@ Vue.component("decision-board", {
                     <select v-model="allyTarget" v-bind:style="selectStyle">
                         <option disabled selected value="">-国家-</option>
                         <option 
-                            v-for="(s, i) in state[activeState.code].ally" v-bind:value="s"
+                            v-for="(s, i) in state[activeState.code].ally" v-bind:value="s" 
                         >
                             {{getStatesInfo()[s].name}}
                         </option>
@@ -93,9 +93,9 @@ Vue.component("decision-board", {
                             this.activeState.code, this.state, this.total, this.relations, this.rank, 
                             this.playerList
                         );
-                        if (this.allyTarget !== "") {
-                        //AI选择递交盟书
-                            setTimeout(function () {
+                        setTimeout(function () {
+                            if (this.allyTarget !== "") {
+                            //AI选择递交盟书
                                 var result;
                                 if (this.player[this.allyTarget] !== 2) {
                                 //缔盟目标为AI
@@ -108,13 +108,13 @@ Vue.component("decision-board", {
                                     result = confirm(this.activeState.name + "国想与你结盟,是否同意?");
                                 }
                                 this.allyProcess(result);
-                            }.bind(this), this.settings.delay);
-                        } else {
-                        //AI选择不缔盟
-                            setTimeout(function () {
-                                this.skipAlly();
-                            }.bind(this), this.settings.delay);
-                        }
+                            } else {
+                            //AI选择不缔盟
+                                setTimeout(function () {
+                                    this.skipAlly();
+                                }.bind(this), this.settings.delay);
+                            }
+                        }.bind(this), this.settings.delay);
                     } else {
                     //玩家流程
                         this.allyTarget = "";
@@ -124,17 +124,18 @@ Vue.component("decision-board", {
                     if (this.player[this.orders[0][newVal]] !== 2 && this.active < this.orders[0].length) {
                     //AI流程
                         this.allyTarget = this.AIbreachAllyOrNot(
-                            this.state[this.activeState.code].ally
+                            this.activeState.code, this.state[this.activeState.code].ally, this.state,
+                            this.relations[this.activeState.code]
                         );
-                        console.log(this.allyTarget);
-                        if (this.allyTarget !== "") {
-                        //AI选择毁约
-                        } else {
-                        //AI选择不毁约
-                            setTimeout(function () {
+                        setTimeout(function () {
+                            if (this.allyTarget !== "") {
+                            //AI选择毁约
+                                this.submitBreach();
+                            } else {
+                            //AI选择不毁约
                                 this.skipBreach();
-                            }.bind(this), this.settings.delay);
-                        }
+                            }
+                        }.bind(this), this.settings.delay);
                     } else {
                     //玩家流程
                         this.allyTarget = "";
@@ -152,7 +153,11 @@ Vue.component("decision-board", {
             this.info = this.activeState.name + this.getStatesInfo()[this.allyTarget].name + "联盟瓦解";
             this.$emit("addnewhistory", this.info);
             this.$emit("removeally", this.activeState.code, this.allyTarget);
-            this.active += 1;
+            if (this.active < (this.playerList.length - 1)) {
+                this.active += 1;
+            } else {
+                this.$emit("tonextstage");
+            }
         },
         skipBreach: function() {
             this.info = this.activeState.name + "国选择不毁约";
@@ -230,7 +235,9 @@ Vue.component("decision-board", {
             },
             selectStyle: {
                 display: "inline-block",
-                verticalAlign: "middle"
+                verticalAlign: "middle",
+                fontSize: "12px",
+                padding: "3px 0"
             },
             lineStyle: {
                 display: "block",
