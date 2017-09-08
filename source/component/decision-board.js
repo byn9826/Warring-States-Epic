@@ -32,7 +32,8 @@ Vue.component("decision-board", {
                 </div>
             </section>
             <section v-else-if="stage === 0 && player[orders[active]] !== 2">
-                <div v-bind:style="descStyle">{{activeState.name}}国正在进行缔盟 ...</div>
+                <div v-bind:style="descStyle">{{activeState.name}}国正在议事 ...</div>
+                <div v-bind:style="flagStyle">{{getStateKingName(orders[active])}}行动中</div>
             </section>
             <section v-if="stage === 1 && player[orders[active]] === 2">
                 <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
@@ -57,7 +58,17 @@ Vue.component("decision-board", {
                 </div>
             </section>
             <section v-else-if="stage === 1 && player[orders[active]] !== 2">
-                <div v-bind:style="descStyle">{{activeState.name}}国正在密谋毁约 ...</div>
+                <div v-bind:style="descStyle">{{activeState.name}}国正在密谋 ...</div>
+                <div v-bind:style="flagStyle">{{getStateKingName(orders[active])}}行动中</div>
+            </section>
+            <section v-if="stage === 2 && player[orders[active]] === 2">
+                <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
+                <div v-bind:style="descStyle">请进行战略布局</div>
+                <div v-bind:style="lineStyle">
+                    <div v-for="city in state[this.activeState.code].occupy">
+                        {{getCitiesInfo()[city].name}}
+                    </div>
+                </div>
             </section>
             <div v-show="info" v-bind:style="infoStyle">{{info}}</div>
         </div>
@@ -65,15 +76,6 @@ Vue.component("decision-board", {
     computed: {
         activeState: function() {
             return this.getStatesInfo()[this.orders[this.active]];
-        },
-        playerList: function() {
-            var list = [];
-            this.player.forEach(function(p, i) {
-                if (p !== 0) {
-                    list.push(i);
-                } 
-            });
-            return list;
         }
     },
     created: function() {
@@ -88,59 +90,47 @@ Vue.component("decision-board", {
                 if (this.stage === 0) {
                 //缔盟阶段
                     if (this.player[this.orders[newVal]] !== 2 && this.active < this.orders.length) {
-                    //AI流程
                         this.allyTarget = this.AIrequestAllyOrNot(
-                            this.activeState.code, this.state, this.relations, this.rank, 
-                            this.playerList
+                            this.activeState.code, this.state, this.relations, this.rank
                         );
                         setTimeout(function () {
                             if (this.allyTarget !== "") {
-                            //AI选择递交盟书
                                 var result;
                                 if (this.player[this.allyTarget] !== 2) {
-                                //缔盟目标为AI
                                     result = this.AIacceptAllyOrNot(
                                         this.activeState.code, this.allyTarget, this.state, this.relations, this.rank
                                     );
                                 } else {
-                                //缔盟目标为玩家
                                     result = confirm(this.activeState.name + "国想与你结盟,是否同意?");
                                 }
                                 this.allyProcess(result);
                             } else {
-                            //AI选择不缔盟
                                 setTimeout(function () {
                                     this.skipAlly();
                                 }.bind(this), this.settings.delay);
                             }
                         }.bind(this), this.settings.delay);
                     } else {
-                    //玩家流程
                         this.allyTarget = "";
                     }
                 } else if (this.stage === 1) {
                 //毁约阶段
                     if (this.player[this.orders[newVal]] !== 2 && this.active < this.orders.length) {
-                    //AI流程
                         this.allyTarget = this.AIbreachAllyOrNot(
                             this.activeState.code, this.state[this.activeState.code].ally, this.state,
                             this.relations[this.activeState.code]
                         );
                         setTimeout(function () {
                             if (this.allyTarget !== "") {
-                            //AI选择毁约
                                 this.submitBreach();
                             } else {
-                            //AI选择不毁约
                                 this.skipBreach();
                             }
                         }.bind(this), this.settings.delay);
                     } else {
-                    //玩家流程
                         this.allyTarget = "";
                     }
                 }
-                
             }.bind(this));
         }  
     },
@@ -152,7 +142,7 @@ Vue.component("decision-board", {
             this.info = this.activeState.name + this.getStatesInfo()[this.allyTarget].name + "联盟瓦解";
             this.$emit("addnewhistory", this.info);
             this.$emit("removeally", this.activeState.code, this.allyTarget);
-            if (this.active < (this.playerList.length - 1)) {
+            if (this.active < (this.rank.length - 1)) {
                 this.active += 1;
             } else {
                 this.$emit("tonextstage");
@@ -160,7 +150,7 @@ Vue.component("decision-board", {
         },
         skipBreach: function() {
             this.info = this.activeState.name + "国选择不毁约";
-            if (this.active < (this.playerList.length - 1)) {
+            if (this.active < (this.rank.length - 1)) {
                 this.active += 1;
             } else {
                 this.$emit("tonextstage");
@@ -168,7 +158,7 @@ Vue.component("decision-board", {
         },
         skipAlly: function() {
             this.info = this.activeState.name + "国选择不缔盟";
-            if (this.active < (this.playerList.length - 1)) {
+            if (this.active < (this.rank.length - 1)) {
                 this.active += 1;
             } else {
                 this.$emit("tonextstage");
@@ -191,7 +181,7 @@ Vue.component("decision-board", {
             } else {
                 this.info = this.getStatesInfo()[this.allyTarget].name + "国拒绝与" + this.activeState.name + "国缔盟";
             }
-            if (this.active < (this.playerList.length - 1)) {
+            if (this.active < (this.rank.length - 1)) {
                 this.active += 1; 
             } else {
                 this.$emit("tonextstage");
@@ -231,6 +221,12 @@ Vue.component("decision-board", {
                 textAlign: "center",
                 color: "lightgrey",
                 marginBottom: "5px"
+            },
+            flagStyle: {
+                display: "block",
+                textAlign: "center",
+                fontSize: "12px",
+                height: "22px"
             },
             selectStyle: {
                 display: "inline-block",

@@ -41,11 +41,6 @@ var app = new Vue({
         }
     },
     computed: {
-        playersTotal: function() {
-            return this.player.filter(function(p) {
-                return p !== 0;
-            }).length;
-        },
         statesInfo: function() {
             var states = [], i = 0;
             for (i; i < this.getStatesInfo().length; i++) {

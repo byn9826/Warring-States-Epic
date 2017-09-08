@@ -6,6 +6,8 @@ Vue.mixin({
                     return "缔盟阶段";
                 case 1:
                     return "毁约阶段";
+                case 2:
+                    return "运筹阶段";
             }
         }
     }

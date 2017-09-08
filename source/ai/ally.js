@@ -21,7 +21,7 @@ Vue.mixin({
             }
             return false;
         },
-        AIrequestAllyOrNot: function(active, states, relations, rank, players) {
+        AIrequestAllyOrNot: function(active, states, relations, rank) {
             var playerTotal = rank.length;
             var alliesTotal = states[active].ally.length;
             var alliesRatio = (Math.random() * 0.1 + 0.9) * (playerTotal - 1 - alliesTotal) / (playerTotal - 1);
@@ -30,18 +30,18 @@ Vue.mixin({
                 return "";
             }
             var currentAllies = states[active].ally;
-            var targetAllies = players.filter(function(a) {
-                return currentAllies.indexOf(a) === -1 && a !== active;
+            var targetAllies = rank.filter(function(t) {
+                return currentAllies.indexOf(t.code) === -1 && t.code !== active;
             });
             var targetRatios = [];
             targetAllies.forEach(function(target) {
                 targetRatios.push(
-                    (players.length - 1 - relations[active].indexOf(target)) / (players.length - 1)
+                    (rank.length - 1 - relations[active].indexOf(target.code)) / (rank.length - 1)
                 );
             });
             rank.forEach(function(r, i) {
                 if (targetAllies.indexOf(r.code) !== -1) {
-                    targetRatios[targetAllies.indexOf(r.code)] *= (i + 1) / players.length;
+                    targetRatios[targetAllies.indexOf(r.code)] *= (i + 1) / rank.length;
                 }
             });
             var sum = targetRatios.reduce(function(a, b) {return a + b;}, 0);
@@ -56,7 +56,7 @@ Vue.mixin({
                     targetRatios[i] = targetRatios[i] / sum + targetRatios[i - 1];
                 }
                 if (targetRatios[i] >= chance) {
-                    target = targetAllies[i];
+                    target = targetAllies[i].code;
                     break;
                 }
             }
