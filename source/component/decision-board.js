@@ -67,8 +67,21 @@ Vue.component("decision-board", {
                 <div v-bind:style="lineStyle">
                     <div v-for="city in state[this.activeState.code].occupy" v-bind:style="occupyStyle">
                         <div>{{getCitiesInfo()[city].name}}</div>
-                        
+                        <select v-bind:style="optionStyle">
+                            <option selected value="">无指令</option>
+                            <option 
+                                v-for="order in getOrdersInfo()" v-bind:value="order.code" 
+                            >
+                                {{order.name}}
+                            </option>
+                        </select>
                     </div>
+                </div>
+                <div v-bind:style="descStyle">可用指令</div>
+                <div v-bind:style="lineStyle">
+                    <span v-for="order in getOrdersInfo()" v-bind:style="orderStyle">
+                        {{order.name}}
+                    </span>
                 </div>
             </section>
             <div v-show="info" v-bind:style="infoStyle">{{info}}</div>
@@ -263,8 +276,24 @@ Vue.component("decision-board", {
                 marginRight: "5px",
                 marginBottom: "5px",
                 border: "1px solid lightgrey",
+                padding: "1px",
+                textAlign: "center",
+                borderRadius: "3px"
+            },
+            orderStyle: {
+                display: "inline-block",
+                verticalAlign: "middle",
+                fontSize: "11px",
+                marginRight: "5px",
+                marginBottom: "5px",
+                border: "1px solid gold",
+                color: "gold",
                 padding: "3px",
                 borderRadius: "3px"
+            },
+            optionStyle: {
+                fontSize: "11px",
+                backgroundColor: "lightgrey"
             }
         };
     }

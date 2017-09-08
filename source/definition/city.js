@@ -12,7 +12,7 @@ Vue.mixin({
                 {code: 7, name: "蓟", position: [815, 45], resource: [0, 1], type: 0, nearby: [5, 6, 8]},
                 {code: 8, name: "辽西", position: [905, 25], resource: [1], type: 2, nearby: [7, 9]},
                 {code: 9, name: "辽东", position: [1030, 25], resource: [0], type: 2, nearby: [8]},
-                {code: 10, name: "陇西", position: [80, 285], resource: [], type: 1, nearby: [11, 14, 12]},
+                {code: 10, name: "陇西", position: [70, 305], resource: [], type: 1, nearby: [11, 14, 12]},
                 {code: 11, name: "义渠", position: [270, 145], resource: [0], type: 2, nearby: [0, 3, 15, 14, 10]},
                 {code: 12, name: "蜀", position: [100, 415], resource: [1, 1], type: 2, nearby: [10, 13, 14]},
                 {code: 13, name: "巴", position: [100, 515], resource: [1], type: 2, nearby: [12, 14, 31]},
