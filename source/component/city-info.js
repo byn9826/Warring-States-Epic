@@ -18,7 +18,8 @@ Vue.component("city-info", {
                     <span v-html="getCityResourceIcon(r)"></span>
                 </template>
             </div>
-            <div v-bind:style="cityStyle" v-html="getCityTypeName(definition.type)"></div>
+            <div v-bind:style="cityStyle" v-html="getCityTypeName(definition.type)">
+            </div>
         </div>
     `,
     computed: {

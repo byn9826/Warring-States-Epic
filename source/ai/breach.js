@@ -4,11 +4,9 @@ Vue.mixin({
             if (allies.length === 0) {
                 return "";
             }
-            var hate = [], i = 0, lapCount = 0, overlap = [];
-            for (i; i < allies.length; i++) {
-                hate[i] = 0;
-                overlap[i] = 0;
-            }
+            var lapCount = 0;
+            var hate = new Array(allies.length).fill(0);
+            var overlap = new Array(allies.length).fill(0);
             allies.forEach(function(ally, i) {
                 hate[i] += relation.indexOf(ally) * 1.5;
                 state[ally].occupy.forEach(function(occupy) {

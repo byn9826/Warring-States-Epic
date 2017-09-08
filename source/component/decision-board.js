@@ -2,6 +2,7 @@ Vue.component("decision-board", {
     props: [
         "stage", "player", "state", "relations", "rank", "orders", "settings", "addnewally",
         "addnewhistory", "tonextstage", "removeally", "increaserelation", "decreaserelation",
+        "updateorderofcities"
     ],
     template: `
         <div v-bind:style="cardStyle">
@@ -65,21 +66,32 @@ Vue.component("decision-board", {
                 <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
                 <div v-bind:style="descStyle">请进行战略布局</div>
                 <div v-bind:style="lineStyle">
-                    <div v-for="city in state[this.activeState.code].occupy" v-bind:style="occupyStyle">
+                    <div 
+                        v-for="(city, i) in state[activeState.code].occupy" 
+                        v-bind:style="occupyStyle"
+                    >
                         <div>{{getCitiesInfo()[city].name}}</div>
-                        <select v-bind:style="optionStyle">
+                        <select v-model="orderPlan[i]" v-bind:style="optionStyle">
                             <option selected value="">无指令</option>
                             <option 
-                                v-for="order in getOrdersInfo()" v-bind:value="order.code" 
+                                v-for="order in getOrdersInfo()" v-bind:value="order.code"
+                                v-show="orderPlan.indexOf(order.code)===-1"
                             >
                                 {{order.name}}
                             </option>
                         </select>
                     </div>
+                    <input 
+                        v-bind:style="buttonStyle" type="button" value="布局完毕" 
+                        v-on:click="submitPlan()"
+                    />
                 </div>
                 <div v-bind:style="descStyle">可用指令</div>
                 <div v-bind:style="lineStyle">
-                    <span v-for="order in getOrdersInfo()" v-bind:style="orderStyle">
+                    <span 
+                        v-for="order in getOrdersInfo()" 
+                        v-bind:style="orderPlan.indexOf(order.code)===-1?orderStyle:setStyle"
+                    >
                         {{order.name}}
                     </span>
                 </div>
@@ -91,6 +103,8 @@ Vue.component("decision-board", {
         activeState: function() {
             return this.getStatesInfo()[this.orders[this.active]];
         }
+    },
+    updated: function() { 
     },
     created: function() {
         this.active = 0;
@@ -144,11 +158,19 @@ Vue.component("decision-board", {
                     } else {
                         this.allyTarget = "";
                     }
+                } else if (this.stage === 2) {
+                //运筹阶段
+                    this.orderPlan = new Array(
+                        this.state[this.activeState.code].occupy.length
+                    ).fill("");
                 }
             }.bind(this));
         }  
     },
     methods: {
+        submitPlan: function() {
+            this.$emit("updateorderofcities", this.state[this.activeState.code].occupy, this.orderPlan);
+        },
         submitBreach: function() {
             if (this.allyTarget === "") {
                 return false;
@@ -212,6 +234,7 @@ Vue.component("decision-board", {
             active: null,
             info: null,
             allyTarget: "",
+            orderPlan: [],
             cardStyle: {
                 position: "absolute",
                 left: "10px",
@@ -291,10 +314,21 @@ Vue.component("decision-board", {
                 padding: "3px",
                 borderRadius: "3px"
             },
+            setStyle: {
+                display: "inline-block",
+                verticalAlign: "middle",
+                fontSize: "11px",
+                marginRight: "5px",
+                marginBottom: "5px",
+                border: "1px solid darkslategrey",
+                color: "darkslategrey",
+                padding: "3px",
+                borderRadius: "3px"
+            },
             optionStyle: {
                 fontSize: "11px",
                 backgroundColor: "lightgrey"
-            }
+            },
         };
     }
 });

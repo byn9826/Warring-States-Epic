@@ -1,5 +1,9 @@
 [v-cloak] { display:none; }
 
+[title] {
+    background-color: black;
+}
+
 body{
     padding: 0;
     margin: 0;
