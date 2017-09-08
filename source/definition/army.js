@@ -13,6 +13,6 @@ Vue.mixin({
                 {code: 8, name: "骑兵"},
                 {code: 9, name: "楼车"},
             ];
-        }
+        },
     }
 });

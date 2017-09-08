@@ -17,7 +17,7 @@ Vue.component("supply-info", {
         getSupplyMatches: function(i) {
             var matches = "";
             this.data.forEach(function(d, index) {
-               if (d.supply === i && this.player[index] === 1) {
+               if (d.supply === i && (this.player[index] === 1 || this.player[index] === 2)) {
                    matches += this.getStatesInfo()[index].name + " ";
                } 
             }.bind(this));
