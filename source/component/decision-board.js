@@ -1,7 +1,7 @@
 Vue.component("decision-board", {
     props: [
         "stage", "player", "state", "relations", "rank", "orders", "settings", "addnewally",
-        "addnewhistory", "tonextstage", "removeally"
+        "addnewhistory", "tonextstage", "removeally", "increaserelation", "decreaserelation",
     ],
     template: `
         <div v-bind:style="cardStyle">
@@ -65,8 +65,9 @@ Vue.component("decision-board", {
                 <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
                 <div v-bind:style="descStyle">请进行战略布局</div>
                 <div v-bind:style="lineStyle">
-                    <div v-for="city in state[this.activeState.code].occupy">
-                        {{getCitiesInfo()[city].name}}
+                    <div v-for="city in state[this.activeState.code].occupy" v-bind:style="occupyStyle">
+                        <div>{{getCitiesInfo()[city].name}}</div>
+                        
                     </div>
                 </div>
             </section>
@@ -142,6 +143,8 @@ Vue.component("decision-board", {
             this.info = this.activeState.name + this.getStatesInfo()[this.allyTarget].name + "联盟瓦解";
             this.$emit("addnewhistory", this.info);
             this.$emit("removeally", this.activeState.code, this.allyTarget);
+            this.$emit("decreaserelation", this.allyTarget, this.activeState.code, 2);
+            this.$emit("decreaserelation", this.activeState.code, this.allyTarget, 1);
             if (this.active < (this.rank.length - 1)) {
                 this.active += 1;
             } else {
@@ -178,8 +181,11 @@ Vue.component("decision-board", {
                 this.info = this.getStatesInfo()[this.allyTarget].name + this.activeState.name + "两国结成同盟";
                 this.$emit("addnewhistory", this.info);
                 this.$emit("addnewally", this.activeState.code, this.allyTarget);
+                this.$emit("increaserelation", this.activeState.code, this.allyTarget, 2);
+                this.$emit("increaserelation", this.allyTarget, this.activeState.code, 1);
             } else {
                 this.info = this.getStatesInfo()[this.allyTarget].name + "国拒绝与" + this.activeState.name + "国缔盟";
+                this.$emit("decreaserelation", this.activeState.code, this.allyTarget, 1);
             }
             if (this.active < (this.rank.length - 1)) {
                 this.active += 1; 
@@ -249,6 +255,16 @@ Vue.component("decision-board", {
                 borderTop: "1px dashed lightgrey",
                 fontSize: "11px",
                 padding: "3px 0"
+            },
+            occupyStyle: {
+                display: "inline-block",
+                verticalAlign: "middle",
+                fontSize: "11px",
+                marginRight: "5px",
+                marginBottom: "5px",
+                border: "1px solid lightgrey",
+                padding: "3px",
+                borderRadius: "3px"
             }
         };
     }

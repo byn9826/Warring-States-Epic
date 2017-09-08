@@ -14,8 +14,6 @@ var app = new Vue({
         treasure: data.treasure,
         fame: data.fame
     },
-    created: function() {
-    },
     methods: {
         toNextStage: function() {
             this.stage += 1;  
@@ -35,6 +33,24 @@ var app = new Vue({
                 }
             }
             this.allies.splice(i, 1);
+        },
+        increaseRelation: function(a, b, step) {
+            var current = this.relations[a].indexOf(b);
+            var increased = current - step;
+            if (increased < 0) {
+                increased = 0;
+            }
+            this.relations[a].splice(current, 1);
+            this.relations[a].splice(increased, 0, b);
+        },
+        decreaseRelation: function(a, b, step) {
+            var current = this.relations[a].indexOf(b);
+            var decreased = current + step;
+            if (decreased >= this.relations[a].length) {
+                decreased = this.relations[a].length -1;
+            }
+            this.relations[a].splice(current, 1);
+            this.relations[a].splice(decreased, 0, b);
         },
         addNewHistory: function(i) {
             this.history[this.round]?this.history[this.round].push(i):this.history[this.round] = [i];

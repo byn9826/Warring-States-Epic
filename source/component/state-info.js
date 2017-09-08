@@ -120,7 +120,7 @@ Vue.component("state-info", {
                 display: "inline-block",
                 verticalAlign: "middel",
                 color: "whitesmoke",
-                fontSize: "12px",
+                fontSize: "11px",
             },
         }  
     },
