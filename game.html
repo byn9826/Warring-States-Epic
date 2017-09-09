@@ -16,7 +16,7 @@
 					delay: 3000
 				},
 				round: 0,
-				stage: 0,
+				stage: 2,
 				history: [],
 				player: [0, 2, 1, 1, 1, 1, 1, 1, 0],
 				allies: [
@@ -108,11 +108,14 @@
 		    <main id="main">
 		    	<template v-for="(c, index) in getCitiesInfo()">
 		    		<city-info 
+		    			v-bind:definition="c" 
+		    		></city-info>
+		    		<occupy-info 
 		    			v-bind:player="player.indexOf(2)"
 		    			v-bind:definition="c" 
 		    			v-bind:data="cities[index]"
 		    			v-bind:state="getStatesInfo()[cities[index].occupy]"
-		    		></city-info>
+		    		></occupy-info>
 		    	</template>
 		    </main>
 		    <div id="map"></div>
@@ -167,6 +170,7 @@
 		<script type="text/javascript" src="source/definition/hero.js"></script>
 		<script type="text/javascript" src="source/definition/order.js"></script>
 		<script type="text/javascript" src="source/component/city-info.js"></script>
+		<script type="text/javascript" src="source/component/occupy-info.js"></script>
 		<script type="text/javascript" src="source/component/state-info.js"></script>
 		<script type="text/javascript" src="source/component/fame-info.js"></script>
 		<script type="text/javascript" src="source/component/supply-info.js"></script>

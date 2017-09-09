@@ -1,100 +1,39 @@
 Vue.component("city-info", {
-    props: ["definition", "data", "state", "player"],
+    props: ["definition"],
     template: `
         <div v-bind:style="cardStyle">
-            <div v-bind:style="armyStyle">
-                <span v-bind:style="nameStyle">{{definition.name}}</span>
-                <span v-bind:style="occupyStyle">{{state.name}}</span>
-                <span v-bind:style="orderStyle" v-if="getOrdersInfo()[data.order]">
-                    {{getOrdersInfo()[data.order].name}}
-                </span>
-            </div>
-            <div v-bind:style="armyStyle">
-                <span v-if="data.army.length!==0&&data.occupy!==player" class="fa fa-shield" aria-hidden="true">
-                    {{data.army.length}}
-                </span>
-                <span v-else-if="data.army.length!==0">
-                    &#9823;{{getPlayerArmyCount[0]}}&#9822;{{getPlayerArmyCount[1]}}
-                    &#9820;{{getPlayerArmyCount[2]}}&#9818;{{getPlayerArmyCount[3]}}
-                </span>
-                <template v-for="r in definition.resource">
-                    <span v-html="getCityResourceIcon(r)"></span>
-                </template>
-            </div>
+            <span v-bind:style="nameStyle">{{definition.name}}</span>
+            <span v-bind:style="resourceStyle" v-html="getCityResourceIcon(r)" v-for="r in definition.resource">
+            </span>
             <div v-bind:style="cityStyle" v-html="getCityTypeName(definition.type)">
             </div>
         </div>
     `,
-    computed: {
-        getPlayerArmyCount: function() {
-            var count = [0, 0, 0, 0];
-            this.data.army.forEach(function(type) {
-                switch (type) {
-                    case 0:
-                        count[0] += 1;
-                        break;
-                    case 8:
-                        count[1] += 1;
-                        break;  
-                    case 9:
-                        count[2] += 1;
-                        break;
-                    default:
-                        count[3] += 1;
-                        break;
-                }
-            })
-            return count;
-        }  
-    },
     data: function() {
         return {
             cardStyle: {
                 position: "absolute",
-                width: "72pt",
-                backgroundColor: "lightgray",
                 left: this.definition.position[0] + "pt",
                 top: this.definition.position[1] + "pt",
-                borderRadius: "3pt",
-                paddingTop: "2pt",
-                border: "1pt solid black",
                 textAlign: "center"
             },
-            armyStyle: {
-                display: "block",
-                fontSize: "9pt",
-            },
             nameStyle: {
-                fontWeight: "bold",
                 display: "inline-block",
                 verticalAlign: "middle",
+                fontSize: "15pt",
+                fontStyle: "italic",
+                color: "darkslategrey",
+                textShadow: "1pt 1pt lightgray"
             },
-            orderStyle: {
-                fontSize: "9pt",
-                padding: "2pt",
-                borderRadius: "5pt",
-                backgroundColor: "black",
-                color: "white",
+            resourceStyle: {
                 display: "inline-block",
                 verticalAlign: "middle",
-            },
-            occupyStyle: {
-                display: "inline-block",
-                verticalAlign: "middle",
-                backgroundColor: this.state.color,
-                borderRadius: "50%",
-                color: "white",
-                minWidth: "16pt",
-                height: "16pt",
-                lineHeight: "16pt",
-                textAlign: "center",
-                fontSize: "9pt"
+                fontSize: "12pt"
             },
             cityStyle: {
-                display: "block",
-                fontSize: "9pt",
-                backgroundColor: "darkgrey",
-                color: "white"
+                display: "inline-block",
+                verticalAlign: "middle",
+                fontSize: "14pt"
             }
         }  
     },

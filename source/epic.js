@@ -55,8 +55,8 @@ var app = new Vue({
         addNewHistory: function(i) {
             this.history[this.round]?this.history[this.round].push(i):this.history[this.round] = [i];
         },
-        updateOrderOfCities: function(cities, orders) {
-            cities.forEach(function(c, i) {
+        updateOrderOfCities: function(city, orders) {
+            city.forEach(function(c, i) {
                 this.cities[c].order = orders[i];
             }.bind(this));
         }

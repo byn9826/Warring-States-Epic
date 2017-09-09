@@ -14,5 +14,17 @@ Vue.mixin({
                 {code: 9, name: "楼车"},
             ];
         },
+        getArmyIcon: function(t) {
+            switch (t) {
+                case 0:
+                    return "&#9823;";
+                case 8:
+                    return "&#9822;";
+                case 9:
+                    return "&#9820;";
+                default:
+                    return "&#9818;";
+            }
+        }
     }
 });
