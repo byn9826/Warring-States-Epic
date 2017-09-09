@@ -32,11 +32,7 @@ Vue.component("decision-board", {
                     />
                 </div>
             </section>
-            <section v-else-if="stage === 0 && player[orders[active]] !== 2">
-                <div v-bind:style="descStyle">{{activeState.name}}国正在议事 ...</div>
-                <div v-bind:style="flagStyle">{{getStateKingName(orders[active])}}行动中</div>
-            </section>
-            <section v-if="stage === 1 && player[orders[active]] === 2">
+            <section v-else-if="stage === 1 && player[orders[active]] === 2">
                 <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
                 <div v-bind:style="descStyle">请选择想要毁约的国家</div>
                 <div v-bind:style="lineStyle">
@@ -58,11 +54,7 @@ Vue.component("decision-board", {
                     />
                 </div>
             </section>
-            <section v-else-if="stage === 1 && player[orders[active]] !== 2">
-                <div v-bind:style="descStyle">{{activeState.name}}国正在密谋 ...</div>
-                <div v-bind:style="flagStyle">{{getStateKingName(orders[active])}}行动中</div>
-            </section>
-            <section v-if="stage === 2 && player[orders[active]] === 2">
+            <section v-else-if="stage === 2 && player[orders[active]] === 2">
                 <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
                 <div v-bind:style="descStyle">请进行战略布局</div>
                 <div v-bind:style="lineStyle">
@@ -96,6 +88,10 @@ Vue.component("decision-board", {
                     </span>
                 </div>
             </section>
+            <section v-else>
+                <div v-bind:style="descStyle">{{activeState.name}}国正在{{getStageDescName(stage)}} ...</div>
+                <div v-bind:style="flagStyle">{{getStateKingName(orders[active])}}行动中</div>
+            </section>
             <div v-show="info" v-bind:style="infoStyle">{{info}}</div>
         </div>
     `,
@@ -103,8 +99,6 @@ Vue.component("decision-board", {
         activeState: function() {
             return this.getStatesInfo()[this.orders[this.active]];
         }
-    },
-    updated: function() { 
     },
     created: function() {
         this.active = 0;
@@ -176,6 +170,7 @@ Vue.component("decision-board", {
     },
     methods: {
         submitPlan: function() {
+            this.info = this.activeState.name + "国完成筹备"
             this.$emit("updateorderofcities", this.state[this.activeState.code].occupy, this.orderPlan);
             this.nextActive();
         },

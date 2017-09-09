@@ -9,6 +9,16 @@ Vue.mixin({
                 case 2:
                     return "运筹阶段";
             }
+        },
+        getStageDescName: function(i) {
+            switch(i) {
+                case 0:
+                    return "议事";
+                case 1:
+                    return "密谋";
+                case 2:
+                    return "筹备";
+            }
         }
     }
 });
