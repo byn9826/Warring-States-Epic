@@ -10,27 +10,27 @@ body{
 }
 
 h4{
-    font-size: 14px;
+    font-size: 12pt;
     margin: 0;
     padding: 0;
     font-weight: normal;
 }
 
 h5{
-    font-size: 12px;
+    font-size: 11pt;
     margin: 0;
     padding: 0;
     font-weight: normal;
 }
 
 #main, #map{
-    width: 1136px;
-    height: 680px;
+    width: 1136pt;
+    height: 680pt;
     position: absolute;
     top: 0;
     left: 0;
     z-index: 1;
-    border: 4px solid darkslategrey;
+    border: 4pt solid darkslategrey;
 }
 
 #map{
@@ -42,14 +42,14 @@ h5{
 
 #rank{
     left: 0;
-    top: 688px;
-    width: 1096px;
+    top: 688pt;
+    width: 1096pt;
     position: absolute;
     background-color: lightgrey;
-    border-left: 4px solid darkslategrey;
-    border-right: 4px solid darkslategrey;
-    border-bottom: 4px solid darkslategrey;
-    padding: 30px 20px;
+    border-left: 4pt solid darkslategrey;
+    border-right: 4pt solid darkslategrey;
+    border-bottom: 4pt solid darkslategrey;
+    padding: 15pt 20pt;
 }
 
 #rank-fame{
@@ -59,21 +59,20 @@ h5{
 
 #rank-treasure{
     display: block;
-    margin-top: 20px;
+    margin-top: 20pt;
 }
 
 #aside{
     position: absolute;
-    min-width: 210px;
+    width: 210pt;
     background-color: brown;
-    min-height: 688px;
-    left: 1144px;
+    min-height: 688pt;
+    left: 1144pt;
     top: 0;
-    right: 0px;
 }
 
 #aside>:first-child{
-    border-bottom: 1px solid lightgrey;
+    border-bottom: 1pt solid lightgrey;
 }
 
 #aside h4, h5{
@@ -81,20 +80,20 @@ h5{
     color: white;
     background-color: black;
     display: block;
-    padding: 5px 0;
+    padding: 5pt 0;
 }
 
 #aside-history{
     display: block;
     background-color: beige;
     width: 100%;
-    height: 72px;
-    border-bottom: 4px solid darkslategrey;
+    height: 151.5pt;
+    border-bottom: 4pt solid darkslategrey;
     overflow-y: scroll;
 }
 
 .history-round{
-    font-size: 11px;
+    font-size: 11pt;
     display: block;
     text-align: center;
     border-bottom-style: ridge;

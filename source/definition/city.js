@@ -3,7 +3,7 @@ Vue.mixin({
         getCitiesInfo: function() {
             return [
                 {code: 0, name: "云中", position: [370, 50], resource: [1], type: 2, nearby: [1, 3, 11]},
-                {code: 1, name: "雁门", position: [495, 90], resource: [1], type: 2, nearby: [0, 2, 3, 4]},
+                {code: 1, name: "雁门", position: [505, 90], resource: [1], type: 2, nearby: [0, 2, 3, 4]},
                 {code: 2, name: "代郡", position: [590, 120], resource: [0], type: 2, nearby: [1, 4, 5, 6]},
                 {code: 3, name: "太原", position: [440, 150], resource: [1], type: 1, nearby: [0, 1, 11, 4, 16, 15]},
                 {code: 4, name: "邯郸", position: [615, 190], resource: [0, 1], type: 0, nearby: [1, 2, 3, 20, 22, 16, 17]},
@@ -23,7 +23,7 @@ Vue.mixin({
                 {code: 18, name: "长平", position: [530, 280], resource: [1], type: 2, nearby: [25, 16, 17, 30, 27]},
                 {code: 19, name: "大梁", position: [650, 345], resource: [0,1], type: 0, nearby: [17, 30, 22, 34, 29]},
                 {code: 20, name: "饶安", position: [720, 165], resource: [1], type: 2, nearby: [6, 4, 21, 22]},
-                {code: 21, name: "临淄", position: [800, 210], resource: [0,1], type: 0, nearby: [20, 22, 23, 24]},
+                {code: 21, name: "临淄", position: [810, 200], resource: [0,1], type: 0, nearby: [20, 22, 23, 24]},
                 {code: 22, name: "定陶", position: [705, 270], resource: [1], type: 2, nearby: [17, 4, 20, 21, 23, 34, 19]},
                 {code: 23, name: "莒", position: [810, 300], resource: [0], type: 2, nearby: [21, 22, 24, 34]},
                 {code: 24, name: "即墨", position: [935, 220], resource: [0], type: 1, nearby: [21, 23]},

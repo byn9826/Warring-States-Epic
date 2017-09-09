@@ -236,97 +236,97 @@ Vue.component("decision-board", {
             allyTarget: "",
             orderPlan: [],
             cardStyle: {
-                position: "absolute",
-                left: "10px",
-                top: "10px",
-                width: "210px",
+                position: "fixed",
+                left: "8pt",
+                top: "8pt",
+                width: "200pt",
                 backgroundColor: "black",
                 zIndex: "2",
                 color: "white",
-                borderRadius: "5px",
-                border: "2px solid white",
-                padding: "0 15px"
+                borderRadius: "5pt",
+                border: "2pt solid white",
+                padding: "0 8pt"
             },
             roundStyle: {
                 display: "block",
                 textAlign: "center",
-                fontSize: "11px",
+                fontSize: "11pt",
                 fontWeight: "bold",
-                padding: "3px 0",
+                padding: "3pt 0",
                 width: "100%",
-                borderBottom: "1px solid lightgrey",
-                marginBottom: "2px"
+                borderBottom: "1pt solid lightgrey",
+                marginBottom: "2pt"
             },
             descStyle: {
                 display: "block",
-                fontSize: "11px",
+                fontSize: "11pt",
                 textAlign: "center",
                 color: "lightgrey",
-                marginBottom: "5px"
+                marginBottom: "5pt"
             },
             flagStyle: {
                 display: "block",
                 textAlign: "center",
-                fontSize: "12px",
-                height: "22px"
+                fontSize: "10pt",
+                height: "22pt"
             },
             selectStyle: {
                 display: "inline-block",
                 verticalAlign: "middle",
-                fontSize: "12px",
-                padding: "3px 0"
+                fontSize: "10pt",
+                padding: "3pt 0"
             },
             lineStyle: {
                 display: "block",
-                marginBottom: "10px"
+                marginBottom: "8pt"
             },
             buttonStyle: {
                 display: "inline-block",
                 verticalAlign: "middle",
                 cursor: "pointer",
-                fontSize: "11px"
+                fontSize: "9pt"
             },
             infoStyle: {
                 display: "block",
-                borderTop: "1px dashed lightgrey",
-                fontSize: "11px",
-                padding: "3px 0"
+                borderTop: "1pt dashed lightgrey",
+                fontSize: "9pt",
+                padding: "3pt 0"
             },
             occupyStyle: {
                 display: "inline-block",
                 verticalAlign: "middle",
-                fontSize: "11px",
-                marginRight: "5px",
-                marginBottom: "5px",
-                border: "1px solid lightgrey",
-                padding: "1px",
+                fontSize: "9pt",
+                marginRight: "5pt",
+                marginBottom: "5pt",
+                border: "1pt solid lightgrey",
+                padding: "1pt",
                 textAlign: "center",
-                borderRadius: "3px"
+                borderRadius: "3pt"
             },
             orderStyle: {
                 display: "inline-block",
                 verticalAlign: "middle",
-                fontSize: "11px",
-                marginRight: "5px",
-                marginBottom: "5px",
-                border: "1px solid gold",
+                fontSize: "9pt",
+                marginRight: "8pt",
+                marginBottom: "5pt",
+                border: "1pt solid gold",
                 color: "gold",
-                padding: "3px",
-                borderRadius: "3px"
+                padding: "1pt",
+                borderRadius: "2pt"
             },
             setStyle: {
                 display: "inline-block",
                 verticalAlign: "middle",
-                fontSize: "11px",
-                marginRight: "5px",
-                marginBottom: "5px",
-                border: "1px solid darkslategrey",
+                fontSize: "9pt",
+                marginRight: "8pt",
+                marginBottom: "5pt",
+                border: "1pt solid darkslategrey",
                 color: "darkslategrey",
-                padding: "3px",
-                borderRadius: "3px"
+                padding: "1pt",
+                borderRadius: "2pt"
             },
             optionStyle: {
-                fontSize: "11px",
+                fontSize: "9pt",
                 backgroundColor: "lightgrey"
             },
         };

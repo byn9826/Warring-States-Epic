@@ -15,15 +15,15 @@ Vue.component("fame-info", {
         return {
             cardStyle: {
                 display: "block",
-                marginBottom: "5px"
+                marginBottom: "5pt"
             },
             typeStyle: {
                 display: "inline-block",
                 verticalAlign: "middle",
-                borderLeft: "3px solid darkslategrey",
-                paddingLeft: "10px",
-                marginRight: "5px",
-                borderRadius: "3px"
+                borderLeft: "3pt solid darkslategrey",
+                paddingLeft: "10pt",
+                marginRight: "5pt",
+                borderRadius: "3pt"
             },
             iconStyle: {
                 display: "block",
@@ -34,36 +34,36 @@ Vue.component("fame-info", {
             titleStyle: {
                 display: "block",
                 textAlign: "center",
-                fontSize: "11px"
+                fontSize: "11pt"
             },
             stateStyle: {
                 display: "inline-block",
                 verticalAlign: "middle",
                 backgroundColor: "darkslategrey",
-                padding: "0 10px",
+                padding: "0 10pt",
                 color: "lightgrey",
             },
             nameStyle: {
-                border: "1px solid lightgrey",
-                minWidth: "20px",
-                height: "20px",
-                lineHeight: "20px",
+                border: "1pt solid lightgrey",
+                minWidth: "20pt",
+                height: "20pt",
+                lineHeight: "20pt",
                 borderRadius: "50%",
-                fontSize: "11px",
+                fontSize: "11pt",
                 textAlign: "center",
-                margin: "8px 0"
+                margin: "8pt 0"
             },
             activeStyle: {
-                border: "1px solid lightgrey",
+                border: "1pt solid lightgrey",
                 backgroundColor: this.getStatesInfo()[this.player].color,
                 color: "white",
-                minWidth: "20px",
-                height: "20px",
-                lineHeight: "20px",
+                minWidth: "20pt",
+                height: "20pt",
+                lineHeight: "20pt",
                 borderRadius: "50%",
-                fontSize: "11px",
+                fontSize: "11pt",
                 textAlign: "center",
-                margin: "8px 0"
+                margin: "8pt 0"
             }
         }  
     },

@@ -56,8 +56,9 @@ var app = new Vue({
             this.history[this.round]?this.history[this.round].push(i):this.history[this.round] = [i];
         },
         updateOrderOfCities: function(cities, orders) {
-            console.log(cities);
-            console.log(orders);
+            cities.forEach(function(c, i) {
+                this.cities[c].order = orders[i];
+            }.bind(this));
         }
     },
     created: function() {
@@ -77,7 +78,7 @@ var app = new Vue({
                     ally: [],
                     code: i,
                     nearby: [],
-                    order: null
+                    order: []
                 }
             }
             this.allies.forEach(function(ally) {
@@ -91,7 +92,7 @@ var app = new Vue({
                     states[city.occupy].city.push(city.code);
                 }
                 states[city.occupy].occupy.push(city.code);
-                states[city.occupy].order = city.order;
+                states[city.occupy].order.push(city.order);
                 states[city.occupy].army = states[city.occupy].army.concat(city.army);
                 states[city.occupy].nearby = [...new Set([...states[city.occupy].nearby ,...this.getCitiesInfo()[city.code].nearby])];
                 states[city.occupy].nearby = states[city.occupy].nearby.filter(function(a) {

@@ -29,34 +29,34 @@ Vue.component("supply-info", {
             cardStyle: {
                 display: "inline-block",
                 verticalAlign: "top",
-                marginLeft: "50px"
+                marginLeft: "50pt"
             },
             supplyStyle: {
                 display: "inline-block",
                 verticalAlign: "top",
                 backgroundColor: "indianred",
-                marginRight: "3px",
-                padding: "8px",
-                borderRadius: "3px"
+                marginRight: "3pt",
+                padding: "8pt",
+                borderRadius: "3pt"
             },
             iconStyle: {
                 display: "block",
                 textAlign: "center",
             },
             limitStyle: {
-                borderTop: "2px solid lightgrey",
-                paddingTop: "5px",
-                marginTop: "5px",
-                maxWidth: "70px",
+                borderTop: "2pt solid lightgrey",
+                paddingTop: "5pt",
+                marginTop: "5pt",
+                maxWidth: "70pt",
                 display: "block",
-                fontSize: "12px"
+                fontSize: "12pt"
             },
             maxStyle: {
                 backgroundColor: "black",
                 color: "white",
-                marginRight: "3px",
-                fontSize: "11px",
-                padding: "0 5px",
+                marginRight: "3pt",
+                fontSize: "11pt",
+                padding: "0 5pt",
                 display: "inline-block",
                 verticalAlign: "middle",
             }

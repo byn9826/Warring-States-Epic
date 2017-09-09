@@ -48,18 +48,18 @@ Vue.component("city-info", {
         return {
             cardStyle: {
                 position: "absolute",
-                width: "80px",
+                width: "70pt",
                 backgroundColor: "lightgray",
-                left: this.definition.position[0] + "px",
-                top: this.definition.position[1] + "px",
-                borderRadius: "3px",
-                padding: "1px",
-                border: "1px solid black",
+                left: this.definition.position[0] + "pt",
+                top: this.definition.position[1] + "pt",
+                borderRadius: "3pt",
+                paddingTop: "2pt",
+                border: "1pt solid black",
                 textAlign: "center"
             },
             armyStyle: {
                 display: "block",
-                fontSize: "11px",
+                fontSize: "9pt",
             },
             nameStyle: {
                 fontWeight: "bold"
@@ -69,16 +69,16 @@ Vue.component("city-info", {
                 backgroundColor: this.state.color,
                 borderRadius: "50%",
                 color: "white",
-                minWidth: "18px",
-                height: "18px",
-                lineHeight: "18px",
+                minWidth: "16pt",
+                height: "16pt",
+                lineHeight: "16pt",
                 textAlign: "center",
                 verticalAlign: "middle",
-                fontSize: "11px"
+                fontSize: "9pt"
             },
             cityStyle: {
                 display: "block",
-                fontSize: "11px",
+                fontSize: "9pt",
                 backgroundColor: "darkgrey",
                 color: "white"
             }

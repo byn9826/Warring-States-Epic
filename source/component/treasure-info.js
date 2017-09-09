@@ -32,10 +32,10 @@ Vue.component("treasure-info", {
             cardStyle: {
                 display: "inline-block",
                 verticalAlign: "middle",
-                marginRight: "20px",
-                border: "1px solid saddlebrown",
-                borderRadius: "3px",
-                padding: "5px"
+                marginRight: "20pt",
+                border: "1pt solid saddlebrown",
+                borderRadius: "3pt",
+                padding: "5pt"
             },
             typeStyle: {
                 display: "inline-block",
@@ -50,15 +50,15 @@ Vue.component("treasure-info", {
             titleStyle: {
                 display: "block",
                 textAlign: "center",
-                fontSize: "11px"
+                fontSize: "11pt"
             },
             activeStyle: {
-                border: "1px solid lightgrey",
+                border: "1pt solid lightgrey",
                 color: "black",
-                borderBottom: "1px solid darkslategrey",
-                fontSize: "11px",
+                borderBottom: "1pt solid darkslategrey",
+                fontSize: "11pt",
                 textAlign: "center",
-                margin: "8px 0",
+                margin: "8pt 0",
                 display: "inline-block",
                 verticalAlign: "middle",
                 fontWeight: "bold"

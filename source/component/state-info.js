@@ -74,24 +74,24 @@ Vue.component("state-info", {
         return {
             cardStyle: {
                 display: "block",
-                padding: "3px",
-                borderBottom: "3px solid black",
-                borderRadius: "5px"
+                padding: "3pt",
+                borderBottom: "3pt solid black",
+                borderRadius: "5pt"
             },
             headerStyle: {
                 display: "block",
-                borderBottom: "1px dashed lightgrey",
+                borderBottom: "1pt dashed lightgrey",
                 width: "80%",
-                paddingBottom: "3px"
+                paddingBottom: "3pt"
             },
             nameStyle: {
                 display: "inline-block",
                 verticalAlign: "middel",
                 backgroundColor: "lightgrey",
-                fontSize: "14px",
-                minWidth: "20px",
-                height: "20px",
-                lineHeight: "20px",
+                fontSize: "12pt",
+                minWidth: "18pt",
+                height: "18pt",
+                lineHeight: "18pt",
                 borderRadius: "50%",
                 textAlign: "center"
             },
@@ -100,10 +100,10 @@ Vue.component("state-info", {
                 verticalAlign: "middel",
                 backgroundColor: this.definition.color,
                 color: "white",
-                fontSize: "14px",
-                minWidth: "20px",
-                height: "20px",
-                lineHeight: "20px",
+                fontSize: "12pt",
+                minWidth: "18pt",
+                height: "18pt",
+                lineHeight: "18pt",
                 borderRadius: "50%",
                 textAlign: "center"
             },
@@ -111,16 +111,17 @@ Vue.component("state-info", {
                 display: "inline-block",
                 verticalAlign: "middel",
                 color: "lightgrey",
-                fontSize: "12px",
+                fontSize: "12pt",
             },
             strengthStyle: {
-                display: "block"
+                display: "block",
+                marginTop: "2pt"
             },
             armyStyle: {
                 display: "inline-block",
                 verticalAlign: "middel",
                 color: "whitesmoke",
-                fontSize: "11px",
+                fontSize: "11pt",
             },
         }  
     },
