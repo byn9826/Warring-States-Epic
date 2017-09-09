@@ -5,6 +5,9 @@ Vue.component("city-info", {
             <div v-bind:style="armyStyle">
                 <span v-bind:style="nameStyle">{{definition.name}}</span>
                 <span v-bind:style="occupyStyle">{{state.name}}</span>
+                <span v-bind:style="orderStyle" v-if="getOrdersInfo()[data.order]">
+                    {{getOrdersInfo()[data.order].name}}
+                </span>
             </div>
             <div v-bind:style="armyStyle">
                 <span v-if="data.army.length!==0&&data.occupy!==player" class="fa fa-shield" aria-hidden="true">
@@ -48,7 +51,7 @@ Vue.component("city-info", {
         return {
             cardStyle: {
                 position: "absolute",
-                width: "70pt",
+                width: "72pt",
                 backgroundColor: "lightgray",
                 left: this.definition.position[0] + "pt",
                 top: this.definition.position[1] + "pt",
@@ -62,10 +65,22 @@ Vue.component("city-info", {
                 fontSize: "9pt",
             },
             nameStyle: {
-                fontWeight: "bold"
+                fontWeight: "bold",
+                display: "inline-block",
+                verticalAlign: "middle",
+            },
+            orderStyle: {
+                fontSize: "9pt",
+                padding: "2pt",
+                borderRadius: "5pt",
+                backgroundColor: "black",
+                color: "white",
+                display: "inline-block",
+                verticalAlign: "middle",
             },
             occupyStyle: {
                 display: "inline-block",
+                verticalAlign: "middle",
                 backgroundColor: this.state.color,
                 borderRadius: "50%",
                 color: "white",
@@ -73,7 +88,6 @@ Vue.component("city-info", {
                 height: "16pt",
                 lineHeight: "16pt",
                 textAlign: "center",
-                verticalAlign: "middle",
                 fontSize: "9pt"
             },
             cityStyle: {

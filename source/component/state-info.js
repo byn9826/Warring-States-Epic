@@ -93,7 +93,8 @@ Vue.component("state-info", {
                 height: "18pt",
                 lineHeight: "18pt",
                 borderRadius: "50%",
-                textAlign: "center"
+                textAlign: "center",
+                marginRight: "3pt"
             },
             activeStyle: {
                 display: "inline-block",
@@ -105,7 +106,8 @@ Vue.component("state-info", {
                 height: "18pt",
                 lineHeight: "18pt",
                 borderRadius: "50%",
-                textAlign: "center"
+                textAlign: "center",
+                marginRight: "3pt"
             },
             occupyStyle: {
                 display: "inline-block",

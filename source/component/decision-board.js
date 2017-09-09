@@ -117,7 +117,7 @@ Vue.component("decision-board", {
             this.$nextTick(function () {
                 if (this.stage === 0) {
                 //缔盟阶段
-                    if (this.player[this.orders[newVal]] !== 2 && this.active < this.orders.length) {
+                    if (this.player[this.orders[newVal]] !== 2) {
                         this.allyTarget = this.AIrequestAllyOrNot(
                             this.activeState.code, this.state, this.relations, this.rank
                         );
@@ -143,7 +143,7 @@ Vue.component("decision-board", {
                     }
                 } else if (this.stage === 1) {
                 //毁约阶段
-                    if (this.player[this.orders[newVal]] !== 2 && this.active < this.orders.length) {
+                    if (this.player[this.orders[newVal]] !== 2) {
                         this.allyTarget = this.AIbreachAllyOrNot(
                             this.activeState.code, this.state[this.activeState.code].ally, this.state,
                             this.relations[this.activeState.code]
@@ -160,9 +160,16 @@ Vue.component("decision-board", {
                     }
                 } else if (this.stage === 2) {
                 //运筹阶段
-                    this.orderPlan = new Array(
-                        this.state[this.activeState.code].occupy.length
-                    ).fill("");
+                    if (this.player[this.orders[newVal]] !== 2) {
+                        this.orderPlan = this.AIplanResult(
+                            this.activeState.code, this.state[this.activeState.code].ally, this.state
+                        )
+                        console.log(this.orderPlan);
+                    } else {
+                        this.orderPlan = new Array(
+                            this.state[this.activeState.code].occupy.length
+                        ).fill("");
+                    }
                 }
             }.bind(this));
         }  
@@ -170,6 +177,7 @@ Vue.component("decision-board", {
     methods: {
         submitPlan: function() {
             this.$emit("updateorderofcities", this.state[this.activeState.code].occupy, this.orderPlan);
+            this.nextActive();
         },
         submitBreach: function() {
             if (this.allyTarget === "") {
@@ -180,27 +188,15 @@ Vue.component("decision-board", {
             this.$emit("removeally", this.activeState.code, this.allyTarget);
             this.$emit("decreaserelation", this.allyTarget, this.activeState.code, 2);
             this.$emit("decreaserelation", this.activeState.code, this.allyTarget, 1);
-            if (this.active < (this.rank.length - 1)) {
-                this.active += 1;
-            } else {
-                this.$emit("tonextstage");
-            }
+            this.nextActive();
         },
         skipBreach: function() {
             this.info = this.activeState.name + "国选择不毁约";
-            if (this.active < (this.rank.length - 1)) {
-                this.active += 1;
-            } else {
-                this.$emit("tonextstage");
-            }
+            this.nextActive();
         },
         skipAlly: function() {
             this.info = this.activeState.name + "国选择不缔盟";
-            if (this.active < (this.rank.length - 1)) {
-                this.active += 1;
-            } else {
-                this.$emit("tonextstage");
-            }
+            this.nextActive();
         },
         submitAlly: function() {
             if (this.allyTarget === "") {
@@ -222,12 +218,15 @@ Vue.component("decision-board", {
                 this.info = this.getStatesInfo()[this.allyTarget].name + "国拒绝与" + this.activeState.name + "国缔盟";
                 this.$emit("decreaserelation", this.activeState.code, this.allyTarget, 1);
             }
+            this.nextActive();
+        },
+        nextActive: function() {
             if (this.active < (this.rank.length - 1)) {
                 this.active += 1; 
             } else {
                 this.$emit("tonextstage");
             }
-        },
+        }
     },
     data: function() {
         return {
