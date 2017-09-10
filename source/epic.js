@@ -84,6 +84,7 @@ var app = new Vue({
                     occupy: [],
                     army: [],
                     supply: 0,
+                    tax: 0,
                     ally: [],
                     code: i,
                     nearby: [],
@@ -110,6 +111,8 @@ var app = new Vue({
                 this.getCitiesInfo()[city.code].resource.forEach(function(r) {
                     if (r === 1) {
                         states[city.occupy].supply += 1;
+                    } else {
+                        states[city.occupy].tax += 1;
                     }
                 });
             }.bind(this));

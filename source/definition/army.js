@@ -25,6 +25,21 @@ Vue.mixin({
                 default:
                     return "&#9818;";
             }
+        },
+        getArmyEstimate: function(t, m) {
+            if (m === 0) {
+            //进攻模式
+                switch (t) {
+                    case 0:
+                        return 1;
+                    case 8:
+                        return 2;
+                    case 9:
+                        return 4;
+                    default:
+                        return 2.5;
+                }
+            }
         }
     }
 });

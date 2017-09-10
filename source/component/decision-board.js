@@ -1,6 +1,6 @@
 Vue.component("decision-board", {
     props: [
-        "stage", "player", "state", "relations", "rank", "orders", "settings", "addnewally",
+        "stage", "player", "state", "cities", "relations", "rank", "orders", "settings", "addnewally",
         "addnewhistory", "tonextstage", "removeally", "increaserelation", "decreaserelation",
         "saveitemorder", "updateorderofcities"
     ],
@@ -139,13 +139,10 @@ Vue.component("decision-board", {
                 //运筹阶段
                     if (this.player[this.orders[newVal]] !== 2) {
                         this.target = this.AIplanResult(
-                            this.activeState.code, this.state[this.activeState.code].ally, this.state
+                            this.activeState.code, this.state[this.activeState.code].ally, 
+                            this.state, this.cities, this.relations
                         )
                         console.log(this.target);
-                    } else {
-                        this.target = new Array(
-                            this.state[this.activeState.code].occupy.length
-                        ).fill("");
                     }
                 }
             }.bind(this));
