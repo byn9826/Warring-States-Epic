@@ -1,7 +1,7 @@
 Vue.component("occupy-info", {
-    props: ["definition", "data", "state", "player"],
+    props: ["definition", "data", "state", "player", "saveitemorder"],
     template: `
-        <div v-show="state.name" v-bind:style="cardStyle">
+        <div v-show="state.name" v-bind:style="cardStyle" @dragover.prevent @drop="onDrop(definition)">
             <div v-bind:style="armyStyle">
                 <span v-bind:style="occupyStyle">{{state.name}}</span>
                 <span v-bind:style="orderStyle" v-if="getOrdersInfo()[data.order]">
@@ -18,6 +18,13 @@ Vue.component("occupy-info", {
             </div>
         </div>
     `,
+    methods: {
+        onDrop: function(e) {
+            if (this.data.occupy === this.player) {
+                this.$emit("saveitemorder", e.code, 1);
+            }
+        }  
+    },
     data: function() {
         return {
             cardStyle: {

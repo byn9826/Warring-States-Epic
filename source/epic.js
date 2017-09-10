@@ -12,7 +12,8 @@ var app = new Vue({
         settings: data.settings,
         history: data.history,
         treasure: data.treasure,
-        fame: data.fame
+        fame: data.fame,
+        item: null
     },
     methods: {
         toNextStage: function() {
@@ -54,6 +55,14 @@ var app = new Vue({
         },
         addNewHistory: function(i) {
             this.history[this.round]?this.history[this.round].push(i):this.history[this.round] = [i];
+        },
+        saveItemOrder: function(i, l) {
+            if (l === 0) {
+                this.item = i;
+            } else {
+                this.updateOrderOfCities([i], [this.item]);
+                this.item = null;
+            }
         },
         updateOrderOfCities: function(city, orders) {
             city.forEach(function(c, i) {

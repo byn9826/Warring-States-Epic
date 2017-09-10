@@ -32,7 +32,7 @@ Vue.mixin({
                     return "";
                 }
             } else if (lapCount !== state[own].nearby.length) {
-                var breachRatio = (Math.random() * 0.1 + 0.9) * (allies.length / relation.length);
+                var breachRatio = (Math.random() * 0.1 + 0.8) * (allies.length / relation.length);
                 if (dice > breachRatio) {
                     return "";
                 }
