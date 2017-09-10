@@ -138,11 +138,19 @@ Vue.component("decision-board", {
                 } else if (this.stage === 2) {
                 //运筹阶段
                     if (this.player[this.orders[newVal]] !== 2) {
+                        this.target = null;
                         this.target = this.AIplanResult(
                             this.activeState.code, this.state[this.activeState.code].ally, 
                             this.state, this.cities, this.relations
                         )
-                        console.log(this.target);
+                        setTimeout(function () {
+                            this.$emit(
+                                "updateorderofcities", this.state[this.activeState.code].occupy, 
+                                this.target
+                            );
+                            this.info = this.activeState.name + "国完成筹备";
+                            this.nextActive();
+                        }.bind(this), this.settings.delay);
                     }
                 }
             }.bind(this));
@@ -159,7 +167,7 @@ Vue.component("decision-board", {
             );
         },
         submitPlan: function() {
-            this.info = this.activeState.name + "国完成筹备"
+            this.info = this.activeState.name + "国完成筹备";
             this.nextActive();
         },
         submitBreach: function() {

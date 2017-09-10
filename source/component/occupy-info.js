@@ -1,11 +1,11 @@
 Vue.component("occupy-info", {
-    props: ["definition", "data", "state", "player", "saveitemorder"],
+    props: ["definition", "data", "state", "player", "stage", "saveitemorder"],
     template: `
         <div v-show="state.name" v-bind:style="cardStyle" @dragover.prevent @drop="onDrop(definition)">
             <div v-bind:style="armyStyle">
                 <span v-bind:style="occupyStyle">{{state.name}}</span>
                 <span v-bind:style="orderStyle" v-if="getOrdersInfo()[data.order]">
-                    {{getOrdersInfo()[data.order].name}}
+                    {{stage === 2&&data.occupy!==player?"???":getOrdersInfo()[data.order].name}}
                 </span>
             </div>
             <div v-bind:style="armyStyle">
@@ -51,7 +51,7 @@ Vue.component("occupy-info", {
                 fontSize: "9pt",
                 padding: "1pt",
                 borderRadius: "5pt",
-                backgroundColor: "darkslategray",
+                backgroundColor: "red",
                 color: "white",
                 display: "inline-block",
                 verticalAlign: "middle",
