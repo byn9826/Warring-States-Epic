@@ -5,7 +5,7 @@ Vue.component("occupy-info", {
             <div v-bind:style="armyStyle">
                 <span v-bind:style="occupyStyle">{{state.name}}</span>
                 <span v-bind:style="orderStyle" v-if="getOrdersInfo()[data.order]">
-                    {{stage === 2&&data.occupy!==player?"???":getOrdersInfo()[data.order].name}}
+                    {{stage === 2&&data.occupy!==player?" ? ":getOrdersInfo()[data.order].name}}
                 </span>
             </div>
             <div v-bind:style="armyStyle">

@@ -2,7 +2,7 @@ Vue.component("decision-board", {
     props: [
         "stage", "player", "state", "cities", "relations", "rank", "orders", "settings", "addnewally",
         "addnewhistory", "tonextstage", "removeally", "increaserelation", "decreaserelation",
-        "saveitemorder", "updateorderofcities"
+        "saveitemorder", "updateorderofcities", "disturbpowerpoint"
     ],
     template: `
         <div v-bind:style="cardStyle">
@@ -55,7 +55,9 @@ Vue.component("decision-board", {
                 </div>
             </section>
             <section v-else-if="stage === 2 && player[orders[active]] === 2">
-                <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
+                <div v-bind:style="descStyle">
+                    {{getStatesAllies(state[activeState.code]) || "无盟友"}}
+                </div>
                 <div v-bind:style="descStyle">请将指令拖拽至目标领地</div>
                 <div v-bind:style="lineStyle">
                     <span 
@@ -73,6 +75,35 @@ Vue.component("decision-board", {
                 <input 
                     v-bind:style="submitStyle" type="button" value="布局完毕" 
                     v-on:click="submitPlan()"
+                />
+            </section>
+            <section v-else-if="stage === 3 && player[orders[active]] === 2">
+                <div v-bind:style="descStyle">
+                    {{getStatesAllies(state[activeState.code]) || "无盟友"}}
+                </div>
+                <div
+                    v-for="(o, i) in state[activeState.code].order" 
+                    v-if="o&&getOrdersInfo()[o].type===2"
+                    v-bind:style="boxStyle"
+                >
+                    <div>
+                        {{getCitiesInfo()[state[activeState.code].occupy[i]].name}}
+                    </div>
+                    <select 
+                        v-bind:style="selectStyle" v-on:change="setDisturbTarget(i)"
+                    >
+                        <option selected value="">无目标</option>
+                        <option 
+                            v-for="c in getCitiesInfo()[state[activeState.code].occupy[i]].nearby"
+                            v-if="filterTargetOptions(c, 0)" v-bind:value="c"
+                        >
+                            {{getCitiesInfo()[c].name}}
+                        </option>
+                    </select>
+                </div>
+                <input 
+                    v-bind:style="confirmStyle" type="button" value="确认目标" 
+                    v-on:click="submitDisturb()"
                 />
             </section>
             <section v-else>
@@ -152,11 +183,69 @@ Vue.component("decision-board", {
                             this.nextActive();
                         }.bind(this), this.settings.delay);
                     }
+                } else if (this.stage === 3) {
+                //劫掠阶段
+                    if (this.state[this.activeState.code].orderType.indexOf(2) === -1) {
+                        this.nextActive();
+                    } else {
+                        if (this.player[this.orders[newVal]] !== 2) {
+                            this.nextActive();
+                        } else {
+                            this.target = {};
+                        }
+                    }
                 }
             }.bind(this));
         }  
     },
     methods: {
+        filterTargetOptions(i, stage) {
+            if (stage === 0) {
+                if (this.cities[i].occupy===this.activeState.code) {
+                    return false;
+                }
+                if (this.state[this.activeState.code].ally.indexOf(this.cities[i].occupy) !== -1) {
+                    return false;
+                }
+                if (!this.getOrdersInfo()[this.cities[i].order]) {
+                    return false;
+                }
+                if ([1, 2, 3].indexOf(this.getOrdersInfo()[this.cities[i].order].type) === -1) {
+                    return false;
+                }
+            }
+            return true;
+        },
+        submitDisturb() {
+            var remover = [];
+            Object.keys(this.target).forEach(function(key) { 
+                if (this.target[key] !== "" && remover.indexOf(parseInt(this.target[key])) === -1) {
+                    remover.push(parseInt(this.target[key]));
+                }
+            }.bind(this));
+            this.disturbProcess(remover);
+        },
+        disturbProcess: function(remover) {
+            remover.forEach(function(r) {
+                if (this.getOrdersInfo()[this.cities[r].order].type === 3) {
+                    this.$emit(
+                        "disturbpowerpoint", this.activeState.code, 
+                        this.getStatesInfo()[this.cities[r].occupy].code
+                    );
+                }
+                this.info = this.activeState.name + "国劫掠了" + this.getStatesInfo()[this.cities[r].occupy].name + "国的" + this.getCitiesInfo()[r].name;
+                this.$emit("addnewhistory", this.info);
+                this.$emit(
+                    "decreaserelation", this.getStatesInfo()[this.cities[r].occupy].code, 
+                    this.activeState.code, 1
+                );
+                this.$emit("updateorderofcities", [r], [null]);
+            }.bind(this));
+            this.nextActive();
+        },
+        setDisturbTarget(i) {
+            this.target[i] = event.target.value;
+        },
         recordSelectedOrder(i) {
             this.$emit("saveitemorder", i, 0);
         },
@@ -280,6 +369,11 @@ Vue.component("decision-board", {
                 fontSize: "9pt",
                 marginBottom: "5pt"
             },
+            confirmStyle: {
+                display: "block",
+                fontSize: "9pt",
+                marginBottom: "5pt"
+            },
             infoStyle: {
                 display: "block",
                 borderTop: "1pt dashed lightgrey",
@@ -309,6 +403,14 @@ Vue.component("decision-board", {
                 padding: "1pt",
                 borderRadius: "2pt",
                 cursor: "pointer"
+            },
+            boxStyle: {
+                display: "inline-block",
+                verticalAlign: "top",
+                marginRight: "8pt",
+                borderTop: "1pt dashed white",
+                textAlign: "center",
+                marginBottom: "8pt"
             }
         };
     }

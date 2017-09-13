@@ -5,7 +5,8 @@ Vue.component("supply-info", {
             <div v-for="(supply, i) in getStatesSupply()" v-bind:style="supplyStyle">
                 <div v-html="getCityResourceIcon(1)+'*'+i" v-bind:style="iconStyle"></div>
                 <div v-bind:style="limitStyle">
-                    <span v-for="s in supply" v-bind:style="maxStyle">{{s}}</span>
+                    <span v-bind:style="maxStyle">兵力上限{{supply}}</span>
+                    <span v-bind:style="maxStyle">区域上限4</span>
                 </div>
                 <div v-bind:style="limitStyle">
                     {{getSupplyMatches(i)}}
@@ -36,8 +37,9 @@ Vue.component("supply-info", {
                 verticalAlign: "top",
                 backgroundColor: "indianred",
                 marginRight: "3pt",
-                padding: "8pt",
-                borderRadius: "3pt"
+                padding: "4pt",
+                borderRadius: "3pt",
+                textAlign: "center"
             },
             iconStyle: {
                 display: "block",

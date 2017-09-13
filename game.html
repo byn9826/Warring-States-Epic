@@ -13,10 +13,10 @@
 		<script>
 			var data = {
 				settings: {
-					delay: 3000
+					delay: 100
 				},
 				round: 0,
-				stage: 2,
+				stage: 0,
 				history: [],
 				player: [0, 2, 1, 1, 1, 1, 1, 1, 0],
 				allies: [
@@ -69,9 +69,9 @@
 					{code: 18, occupy: 5, army: [0], order: null},
 					{code: 19, occupy: 6, army: [6, 8], order: null},
 					{code: 20, occupy: 0, army: [], order: null},
-					{code: 21, occupy: 1, army: [1, 8], order: null},
+					{code: 21, occupy: 1, army: [1, 8], order: 9},
 					{code: 22, occupy: 0, army: [], order: null},
-					{code: 23, occupy: 1, army: [0], order: null},
+					{code: 23, occupy: 1, army: [0], order: 9},
 					{code: 24, occupy: 0, army: [], order: null},
 					{code: 25, occupy: 0, army: [], order: null},
 					{code: 26, occupy: 0, army: [], order: null},
@@ -106,6 +106,7 @@
 				@decreaseRelation="decreaseRelation"
 				@saveItemOrder="saveItemOrder"
 				@updateOrderOfCities="updateOrderOfCities"
+				@disturbPowerPoint="disturbPowerPoint"
 			></decision-board>
 		    <main id="main">
 		    	<template v-for="(c, index) in getCitiesInfo()">

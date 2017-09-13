@@ -54,7 +54,9 @@ var app = new Vue({
             this.relations[a].splice(decreased, 0, b);
         },
         addNewHistory: function(i) {
-            this.history[this.round]?this.history[this.round].push(i):this.history[this.round] = [i];
+            this.history[this.round] ? 
+                this.history[this.round].push(i):
+                this.history[this.round] = [i];
         },
         saveItemOrder: function(i, l) {
             if (l === 0) {
@@ -68,6 +70,12 @@ var app = new Vue({
             city.forEach(function(c, i) {
                 this.cities[c].order = orders[i];
             }.bind(this));
+        },
+        disturbPowerPoint: function(winer, loser) {
+            this.power[winer] += 1;
+            if (this.power[loser] > 0) {
+                this.power[loser] -= 1;
+            }
         }
     },
     created: function() {
@@ -88,7 +96,8 @@ var app = new Vue({
                     ally: [],
                     code: i,
                     nearby: [],
-                    order: []
+                    order: [],
+                    orderType: []
                 }
             }
             this.allies.forEach(function(ally) {
@@ -103,6 +112,9 @@ var app = new Vue({
                 }
                 states[city.occupy].occupy.push(city.code);
                 states[city.occupy].order.push(city.order);
+                if (city.order || city.order === 0) {
+                    states[city.occupy].orderType.push(this.getOrdersInfo()[city.order].type);
+                }
                 states[city.occupy].army = states[city.occupy].army.concat(city.army);
                 states[city.occupy].nearby = [...new Set([...states[city.occupy].nearby ,...this.getCitiesInfo()[city.code].nearby])];
                 states[city.occupy].nearby = states[city.occupy].nearby.filter(function(a) {

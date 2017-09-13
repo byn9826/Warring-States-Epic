@@ -8,6 +8,10 @@ Vue.mixin({
                     return "毁约阶段";
                 case 2:
                     return "运筹阶段";
+                case 3:
+                    return "劫掠阶段";
+                case 4:
+                    return "行军阶段";
             }
         },
         getStageDescName: function(i) {

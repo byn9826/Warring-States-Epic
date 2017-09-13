@@ -141,7 +141,7 @@ Vue.mixin({
             state[own].occupy.forEach(function(o, i) {
                 if (final[i] !== 0 && !final[i]) {
                     if(cities[o].army.length !== 0) {
-                        chance = 0.5 * cities[o].army.length;
+                        chance = 0.45 * cities[o].army.length;
                         var random = Math.random();
                         final[i] = random <= chance ? "attack" : "rest";
                     } else {
