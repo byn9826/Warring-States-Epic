@@ -11,7 +11,7 @@ var app = new Vue({
         relations: data.relations,
         settings: data.settings,
         history: data.history,
-        treasure: data.treasure,
+        force: data.force,
         fame: data.fame,
         item: null
     },

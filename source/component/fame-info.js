@@ -1,10 +1,13 @@
 Vue.component("fame-info", {
-    props: ["data", "player"],
+    props: ["data", "player", "type"],
     template: `
         <div v-bind:style="cardStyle">
             <div v-bind:style="typeStyle">
-                <i v-bind:style="iconStyle" class="fa fa-certificate" aria-hidden="true"></i>
-                <div v-bind:style="titleStyle">霸业</div>
+                <i 
+                    v-bind:style="iconStyle" aria-hidden="true"
+                    v-bind:class="['fa', type===1?'fa-flag':'fa-certificate']" 
+                ></i>
+                <div v-bind:style="titleStyle">{{type===1?"军威":"霸业"}}</div>
             </div>
             <div v-for="d in data" v-bind:style="stateStyle">
                 <div v-bind:style="player!==d?nameStyle:activeStyle">{{getStatesInfo()[d].name}}</div>
