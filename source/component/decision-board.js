@@ -189,7 +189,12 @@ Vue.component("decision-board", {
                         this.nextActive();
                     } else {
                         if (this.player[this.orders[newVal]] !== 2) {
-                            this.nextActive();
+                            //this.nextActive();
+                            var result = this.AIdecideDisturbTarget(
+                                this.activeState.code, this.state, this.rank, this.cities,
+                                this.relations[this.activeState.code]
+                            );
+                            this.disturbProcess(result);
                         } else {
                             this.target = {};
                         }
@@ -241,6 +246,12 @@ Vue.component("decision-board", {
                 );
                 this.$emit("updateorderofcities", [r], [null]);
             }.bind(this));
+            var own = this.state[this.activeState.code].occupy.filter(function(o, index) {
+                if (this.state[this.activeState.code].orderType[index] === 2) {
+                    return true;
+                }
+            }.bind(this));
+            this.$emit("updateorderofcities", own, new Array(own.length).fill(null));
             this.nextActive();
         },
         setDisturbTarget(i) {
