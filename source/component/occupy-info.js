@@ -1,7 +1,12 @@
 Vue.component("occupy-info", {
-    props: ["definition", "data", "state", "player", "stage", "saveitemorder"],
+    props: [
+        "definition", "data", "state", "player", "stage", "saveitemorder", "updatefocusvariable"
+    ],
     template: `
-        <div v-show="state.name" v-bind:style="cardStyle" @dragover.prevent @drop="onDrop(definition)">
+        <div 
+            v-show="state.name" @dragover.prevent @drop="onDrop(definition)"
+            v-on:click="clickCity" v-bind:style="cardStyle"
+        >
             <div v-bind:style="armyStyle">
                 <span v-bind:style="occupyStyle">{{state.name}}</span>
                 <span v-bind:style="orderStyle" v-if="getOrdersInfo()[data.order]">
@@ -23,7 +28,15 @@ Vue.component("occupy-info", {
             if (this.data.occupy === this.player) {
                 this.$emit("saveitemorder", e.code, 1);
             }
-        }  
+        },
+        clickCity: function() {
+            if (
+                this.data.order !== null && this.getOrdersInfo()[this.data.order].type === 0
+                && this.data.occupy === this.player && this.stage === 4
+            ) {
+                this.$emit("updatefocusvariable", this.data.code);
+            }
+        }
     },
     data: function() {
         return {
@@ -38,6 +51,7 @@ Vue.component("occupy-info", {
                 textAlign: "center",
                 borderBottom: "1px solid black",
                 borderRight: "1px solid black",
+                cursor: this.stage===4&&this.data.occupy===this.player&&this.data.order!==null&&this.getOrdersInfo()[this.data.order].type===0?"pointer":"default"
             },
             armyStyle: {
                 display: "block",

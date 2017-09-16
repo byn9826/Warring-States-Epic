@@ -25,5 +25,8 @@ Vue.mixin({
                 {code: 17, name: "休整0", type: 3},
             ];
         },
+        getDisturbleType: function() {
+            return [1, 2, 3];
+        }
     }
 });

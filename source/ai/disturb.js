@@ -8,7 +8,9 @@ Vue.mixin({
                             cities[n].occupy !== own && 
                             state[own].ally.indexOf(cities[n].occupy) === -1 &&
                             this.getOrdersInfo()[cities[n].order] &&
-                            [1, 2, 3].indexOf(this.getOrdersInfo()[cities[n].order].type) !== -1
+                            this.getDisturbleType().indexOf(
+                                this.getOrdersInfo()[cities[n].order].type
+                            ) !== -1
                         ) {
                             return true;
                         } else {
@@ -34,7 +36,6 @@ Vue.mixin({
                 if (nearby) {
                     target.push(
                         nearby.map(function(a) {
-                            console.log();
                             return 0.25 * relation.indexOf(this.cities[a].occupy) / relation.length +
                                 0.5 * (3 - this.getOrdersInfo()[this.cities[a].order].type) / 3 + 
                                 0.25 * (rank.length - rank.indexOf(this.cities[a].occupy)) / rank.length;
@@ -44,8 +45,6 @@ Vue.mixin({
                     target.push(null);
                 }
             }.bind(this));
-            console.log(nearbys);
-            console.log(target);
             var result = [];
             target.forEach(function(t, i) {
                 result.push(nearbys[i][this.getRandomDecision(t)]);

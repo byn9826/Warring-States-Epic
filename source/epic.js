@@ -13,7 +13,8 @@ var app = new Vue({
         history: data.history,
         force: data.force,
         fame: data.fame,
-        item: null
+        item: null,
+        focus: null
     },
     methods: {
         toNextStage: function() {
@@ -70,6 +71,9 @@ var app = new Vue({
             city.forEach(function(c, i) {
                 this.cities[c].order = orders[i];
             }.bind(this));
+        },
+        updateFocusVariable: function(focus) {
+            this.focus = focus;
         },
         disturbPowerPoint: function(winer, loser) {
             this.power[winer] += 1;

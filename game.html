@@ -16,7 +16,7 @@
 					delay: 100
 				},
 				round: 0,
-				stage: 0,
+				stage: 4,
 				history: [],
 				player: [0, 2, 1, 1, 1, 1, 1, 1, 0],
 				allies: [
@@ -69,9 +69,9 @@
 					{code: 18, occupy: 5, army: [0], order: null},
 					{code: 19, occupy: 6, army: [6, 8], order: null},
 					{code: 20, occupy: 0, army: [], order: null},
-					{code: 21, occupy: 1, army: [1, 8], order: 9},
+					{code: 21, occupy: 1, army: [1, 8], order: 0},
 					{code: 22, occupy: 0, army: [], order: null},
-					{code: 23, occupy: 1, army: [0], order: 9},
+					{code: 23, occupy: 1, army: [0], order: 0},
 					{code: 24, occupy: 0, army: [], order: null},
 					{code: 25, occupy: 0, army: [], order: null},
 					{code: 26, occupy: 0, army: [], order: null},
@@ -98,6 +98,7 @@
 				v-bind:rank="rank"
 				v-bind:orders="fame"
 				v-bind:settings="settings"
+				v-bind:focus="focus"
 				@addNewAlly="addNewAlly"
 				@removeAlly="removeAlly"
 				@addNewHistory="addNewHistory"
@@ -120,6 +121,7 @@
 		    			v-bind:stage="stage"
 		    			v-bind:state="getStatesInfo()[cities[index].occupy]"
 		    			@saveItemOrder="saveItemOrder"
+		    			@updateFocusVariable="updateFocusVariable"
 		    		></occupy-info>
 		    	</template>
 		    </main>

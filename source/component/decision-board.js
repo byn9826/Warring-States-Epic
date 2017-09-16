@@ -1,7 +1,7 @@
 Vue.component("decision-board", {
     props: [
         "stage", "player", "state", "cities", "relations", "rank", "orders", "settings", "addnewally",
-        "addnewhistory", "tonextstage", "removeally", "increaserelation", "decreaserelation",
+        "focus", "addnewhistory", "tonextstage", "removeally", "increaserelation", "decreaserelation",
         "saveitemorder", "updateorderofcities", "disturbpowerpoint"
     ],
     template: `
@@ -9,7 +9,7 @@ Vue.component("decision-board", {
             <header v-bind:style="roundStyle">
                 {{getStageName(stage)}} 
             </header>
-            <section v-if="stage === 0 && player[orders[active]] === 2">
+            <section v-if="stage===0 && player[orders[active]]===2">
                 <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
                 <div v-bind:style="descStyle">请选择想要缔盟的国家</div>
                 <div v-bind:style="lineStyle">
@@ -32,7 +32,7 @@ Vue.component("decision-board", {
                     />
                 </div>
             </section>
-            <section v-else-if="stage === 1 && player[orders[active]] === 2">
+            <section v-else-if="stage===1 && player[orders[active]]===2">
                 <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
                 <div v-bind:style="descStyle">请选择想要毁约的国家</div>
                 <div v-bind:style="lineStyle">
@@ -54,7 +54,7 @@ Vue.component("decision-board", {
                     />
                 </div>
             </section>
-            <section v-else-if="stage === 2 && player[orders[active]] === 2">
+            <section v-else-if="stage===2 && player[orders[active]]===2">
                 <div v-bind:style="descStyle">
                     {{getStatesAllies(state[activeState.code]) || "无盟友"}}
                 </div>
@@ -77,7 +77,7 @@ Vue.component("decision-board", {
                     v-on:click="submitPlan()"
                 />
             </section>
-            <section v-else-if="stage === 3 && player[orders[active]] === 2">
+            <section v-else-if="stage===3 && player[orders[active]]===2">
                 <div v-bind:style="descStyle">
                     {{getStatesAllies(state[activeState.code]) || "无盟友"}}
                 </div>
@@ -95,16 +95,36 @@ Vue.component("decision-board", {
                         <option selected value="">无目标</option>
                         <option 
                             v-for="c in getCitiesInfo()[state[activeState.code].occupy[i]].nearby"
-                            v-if="filterTargetOptions(c, 0)" v-bind:value="c"
+                            v-if="filterTargetOptions(c, 3)" v-bind:value="c"
                         >
                             {{getCitiesInfo()[c].name}}
                         </option>
                     </select>
                 </div>
                 <input 
-                    v-bind:style="confirmStyle" type="button" value="确认目标" 
+                    v-bind:style="confirmStyle" type="button" value="确认劫掠目标" 
                     v-on:click="submitDisturb()"
                 />
+            </section>
+            <section v-else-if="stage===4 && player[orders[active]]===2">
+                <div v-bind:style="descStyle">
+                    {{getStatesAllies(state[activeState.code]) || "无盟友"}}
+                </div>
+                <div v-bind:style="descStyle">请从地图选择发兵城市</div>
+                <template v-if="focus!==null">
+                    <span>自{{getCitiesInfo()[focus].name}}进攻</span>
+                    <select 
+                        v-bind:style="selectStyle"
+                    >
+                        <option selected value="">无目标</option>
+                        <option 
+                            v-for="c in getCitiesInfo()[focus].nearby"
+                            v-if="filterTargetOptions(c, 4)"
+                        >
+                            {{getCitiesInfo()[c].name}}
+                        </option>
+                    </select>
+                </template>
             </section>
             <section v-else>
                 <div v-bind:style="descStyle">{{activeState.name}}国正在{{getStageDescName(stage)}} ...</div>
@@ -189,14 +209,25 @@ Vue.component("decision-board", {
                         this.nextActive();
                     } else {
                         if (this.player[this.orders[newVal]] !== 2) {
-                            //this.nextActive();
                             var result = this.AIdecideDisturbTarget(
                                 this.activeState.code, this.state, this.rank, this.cities,
                                 this.relations[this.activeState.code]
                             );
-                            this.disturbProcess(result);
+                            setTimeout(function () {
+                                this.disturbProcess(result);
+                            }.bind(this), this.settings.delay);
                         } else {
                             this.target = {};
+                        }
+                    }
+                } else if (this.stage === 4) {
+                    if (this.state[this.activeState.code].orderType.indexOf(0) === -1) {
+                        this.nextActive();
+                    } else {
+                        if (this.player[this.orders[newVal]] !== 2) {
+                            
+                        } else {
+                            this.target = "";
                         }
                     }
                 }
@@ -205,7 +236,7 @@ Vue.component("decision-board", {
     },
     methods: {
         filterTargetOptions(i, stage) {
-            if (stage === 0) {
+            if (stage === 3) {
                 if (this.cities[i].occupy===this.activeState.code) {
                     return false;
                 }
@@ -215,7 +246,18 @@ Vue.component("decision-board", {
                 if (!this.getOrdersInfo()[this.cities[i].order]) {
                     return false;
                 }
-                if ([1, 2, 3].indexOf(this.getOrdersInfo()[this.cities[i].order].type) === -1) {
+                if (
+                    this.getDisturbleType().indexOf(
+                        this.getOrdersInfo()[this.cities[i].order].type
+                    ) === -1
+                ) {
+                    return false;
+                }
+            } else if (stage === 4) {
+                if (this.cities[i].occupy===this.activeState.code) {
+                    return false;
+                }
+                if (this.state[this.activeState.code].ally.indexOf(this.cities[i].occupy) !== -1) {
                     return false;
                 }
             }
