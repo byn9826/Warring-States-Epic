@@ -114,20 +114,37 @@ Vue.component("decision-board", {
                 <template v-if="focus!==null">
                     <span>自{{getCitiesInfo()[focus].name}}进攻</span>
                     <select 
-                        v-bind:style="selectStyle"
+                        v-bind:style="selectStyle" v-model="reminder"
                     >
                         <option selected value="">无目标</option>
                         <option 
                             v-for="c in getCitiesInfo()[focus].nearby"
-                            v-if="filterTargetOptions(c, 4)"
+                            v-if="filterTargetOptions(c, 4)" v-bind:value="getCitiesInfo()[c].code"
                         >
                             {{getCitiesInfo()[c].name}}
                         </option>
                     </select>
                 </template>
+                <section v-bind:style="marchStyle" v-if="focus!==null">
+                    <div v-bind:style="lineStyle">
+                        选择我军出征部队 战力:{{calAttackArmy()}}
+                    </div>
+                    <span 
+                        v-for="(a, i) in cities[focus].army" 
+                        v-bind:style="[forceStyle, target.indexOf(i)!==-1?borderStyle:'']" 
+                        v-on:click="chooseArmy(i)"
+                    >
+                        {{getArmyInfo()[a].name}}
+                    </span>
+                    <div v-if="reminder!==''" v-bind:style="lineStyle">
+                        敌军军团数:{{calDefendNum()}}
+                    </div>
+                </section>
             </section>
             <section v-else>
-                <div v-bind:style="descStyle">{{activeState.name}}国正在{{getStageDescName(stage)}} ...</div>
+                <div v-bind:style="descStyle">
+                    {{activeState.name}}国正在{{getStageDescName(stage)}} ...
+                </div>
                 <div v-bind:style="flagStyle">{{getStateKingName(orders[active])}}行动中</div>
             </section>
             <div v-show="info" v-bind:style="infoStyle">{{info}}</div>
@@ -138,101 +155,8 @@ Vue.component("decision-board", {
             return this.getStatesInfo()[this.orders[this.active]];
         }
     },
-    updated: function() {
-    },
     created: function() {
         this.active = 0;
-    },
-    watch: {
-        stage: function() {
-            this.active = 0;
-        },
-        active: function (newVal) {
-            this.$nextTick(function () {
-                if (this.stage === 0) {
-                //缔盟阶段
-                    if (this.player[this.orders[newVal]] !== 2) {
-                        this.target = this.AIrequestAllyOrNot(
-                            this.activeState.code, this.state, this.relations, this.rank
-                        );
-                        setTimeout(function () {
-                            if (this.target !== "") {
-                                var result;
-                                if (this.player[this.target] !== 2) {
-                                    result = this.AIacceptAllyOrNot(
-                                        this.activeState.code, this.target, this.state, this.relations, this.rank
-                                    );
-                                } else {
-                                    result = confirm(this.activeState.name + "国想与你结盟,是否同意?");
-                                }
-                                this.allyProcess(result);
-                            } else {
-                                this.skipAlly();
-                            }
-                        }.bind(this), this.settings.delay);
-                    } else {
-                        this.target = "";
-                    }
-                } else if (this.stage === 1) {
-                //毁约阶段
-                    if (this.player[this.orders[newVal]] !== 2) {
-                        this.target = this.AIbreachAllyOrNot(
-                            this.activeState.code, this.state[this.activeState.code].ally, this.state,
-                            this.relations[this.activeState.code]
-                        );
-                        setTimeout(function () {
-                            this.target !== "" ? this.submitBreach() : this.skipBreach();
-                        }.bind(this), this.settings.delay);
-                    } else {
-                        this.target = "";
-                    }
-                } else if (this.stage === 2) {
-                //运筹阶段
-                    if (this.player[this.orders[newVal]] !== 2) {
-                        this.target = null;
-                        this.target = this.AIplanResult(
-                            this.activeState.code, this.state[this.activeState.code].ally, 
-                            this.state, this.cities, this.relations
-                        )
-                        setTimeout(function () {
-                            this.$emit(
-                                "updateorderofcities", this.state[this.activeState.code].occupy, 
-                                this.target
-                            );
-                            this.info = this.activeState.name + "国完成筹备";
-                            this.nextActive();
-                        }.bind(this), this.settings.delay);
-                    }
-                } else if (this.stage === 3) {
-                //劫掠阶段
-                    if (this.state[this.activeState.code].orderType.indexOf(2) === -1) {
-                        this.nextActive();
-                    } else {
-                        if (this.player[this.orders[newVal]] !== 2) {
-                            var result = this.AIdecideDisturbTarget(
-                                this.activeState.code, this.state, this.rank, this.cities,
-                                this.relations[this.activeState.code]
-                            );
-                            setTimeout(function () {
-                                this.disturbProcess(result);
-                            }.bind(this), this.settings.delay);
-                        } else {
-                            this.target = {};
-                        }
-                    }
-                } else if (this.stage === 4) {
-                    if (this.state[this.activeState.code].orderType.indexOf(0) === -1) {
-                        this.nextActive();
-                    } else {
-                        if (this.player[this.orders[newVal]] !== 2) {
-                            
-                        } else {
-                            this.target = "";
-                        }
-                    }
-                }
-            }.bind(this));
-        }  
     },
     methods: {
         filterTargetOptions(i, stage) {
@@ -263,7 +187,45 @@ Vue.component("decision-board", {
             }
             return true;
         },
-        submitDisturb() {
+        calAttackArmy: function() {
+            var attack = 0;
+            this.target.forEach(function(t) {
+                attack += this.getArmyInfo()[this.cities[this.focus].army[t]].attack;
+            }.bind(this));
+            attack += this.getOrdersInfo()[this.cities[this.focus].order].bonus;
+            if (this.reminder !== "") {
+                this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
+                    if (this.cities[n].order !== null) {
+                        console.log();
+                        if (
+                            (
+                                this.cities[n].occupy === this.activeState.code ||
+                                this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) !== -1
+                            ) && this.getOrdersInfo()[this.cities[n].order].type === 1
+                        ) {
+                            this.cities[n].army.forEach(function(a) {
+                                attack += this.getArmyInfo()[a].attack;
+                            }.bind(this));
+                            attack += this.getOrdersInfo()[this.cities[n].order].bonus;
+                        }
+                    }
+                }.bind(this));
+            }
+            return attack;
+        },
+        calDefendNum: function() {
+            var num = 0;
+            num += this.cities[this.reminder].army.length;
+            return num;
+        },
+        chooseArmy: function(i) {
+            if (this.target.indexOf(i) === -1) {
+                this.target.push(i);
+            } else {
+                this.target.splice(this.target.indexOf(i), 1);
+            }
+        },
+        submitDisturb: function() {
             var remover = [];
             Object.keys(this.target).forEach(function(key) { 
                 if (this.target[key] !== "" && remover.indexOf(parseInt(this.target[key])) === -1) {
@@ -361,11 +323,105 @@ Vue.component("decision-board", {
             }
         }
     },
+    watch: {
+        stage: function() {
+            this.active = 0;
+        },
+        active: function (newVal) {
+            this.$nextTick(function () {
+                if (this.stage === 0) {
+                //缔盟阶段
+                    if (this.player[this.orders[newVal]] !== 2) {
+                        this.target = this.AIrequestAllyOrNot(
+                            this.activeState.code, this.state, this.relations, this.rank
+                        );
+                        setTimeout(function () {
+                            if (this.target !== "") {
+                                var result;
+                                if (this.player[this.target] !== 2) {
+                                    result = this.AIacceptAllyOrNot(
+                                        this.activeState.code, this.target, this.state, this.relations, this.rank
+                                    );
+                                } else {
+                                    result = confirm(this.activeState.name + "国想与你结盟,是否同意?");
+                                }
+                                this.allyProcess(result);
+                            } else {
+                                this.skipAlly();
+                            }
+                        }.bind(this), this.settings.delay);
+                    } else {
+                        this.target = "";
+                    }
+                } else if (this.stage === 1) {
+                //毁约阶段
+                    if (this.player[this.orders[newVal]] !== 2) {
+                        this.target = this.AIbreachAllyOrNot(
+                            this.activeState.code, this.state[this.activeState.code].ally, this.state,
+                            this.relations[this.activeState.code]
+                        );
+                        setTimeout(function () {
+                            this.target !== "" ? this.submitBreach() : this.skipBreach();
+                        }.bind(this), this.settings.delay);
+                    } else {
+                        this.target = "";
+                    }
+                } else if (this.stage === 2) {
+                //运筹阶段
+                    if (this.player[this.orders[newVal]] !== 2) {
+                        this.target = null;
+                        this.target = this.AIplanResult(
+                            this.activeState.code, this.state[this.activeState.code].ally, 
+                            this.state, this.cities, this.relations
+                        )
+                        setTimeout(function () {
+                            this.$emit(
+                                "updateorderofcities", this.state[this.activeState.code].occupy, 
+                                this.target
+                            );
+                            this.info = this.activeState.name + "国完成筹备";
+                            this.nextActive();
+                        }.bind(this), this.settings.delay);
+                    }
+                } else if (this.stage === 3) {
+                //劫掠阶段
+                    if (this.state[this.activeState.code].orderType.indexOf(2) === -1) {
+                        this.nextActive();
+                    } else {
+                        if (this.player[this.orders[newVal]] !== 2) {
+                            var result = this.AIdecideDisturbTarget(
+                                this.activeState.code, this.state, this.rank, this.cities,
+                                this.relations[this.activeState.code]
+                            );
+                            setTimeout(function () {
+                                this.disturbProcess(result);
+                            }.bind(this), this.settings.delay);
+                        } else {
+                            this.target = {};
+                        }
+                    }
+                } else if (this.stage === 4) {
+                //行军阶段
+                    if (this.state[this.activeState.code].orderType.indexOf(0) === -1) {
+                        this.nextActive();
+                    } else {
+                        if (this.player[this.orders[newVal]] !== 2) {
+                            
+                        } else {
+                            this.target = [];
+                            this.reminder = "";
+                        }
+                    }
+                }
+            }.bind(this));
+        }  
+    },
     data: function() {
         return {
             active: null,
             info: null,
             target: [],
+            reminder: null,
             cardStyle: {
                 position: "fixed",
                 left: "8pt",
@@ -464,6 +520,26 @@ Vue.component("decision-board", {
                 borderTop: "1pt dashed white",
                 textAlign: "center",
                 marginBottom: "8pt"
+            },
+            marchStyle: {
+                display: "block",
+                margin: "5pt 0",
+                borderTop: "1pt solid lightgrey"
+            },
+            lineStyle: {
+                display: "block",
+                margin: "2pt 0"
+            },
+            forceStyle: {
+                display: "inline-block",
+                verticalAlign: "top",
+                marginRight: "4pt",
+                padding: "2pt 4pt",
+                cursor: "pointer"
+            },
+            borderStyle: {
+                border: "1pt solid lightgrey",
+                borderRadius: "3pt",
             }
         };
     }

@@ -2,16 +2,16 @@ Vue.mixin({
     methods: {
         getOrdersInfo: function() {
             return [
-                {code: 0, name: "战备1", type: 0},
-                {code: 1, name: "战备1", type: 0},
-                {code: 2, name: "战备0", type: 0},
-                {code: 3, name: "战备0", type: 0},
-                {code: 4, name: "战备0", type: 0},
-                {code: 5, name: "战备0", type: 0},
+                {code: 0, name: "战备1", type: 0, bonus: 1},
+                {code: 1, name: "战备1", type: 0, bonus: 1},
+                {code: 2, name: "战备0", type: 0, bonus: 0},
+                {code: 3, name: "战备0", type: 0, bonus: 0},
+                {code: 4, name: "战备0", type: 0, bonus: 0},
+                {code: 5, name: "战备0", type: 0, bonus: 0},
                 
-                {code: 6, name: "支援1", type: 1},
-                {code: 7, name: "支援0", type: 1},
-                {code: 8, name: "支援0", type: 1},
+                {code: 6, name: "支援1", type: 1, bonus: 1},
+                {code: 7, name: "支援0", type: 1, bonus: 0},
+                {code: 8, name: "支援0", type: 1, bonus: 0},
                 
                 {code: 9, name: "劫掠0", type: 2},
                 {code: 10, name: "劫掠0", type: 2},
