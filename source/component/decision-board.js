@@ -83,7 +83,7 @@ Vue.component("decision-board", {
                 </div>
                 <div
                     v-for="(o, i) in state[activeState.code].order" 
-                    v-if="o&&getOrdersInfo()[o].type===2"
+                    v-if="o!==null&&getOrdersInfo()[o].type===2"
                     v-bind:style="boxStyle"
                 >
                     <div>
@@ -137,7 +137,7 @@ Vue.component("decision-board", {
                         {{getArmyInfo()[a].name}}
                     </span>
                     <div v-if="reminder!==''" v-bind:style="lineStyle">
-                        敌军军团数:{{calDefendNum()}}
+                        敌军军团数{{calDefendNum()}} + 已知战力{{calDefendAbility()}}
                     </div>
                 </section>
             </section>
@@ -167,7 +167,7 @@ Vue.component("decision-board", {
                 if (this.state[this.activeState.code].ally.indexOf(this.cities[i].occupy) !== -1) {
                     return false;
                 }
-                if (!this.getOrdersInfo()[this.cities[i].order]) {
+                if (this.cities[i].order === null) {
                     return false;
                 }
                 if (
@@ -196,11 +196,13 @@ Vue.component("decision-board", {
             if (this.reminder !== "") {
                 this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
                     if (this.cities[n].order !== null) {
-                        console.log();
                         if (
                             (
                                 this.cities[n].occupy === this.activeState.code ||
-                                this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) !== -1
+                                (
+                                    this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) !== -1 &&
+                                    this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) === -1
+                                )
                             ) && this.getOrdersInfo()[this.cities[n].order].type === 1
                         ) {
                             this.cities[n].army.forEach(function(a) {
@@ -213,9 +215,50 @@ Vue.component("decision-board", {
             }
             return attack;
         },
+        calDefendAbility: function() {
+            var ability = 0;
+            ability += 2 - this.getCitiesInfo()[this.reminder].type;
+            if (
+                this.cities[this.reminder].order !== null && 
+                this.getOrdersInfo()[this.cities[this.reminder].order].type === 0
+            ) {
+                ability += this.getOrdersInfo()[this.cities[this.reminder].order].bonus;
+            }
+            this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
+                if (this.cities[n].order !== null) {
+                    if (
+                        (
+                            this.cities[n].occupy === this.state[this.cities[this.reminder].occupy].code ||
+                            (
+                                this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) !== -1 &&
+                                this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) === -1
+                            )
+                        ) && this.getOrdersInfo()[this.cities[n].order].type === 1
+                    ) {
+                        ability += this.getOrdersInfo()[this.cities[n].order].bonus;
+                    }
+                }
+            }.bind(this));
+            return ability;
+        },
         calDefendNum: function() {
             var num = 0;
             num += this.cities[this.reminder].army.length;
+            this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
+                if (this.cities[n].order !== null) {
+                    if (
+                        (
+                            this.cities[n].occupy === this.state[this.cities[this.reminder].occupy].code ||
+                            (
+                                this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) !== -1 &&
+                                this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) === -1
+                            )
+                        ) && this.getOrdersInfo()[this.cities[n].order].type === 1
+                    ) {
+                        num += this.cities[n].army.length;
+                    }
+                }
+            }.bind(this));
             return num;
         },
         chooseArmy: function(i) {
@@ -324,6 +367,10 @@ Vue.component("decision-board", {
         }
     },
     watch: {
+        focus: function() {
+            this.target = [];
+            this.reminder = "";
+        },
         stage: function() {
             this.active = 0;
         },

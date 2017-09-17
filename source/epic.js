@@ -116,7 +116,7 @@ var app = new Vue({
                 }
                 states[city.occupy].occupy.push(city.code);
                 states[city.occupy].order.push(city.order);
-                if (city.order || city.order === 0) {
+                if (city.order !== null || city.order === 0) {
                     states[city.occupy].orderType.push(this.getOrdersInfo()[city.order].type);
                 }
                 states[city.occupy].army = states[city.occupy].army.concat(city.army);
