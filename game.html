@@ -68,11 +68,11 @@
 					{code: 17, occupy: 0, army: [], order: null},
 					{code: 18, occupy: 5, army: [0], order: null},
 					{code: 19, occupy: 6, army: [6, 8], order: null},
-					{code: 20, occupy: 2, army: [0], order: 6},
+					{code: 20, occupy: 4, army: [0], order: 6},
 					{code: 21, occupy: 1, army: [1, 8], order: 0},
-					{code: 22, occupy: 7, army: [1,1,1], order: 0},
+					{code: 22, occupy: 6, army: [1,1,1], order: 0},
 					{code: 23, occupy: 1, army: [0], order: 6},
-					{code: 24, occupy: 0, army: [], order: null},
+					{code: 24, occupy: 4, army: [], order: null},
 					{code: 25, occupy: 0, army: [], order: null},
 					{code: 26, occupy: 0, army: [], order: null},
 					{code: 27, occupy: 6, army: [0], order: null},
@@ -108,6 +108,7 @@
 				@saveItemOrder="saveItemOrder"
 				@updateOrderOfCities="updateOrderOfCities"
 				@disturbPowerPoint="disturbPowerPoint"
+				@replaceCitisOccupy="replaceCitisOccupy"
 			></decision-board>
 		    <main id="main">
 		    	<template v-for="(c, index) in getCitiesInfo()">

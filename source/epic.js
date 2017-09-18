@@ -20,6 +20,15 @@ var app = new Vue({
         toNextStage: function() {
             this.stage += 1;  
         },
+        replaceCitisOccupy: function(from, to, move, retreat, kill) {
+            this.cities[to].occupy = this.cities[from].occupy;
+            this.cities[from].order = null;
+            this.cities[to].order = null;
+            move.forEach(function(m) {
+                this.cities[to].army.push(m);
+                this.cities[from].army.splice(this.cities[from].army.indexOf(m), 1);
+            }.bind(this));
+        },
         addNewAlly: function(request, target) {
             this.allies.push([request, target]);
         },
@@ -34,7 +43,7 @@ var app = new Vue({
                     break;
                 }
             }
-            this.allies.splice(i, 1);
+            this.allies.splice(index, 1);
         },
         increaseRelation: function(a, b, step) {
             var current = this.relations[a].indexOf(b);

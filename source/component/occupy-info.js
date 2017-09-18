@@ -6,10 +6,10 @@ Vue.component("occupy-info", {
     template: `
         <div 
             v-show="state.name" @dragover.prevent @drop="onDrop(definition)"
-            v-on:click="clickCity" v-bind:style="cardStyle"
+            v-on:click="clickCity" v-bind:style="[cardStyle, {backgroundColor: state.color}]"
         >
             <div v-bind:style="armyStyle">
-                <span v-bind:style="occupyStyle">{{state.name}}</span>
+                <span v-bind:style="[occupyStyle, {backgroundColor: state.color}]">{{state.name}}</span>
                 <span v-bind:style="orderStyle" v-if="getOrdersInfo()[data.order]">
                     {{stage === 2&&data.occupy!==player?" ? ":getOrdersInfo()[data.order].name}}
                 </span>
@@ -49,7 +49,6 @@ Vue.component("occupy-info", {
             cardStyle: {
                 position: "absolute",
                 width: "55pt",
-                backgroundColor: this.state.color,
                 left: this.definition.location[0] + "pt",
                 top: this.definition.location[1] + "pt",
                 borderRadius: "3pt",
@@ -79,7 +78,6 @@ Vue.component("occupy-info", {
             occupyStyle: {
                 display: "inline-block",
                 verticalAlign: "middle",
-                backgroundColor: this.state.color,
                 borderRadius: "50%",
                 color: "white",
                 minWidth: "16pt",

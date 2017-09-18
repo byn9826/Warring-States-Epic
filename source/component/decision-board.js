@@ -2,7 +2,7 @@ Vue.component("decision-board", {
     props: [
         "stage", "player", "state", "cities", "relations", "rank", "orders", "settings", "addnewally",
         "focus", "addnewhistory", "tonextstage", "removeally", "increaserelation", "decreaserelation",
-        "saveitemorder", "updateorderofcities", "disturbpowerpoint"
+        "saveitemorder", "updateorderofcities", "disturbpowerpoint", "replacecitisoccupy"
     ],
     template: `
         <div v-bind:style="cardStyle">
@@ -139,6 +139,11 @@ Vue.component("decision-board", {
                     <div v-if="reminder!==''" v-bind:style="lineStyle">
                         敌军军团数{{calDefendNum()}} + 已知战力{{calDefendAbility()}}
                     </div>
+                    <input
+                        v-if="reminder!==''&&target.length!==0"
+                        v-bind:style="confirmStyle" type="button" value="出征" 
+                        v-on:click="confirmAttack()"
+                    />
                 </section>
             </section>
             <section v-else>
@@ -186,6 +191,27 @@ Vue.component("decision-board", {
                 }
             }
             return true;
+        },
+        confirmAttack: function() { 
+            if (this.cities[this.reminder].army.length === 0) {
+                if (this.player[this.cities[this.reminder].occupy] === 0) {
+                    this.info = this.activeState.name + "国占领了" + this.getCitiesInfo()[this.reminder].name;
+                } else {
+                    this.$emit(
+                        "decreaserelation", this.cities[this.reminder].occupy, this.activeState.code, 2
+                    );
+                    this.$emit(
+                        "decreaserelation", this.activeState.code, this.cities[this.reminder].occupy, 1
+                    );
+                    this.info = this.activeState.name + "国攻占了" + this.getStatesInfo()[this.cities[this.reminder].occupy].name + "国的" + this.getCitiesInfo()[this.reminder].name;
+                }
+                this.$emit("addnewhistory", this.info);
+                var move = this.target.map(function(t) {
+                    return this.getArmyInfo()[this.cities[this.focus].army[t]].code;
+                }.bind(this));
+                this.$emit("replacecitisoccupy", this.focus, this.reminder, move, null, null);
+            }
+            this.nextActive();
         },
         calAttackArmy: function() {
             var attack = 0;
