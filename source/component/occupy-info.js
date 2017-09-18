@@ -1,6 +1,7 @@
 Vue.component("occupy-info", {
     props: [
-        "definition", "data", "state", "player", "stage", "saveitemorder", "updatefocusvariable"
+        "definition", "data", "state", "player", "stage", "states",
+        "saveitemorder", "updatefocusvariable"
     ],
     template: `
         <div 
@@ -14,10 +15,15 @@ Vue.component("occupy-info", {
                 </span>
             </div>
             <div v-bind:style="armyStyle">
-                <span v-if="data.army.length!==0&&data.occupy!==player" class="fa fa-shield" aria-hidden="true">
+                <span 
+                    v-if="data.army.length!==0&&data.occupy!==player&&states[player].ally.indexOf(data.occupy)===-1" 
+                    class="fa fa-shield" aria-hidden="true"
+                >
                     {{data.army.length}}
                 </span>
-                <template v-else-if="data.army.length!==0" v-for="a in data.army" v-bind:style="iconStyle">
+                <template 
+                    v-else-if="data.army.length!==0" v-for="a in data.army" v-bind:style="iconStyle"
+                >
                     <span v-html="getArmyIcon(a)"></span>
                 </template>
             </div>
