@@ -1,7 +1,7 @@
 Vue.component("state-info", {
     props: ["definition", "player", "data", "power", "hero", "relations", "rank"],
     template: `
-        <div v-bind:style="cardStyle">
+        <div v-bind:style="cardStyle" v-on:mouseleave="leaveBoard">
             <div v-bind:style="headerStyle">
                 <span v-bind:style="player?activeStyle:nameStyle">
                     {{definition.name}}
@@ -21,8 +21,18 @@ Vue.component("state-info", {
             <div v-bind:style="strengthStyle">
                 <span v-bind:style="armyStyle">
                     主将 {{getActiveHeroCount}}/{{hero.length}} 
-                    <span>[查看]</span>
+                    <span style="cursor:pointer" v-on:click="showBoard">[查看]</span>
                 </span>
+                <div 
+                    v-for="(h, i) in getHerosInfo()[this.definition.code]" 
+                    style="font-size:8pt;marginBottom:3pt"
+                    v-show="showHero"
+                >
+                    <span style="backgroundColor:darkslategray;color:white;marginRight:3pt;text-align:center;border-radius:3pt">
+                        {{hero[i]===1?"待命":"休整"}}
+                    </span>
+                    {{h.name}} 战力{{h.strength}} {{h.kill!==0?'斩杀'+h.kill:''}}
+                </div>
             </div>
             <div v-bind:style="strengthStyle">
                 <span v-bind:style="armyStyle">
@@ -34,6 +44,14 @@ Vue.component("state-info", {
     created: function() {
         //console.log(this.hero);
         //console.log(this.definition.code);
+    },
+    methods: {
+        showBoard: function() {
+            this.showHero = true;    
+        },
+        leaveBoard: function() {
+            this.showHero = false;
+        }    
     },
     computed: {
         getCurrentRank: function() {
@@ -77,6 +95,7 @@ Vue.component("state-info", {
     },
     data: function() {
         return {
+            showHero: false,
             cardStyle: {
                 display: "block",
                 padding: "3pt",

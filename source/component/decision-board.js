@@ -210,8 +210,11 @@ Vue.component("decision-board", {
                     return this.getArmyInfo()[this.cities[this.focus].army[t]].code;
                 }.bind(this));
                 this.$emit("replacecitisoccupy", this.focus, this.reminder, move, null, null);
+            } else {
+                console.log(this.calAttackArmy());
+                console.log(this.calDefendArmy());
             }
-            this.nextActive();
+            //this.nextActive();
         },
         calAttackArmy: function() {
             var attack = 0;
@@ -240,6 +243,30 @@ Vue.component("decision-board", {
                 }.bind(this));
             }
             return attack;
+        },
+        calDefendArmy: function() {
+            var total = this.calDefendAbility();
+            this.cities[this.reminder].army.forEach(function(a) {
+                total += this.getArmyInfo()[a].defend;
+            }.bind(this));
+            this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
+                if (this.cities[n].order !== null) {
+                    if (
+                        (
+                            this.cities[n].occupy === this.state[this.cities[this.reminder].occupy].code ||
+                            (
+                                this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) !== -1 &&
+                                this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) === -1
+                            )
+                        ) && this.getOrdersInfo()[this.cities[n].order].type === 1
+                    ) {
+                        this.cities[n].army.forEach(function(a) {
+                            total += this.getArmyInfo()[a].defend;
+                        }.bind(this));
+                    }
+                }
+            }.bind(this));
+            return total;
         },
         calDefendAbility: function() {
             var ability = 0;
