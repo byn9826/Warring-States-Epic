@@ -92,8 +92,8 @@ var app = new Vue({
         }
     },
     created: function() {
-        console.log("state info:");
-        console.log(this.statesInfo);
+        //console.log(this.statesInfo);
+        console.log(this.getHerosInfo());
     },
     computed: {
         statesInfo: function() {

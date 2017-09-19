@@ -150,7 +150,7 @@ Vue.component("decision-board", {
                 <div v-bind:style="descStyle">
                     {{activeState.name}}国正在{{getStageDescName(stage)}} ...
                 </div>
-                <div v-bind:style="flagStyle">{{getStateKingName(orders[active])}}行动中</div>
+                <div v-bind:style="flagStyle">{{this.getHerosInfo()[orders[active]][0].name}}行动中</div>
             </section>
             <div v-show="info" v-bind:style="infoStyle">{{info}}</div>
         </div>

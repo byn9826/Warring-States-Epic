@@ -20,7 +20,8 @@ Vue.component("state-info", {
             </div>
             <div v-bind:style="strengthStyle">
                 <span v-bind:style="armyStyle">
-                    主将 {{getActiveHeroCount}}/{{hero.length}}
+                    主将 {{getActiveHeroCount}}/{{hero.length}} 
+                    <span>[查看]</span>
                 </span>
             </div>
             <div v-bind:style="strengthStyle">
@@ -30,6 +31,10 @@ Vue.component("state-info", {
             </div>
         </div>
     `,
+    created: function() {
+        //console.log(this.hero);
+        //console.log(this.definition.code);
+    },
     computed: {
         getCurrentRank: function() {
             var rank, i = 0;
