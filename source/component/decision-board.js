@@ -9,7 +9,7 @@ Vue.component("decision-board", {
             <header v-bind:style="roundStyle">
                 {{getStageName(stage)}} 
             </header>
-            <section v-if="stage===0 && player[orders[active]]===2">
+            <section v-if="stage===0&&player[orders[active]]===2">
                 <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
                 <div v-bind:style="descStyle">请选择想要缔盟的国家</div>
                 <div v-bind:style="lineStyle">
@@ -32,7 +32,7 @@ Vue.component("decision-board", {
                     />
                 </div>
             </section>
-            <section v-else-if="stage===1 && player[orders[active]]===2">
+            <section v-else-if="stage===1&&player[orders[active]]===2">
                 <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
                 <div v-bind:style="descStyle">请选择想要毁约的国家</div>
                 <div v-bind:style="lineStyle">
@@ -54,7 +54,7 @@ Vue.component("decision-board", {
                     />
                 </div>
             </section>
-            <section v-else-if="stage===2 && player[orders[active]]===2">
+            <section v-else-if="stage===2&&player[orders[active]]===2">
                 <div v-bind:style="descStyle">
                     {{getStatesAllies(state[activeState.code]) || "无盟友"}}
                 </div>
@@ -77,7 +77,7 @@ Vue.component("decision-board", {
                     v-on:click="submitPlan()"
                 />
             </section>
-            <section v-else-if="stage===3 && player[orders[active]]===2">
+            <section v-else-if="stage===3&&player[orders[active]]===2">
                 <div v-bind:style="descStyle">
                     {{getStatesAllies(state[activeState.code]) || "无盟友"}}
                 </div>
@@ -106,7 +106,7 @@ Vue.component("decision-board", {
                     v-on:click="submitDisturb()"
                 />
             </section>
-            <section v-else-if="stage===4 && player[orders[active]]===2">
+            <section v-else-if="stage===4&&player[orders[active]]===2&&!showBattle">
                 <div v-bind:style="descStyle">
                     {{getStatesAllies(state[activeState.code]) || "无盟友"}}
                 </div>
@@ -145,6 +145,79 @@ Vue.component("decision-board", {
                         v-on:click="confirmAttack()"
                     />
                 </section>
+            </section>
+            <section v-else-if="stage===4&&player[orders[active]]===2&&showBattle">
+                <div v-bind:style="descStyle">
+                    {{activeState.name + getStatesInfo()[cities[reminder].occupy].name}}交战于{{getCitiesInfo()[reminder].name}}
+                </div>
+                <table border="1" style="font-size:9pt;font-weight:normal;text-align:center">
+                    <tr>
+                        <th style="width:125px;background-color:darkgrey;color:black">
+                            {{activeState.name}}军进攻
+                        </th>
+                        <th style="width:125px;background-color:darkgrey;color:black">
+                            {{getStatesInfo()[cities[reminder].occupy].name}}军防守
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            进攻部队:<br />
+                            {{target.map(function(t){return getArmyInfo()[cities[focus].army[t]].name}).join(" ")}}
+                        </td>
+                        <td>
+                            驻防部队:<br />
+                            {{cities[reminder].army.map(function(a){return getArmyInfo()[a].name}).join(" ")}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            援军:<br />{{
+                                getCitiesInfo()[reminder].nearby.map(function(nearby) {
+                                    if (
+                                        (
+                                            cities[nearby].occupy === activeState.code ||
+                                            (
+                                                state[activeState.code].ally.indexOf(cities[nearby].occupy) !== -1 &&
+                                                state[cities[reminder].occupy].ally.indexOf(cities[nearby].occupy) === -1
+                                            )
+                                        ) && getOrdersInfo()[cities[nearby].order].type === 1
+                                    ) {
+                                        return cities[nearby].army.map(function(a){return getArmyInfo()[a].name}).join(" ");
+                                    } else {
+                                        return "";
+                                    }
+                                }.bind(this)).join(" ")
+                            }}
+                        </td>
+                        <td>
+                            援军:<br />{{
+                                getCitiesInfo()[reminder].nearby.map(function(nearby) {
+                                    if (
+                                        (
+                                            cities[nearby].occupy === cities[reminder].occupy ||
+                                            (
+                                                state[cities[reminder].occupy].ally.indexOf(cities[nearby].occupy) !== -1 &&
+                                                state[cities[focus].occupy].ally.indexOf(cities[nearby].occupy) === -1
+                                            )
+                                        ) && cities[nearby].order !== null && getOrdersInfo()[cities[nearby].order].type === 1
+                                    ) {
+                                        return cities[nearby].army.map(function(a){return getArmyInfo()[a].name}.bind(this)).join(" ");
+                                    } else {
+                                        return "";
+                                    }
+                                }.bind(this)).join(" ")
+                            }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>总战力:{{calAttackArmy()}}</td>
+                        <td>总战力:{{calDefendArmy()}}</td>
+                    </tr>
+                    <tr>
+                        <td>武将:{{}}</td>
+                        <td>武将:{{}}</td>
+                    </tr>
+                </table>
             </section>
             <section v-else>
                 <div v-bind:style="descStyle">
@@ -213,6 +286,7 @@ Vue.component("decision-board", {
             } else {
                 console.log(this.calAttackArmy());
                 console.log(this.calDefendArmy());
+                this.showBattle = true;
             }
             //this.nextActive();
         },
@@ -253,7 +327,7 @@ Vue.component("decision-board", {
                 if (this.cities[n].order !== null) {
                     if (
                         (
-                            this.cities[n].occupy === this.state[this.cities[this.reminder].occupy].code ||
+                            this.cities[n].occupy === this.cities[this.reminder].occupy ||
                             (
                                 this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) !== -1 &&
                                 this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) === -1
@@ -281,7 +355,7 @@ Vue.component("decision-board", {
                 if (this.cities[n].order !== null) {
                     if (
                         (
-                            this.cities[n].occupy === this.state[this.cities[this.reminder].occupy].code ||
+                            this.cities[n].occupy === this.cities[this.reminder].occupy ||
                             (
                                 this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) !== -1 &&
                                 this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) === -1
@@ -301,7 +375,7 @@ Vue.component("decision-board", {
                 if (this.cities[n].order !== null) {
                     if (
                         (
-                            this.cities[n].occupy === this.state[this.cities[this.reminder].occupy].code ||
+                            this.cities[n].occupy === this.cities[this.reminder].occupy ||
                             (
                                 this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) !== -1 &&
                                 this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) === -1
@@ -522,6 +596,7 @@ Vue.component("decision-board", {
             info: null,
             target: [],
             reminder: null,
+            showBattle: false,
             cardStyle: {
                 position: "fixed",
                 left: "8pt",

@@ -27,11 +27,6 @@ Vue.mixin({
                 default:
                     return "&#9818;";
             }
-        },
-        getArmyEstimate: function(t, m) {
-            if (m === 0) {
-                return this.getArmyInfo()[t].attack;
-            }
         }
     }
 });
