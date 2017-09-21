@@ -1,8 +1,9 @@
 Vue.component("decision-board", {
     props: [
-        "stage", "player", "state", "cities", "relations", "rank", "orders", "settings", "addnewally",
-        "focus", "addnewhistory", "tonextstage", "removeally", "increaserelation", "decreaserelation",
-        "saveitemorder", "updateorderofcities", "disturbpowerpoint", "replacecitisoccupy"
+        "stage", "player", "state", "cities", "relations", "rank", "orders", "settings", "focus",
+        "addnewally", "addnewhistory", "tonextstage", "removeally", "increaserelation", "decreaserelation",
+        "saveitemorder", "updateorderofcities", "disturbpowerpoint", "replacecitisoccupy",
+        "hero"
     ],
     template: `
         <div v-bind:style="cardStyle">
@@ -127,7 +128,7 @@ Vue.component("decision-board", {
                 </template>
                 <section v-bind:style="marchStyle" v-if="focus!==null">
                     <div v-bind:style="lineStyle">
-                        选择我军出征部队 战力:{{calAttackArmy()}}
+                        选择我军出征部队 战力:{{calAttackEnvPoint + calAttackArmyPoint + calAttackSupportPoint}}
                     </div>
                     <span 
                         v-for="(a, i) in cities[focus].army" 
@@ -137,7 +138,7 @@ Vue.component("decision-board", {
                         {{getArmyInfo()[a].name}}
                     </span>
                     <div v-if="reminder!==''" v-bind:style="lineStyle">
-                        敌军军团数{{calDefendNum()}} + 已知战力{{calDefendAbility()}}
+                        敌军军团数{{calDefendNum}} + 已知战力{{calDefendEnvPoint}}
                     </div>
                     <input
                         v-if="reminder!==''&&target.length!==0"
@@ -152,10 +153,10 @@ Vue.component("decision-board", {
                 </div>
                 <table border="1" style="font-size:9pt;font-weight:normal;text-align:center">
                     <tr>
-                        <th style="width:125px;background-color:darkgrey;color:black">
+                        <th style="width:125pt;background-color:darkgrey;color:black">
                             {{activeState.name}}军进攻
                         </th>
-                        <th style="width:125px;background-color:darkgrey;color:black">
+                        <th style="width:125pt;background-color:darkgrey;color:black">
                             {{getStatesInfo()[cities[reminder].occupy].name}}军防守
                         </th>
                     </tr>
@@ -210,12 +211,21 @@ Vue.component("decision-board", {
                         </td>
                     </tr>
                     <tr>
-                        <td>总战力:{{calAttackArmy()}}</td>
-                        <td>总战力:{{calDefendArmy()}}</td>
+                        <td>总战力:{{calAttackEnvPoint + calAttackArmyPoint + calAttackSupportPoint}}</td>
+                        <td>总战力:{{calDefendArmyPoint + calDefendEnvPoint + calDefendSupportPoint}}</td>
                     </tr>
                     <tr>
-                        <td>武将:{{}}</td>
-                        <td>武将:{{}}</td>
+                        <td style="padding:3pt 0">将领:
+                            <select>
+                                <option 
+                                    v-for="(h, i) in getHerosInfo()[activeState.code]"
+                                    v-if="hero[activeState.code][i]===1"
+                                >
+                                    {{h.name}}
+                                </option>
+                            </select>
+                        </td>
+                        <td>将领:{{}}</td>
                     </tr>
                 </table>
             </section>
@@ -228,11 +238,6 @@ Vue.component("decision-board", {
             <div v-show="info" v-bind:style="infoStyle">{{info}}</div>
         </div>
     `,
-    computed: {
-        activeState: function() {
-            return this.getStatesInfo()[this.orders[this.active]];
-        }
-    },
     created: function() {
         this.active = 0;
     },
@@ -284,109 +289,11 @@ Vue.component("decision-board", {
                 }.bind(this));
                 this.$emit("replacecitisoccupy", this.focus, this.reminder, move, null, null);
             } else {
-                console.log(this.calAttackArmy());
-                console.log(this.calDefendArmy());
+                console.log(this.calAttackEnvPoint + this.calAttackArmyPoint + this.calAttackSupportPoint);
+                console.log(this.calDefendArmyPoint + this.calDefendEnvPoint + this.calDefendSupportPoint);
                 this.showBattle = true;
             }
             //this.nextActive();
-        },
-        calAttackArmy: function() {
-            var attack = 0;
-            this.target.forEach(function(t) {
-                attack += this.getArmyInfo()[this.cities[this.focus].army[t]].attack;
-            }.bind(this));
-            attack += this.getOrdersInfo()[this.cities[this.focus].order].bonus;
-            if (this.reminder !== "") {
-                this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
-                    if (this.cities[n].order !== null) {
-                        if (
-                            (
-                                this.cities[n].occupy === this.activeState.code ||
-                                (
-                                    this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) !== -1 &&
-                                    this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) === -1
-                                )
-                            ) && this.getOrdersInfo()[this.cities[n].order].type === 1
-                        ) {
-                            this.cities[n].army.forEach(function(a) {
-                                attack += this.getArmyInfo()[a].attack;
-                            }.bind(this));
-                            attack += this.getOrdersInfo()[this.cities[n].order].bonus;
-                        }
-                    }
-                }.bind(this));
-            }
-            return attack;
-        },
-        calDefendArmy: function() {
-            var total = this.calDefendAbility();
-            this.cities[this.reminder].army.forEach(function(a) {
-                total += this.getArmyInfo()[a].defend;
-            }.bind(this));
-            this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
-                if (this.cities[n].order !== null) {
-                    if (
-                        (
-                            this.cities[n].occupy === this.cities[this.reminder].occupy ||
-                            (
-                                this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) !== -1 &&
-                                this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) === -1
-                            )
-                        ) && this.getOrdersInfo()[this.cities[n].order].type === 1
-                    ) {
-                        this.cities[n].army.forEach(function(a) {
-                            total += this.getArmyInfo()[a].defend;
-                        }.bind(this));
-                    }
-                }
-            }.bind(this));
-            return total;
-        },
-        calDefendAbility: function() {
-            var ability = 0;
-            ability += 2 - this.getCitiesInfo()[this.reminder].type;
-            if (
-                this.cities[this.reminder].order !== null && 
-                this.getOrdersInfo()[this.cities[this.reminder].order].type === 0
-            ) {
-                ability += this.getOrdersInfo()[this.cities[this.reminder].order].bonus;
-            }
-            this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
-                if (this.cities[n].order !== null) {
-                    if (
-                        (
-                            this.cities[n].occupy === this.cities[this.reminder].occupy ||
-                            (
-                                this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) !== -1 &&
-                                this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) === -1
-                            )
-                        ) && this.getOrdersInfo()[this.cities[n].order].type === 1
-                    ) {
-                        ability += this.getOrdersInfo()[this.cities[n].order].bonus;
-                    }
-                }
-            }.bind(this));
-            return ability;
-        },
-        calDefendNum: function() {
-            var num = 0;
-            num += this.cities[this.reminder].army.length;
-            this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
-                if (this.cities[n].order !== null) {
-                    if (
-                        (
-                            this.cities[n].occupy === this.cities[this.reminder].occupy ||
-                            (
-                                this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) !== -1 &&
-                                this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) === -1
-                            )
-                        ) && this.getOrdersInfo()[this.cities[n].order].type === 1
-                    ) {
-                        num += this.cities[n].army.length;
-                    }
-                }
-            }.bind(this));
-            return num;
         },
         chooseArmy: function(i) {
             if (this.target.indexOf(i) === -1) {
@@ -717,5 +624,136 @@ Vue.component("decision-board", {
                 borderRadius: "3pt",
             }
         };
-    }
+    },
+    computed: {
+        activeState: function() {
+            return this.getStatesInfo()[this.orders[this.active]];
+        },
+        calDefendEnvPoint: function() {
+            var ability = 0;
+            ability += 2 - this.getCitiesInfo()[this.reminder].type;
+            if (
+                this.cities[this.reminder].order !== null && 
+                this.getOrdersInfo()[this.cities[this.reminder].order].type === 0
+            ) {
+                ability += this.getOrdersInfo()[this.cities[this.reminder].order].bonus;
+            }
+            this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
+                if (this.cities[n].order !== null) {
+                    if (
+                        (
+                            this.cities[n].occupy === this.cities[this.reminder].occupy ||
+                            (
+                                this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) !== -1 &&
+                                this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) === -1
+                            )
+                        ) && this.getOrdersInfo()[this.cities[n].order].type === 1
+                    ) {
+                        ability += this.getOrdersInfo()[this.cities[n].order].bonus;
+                    }
+                }
+            }.bind(this));
+            return ability;
+        },
+        calDefendArmyPoint: function() {
+            var total = 0;
+            this.cities[this.reminder].army.forEach(function(a) {
+                total += this.getArmyInfo()[a].defend;
+            }.bind(this));
+            return total;
+        },
+        calDefendSupportPoint: function() {
+            var total = 0;
+            this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
+                if (this.cities[n].order !== null) {
+                    if (
+                        (
+                            this.cities[n].occupy === this.cities[this.reminder].occupy ||
+                            (
+                                this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) !== -1 &&
+                                this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) === -1
+                            )
+                        ) && this.getOrdersInfo()[this.cities[n].order].type === 1
+                    ) {
+                        this.cities[n].army.forEach(function(a) {
+                            total += this.getArmyInfo()[a].defend;
+                        }.bind(this));
+                    }
+                }
+            }.bind(this));
+            return total;
+        },
+        calDefendNum: function() {
+            var num = 0;
+            num += this.cities[this.reminder].army.length;
+            this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
+                if (this.cities[n].order !== null) {
+                    if (
+                        (
+                            this.cities[n].occupy === this.cities[this.reminder].occupy ||
+                            (
+                                this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) !== -1 &&
+                                this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) === -1
+                            )
+                        ) && this.getOrdersInfo()[this.cities[n].order].type === 1
+                    ) {
+                        num += this.cities[n].army.length;
+                    }
+                }
+            }.bind(this));
+            return num;
+        },
+        calAttackEnvPoint: function() {
+            var attack = 0;
+            attack += this.getOrdersInfo()[this.cities[this.focus].order].bonus;
+            if (this.reminder !== "") {
+                this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
+                    if (this.cities[n].order !== null) {
+                        if (
+                            (
+                                this.cities[n].occupy === this.activeState.code ||
+                                (
+                                    this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) !== -1 &&
+                                    this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) === -1
+                                )
+                            ) && this.getOrdersInfo()[this.cities[n].order].type === 1
+                        ) {
+                            attack += this.getOrdersInfo()[this.cities[n].order].bonus;
+                        }
+                    }
+                }.bind(this));
+            }
+            return attack;
+        },
+        calAttackArmyPoint: function() {
+            var attack = 0;
+            this.target.forEach(function(t) {
+                attack += this.getArmyInfo()[this.cities[this.focus].army[t]].attack;
+            }.bind(this));
+            return attack;
+        },
+        calAttackSupportPoint: function() {
+            var attack = 0;
+            if (this.reminder !== "") {
+                this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
+                    if (this.cities[n].order !== null) {
+                        if (
+                            (
+                                this.cities[n].occupy === this.activeState.code ||
+                                (
+                                    this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) !== -1 &&
+                                    this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) === -1
+                                )
+                            ) && this.getOrdersInfo()[this.cities[n].order].type === 1
+                        ) {
+                            this.cities[n].army.forEach(function(a) {
+                                attack += this.getArmyInfo()[a].attack;
+                            }.bind(this));
+                        }
+                    }
+                }.bind(this));
+            }
+            return attack;
+        },
+    },
 });

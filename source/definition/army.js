@@ -13,7 +13,7 @@ Vue.mixin({
                 {code: 7, name: "锐士", attack: 3.5, defend: 2, cost: 2},
                 
                 {code: 8, name: "骑兵", attack: 2, defend: 2, cost: 2},
-                {code: 9, name: "楼车", attack: 4, defend: 0, cost: 2},
+                {code: 9, name: "战车", attack: 3, defend: 1, cost: 2},
             ];
         },
         getArmyIcon: function(t) {
@@ -23,9 +23,9 @@ Vue.mixin({
                 case 8:
                     return "&#9822;";
                 case 9:
-                    return "&#9820;";
+                    return "&#9821;";
                 default:
-                    return "&#9818;";
+                    return "&#9819;";
             }
         }
     }

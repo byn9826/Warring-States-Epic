@@ -25,13 +25,14 @@ Vue.component("state-info", {
                 </span>
                 <div 
                     v-for="(h, i) in getHerosInfo()[this.definition.code]" 
-                    style="font-size:8pt;marginBottom:3pt"
+                    style="font-size:8pt;marginBottom:3pt;color:lightgrey"
                     v-show="showHero"
                 >
                     <span style="backgroundColor:darkslategray;color:white;marginRight:3pt;text-align:center;border-radius:3pt">
                         {{hero[i]===1?"待命":"休整"}}
                     </span>
-                    {{h.name}} 战力{{h.strength}} {{h.kill!==0?'斩杀'+h.kill:''}} {{h.safe!==0?'防卫'+h.safe:''}}
+                    {{h.name}} 战力{{h.strength}} {{h.kill!==0?'斩杀'+h.kill:''}} 
+                    {{h.safe!==0?'防卫'+h.safe:''}} {{h.skill!==null?h.skill:''}}
                 </div>
             </div>
             <div v-bind:style="strengthStyle">
