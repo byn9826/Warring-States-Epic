@@ -15,7 +15,7 @@ Vue.mixin({
                     {code: 6, name: "楚怀王", state: 2, strength: 2, kill: 0, safe: 0, skill: "战斗胜利后,将一个军团升级为" + this.getArmyInfo()[2].name},
                     {code: 7, name: "吴起", state: 2, strength: 4, kill: 3, safe: 1, skill: ""},
                     {code: 8, name: "项燕", state: 2, strength: 3, kill: 2, safe: 2, skill: ""},
-                    {code: 9, name: "春申君", state: 2, strength: 2, kill: 0, safe: 0, skill: "当己方有援军时,敌方援军无法支援"},
+                    {code: 9, name: "春申君", state: 2, strength: 2, kill: 0, safe: 0, skill: "当己方有援军时,敌方援军战力为0"},
                     {code: 10, name: "屈原", state: 2, strength: 1, kill: 0, safe: 0, skill: "战斗胜利后,国力增长两点"},
                     {code: 11, name: "申包胥", state: 2, strength: 1, kill: 0, safe: 0, skill: "当已方有援军时,将领战力+2"},
                 ],
@@ -25,7 +25,7 @@ Vue.mixin({
                     {code: 14, name: "秦开", state: 3, strength: 3, kill: 2, safe: 1, skill: ""},
                     {code: 15, name: "剧辛", state: 3, strength: 2, kill: 1, safe: 1, skill: ""},
                     {code: 16, name: "郭隗", state: 3, strength: 1, kill: 0, safe: 0, skill: "战斗失败后,已方全部将领恢复为待命"},
-                    {code: 17, name: "苏秦", state: 3, strength: 1, kill: 0, safe: 0, skill: "战斗双方均无援军"},
+                    {code: 17, name: "苏秦", state: 3, strength: 1, kill: 0, safe: 0, skill: "当已方无援军时,将领战力+2"},
                 ],
                 [
                     {code: 18, name: "赵武灵王", state: 4, strength: 2, kill: 0, safe: 0, skill: "战斗胜利后,将一个军团升级为" + this.getArmyInfo()[4].name},

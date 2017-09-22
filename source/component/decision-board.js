@@ -368,7 +368,8 @@ Vue.component("decision-board", {
                 var attackDefine = this.getHerosInfo()[this.activeState.code][this.attackHeroSelector];
                 var defendDefine = this.getHerosInfo()[this.cities[this.reminder].occupy][this.defendHero];
                 this.heroPower = this.processBeforeBattle(
-                    attackDefine, defendDefine, this.calAttackSupportPoint, this.calDefendSupportPoint
+                    attackDefine, defendDefine, this.calAttackSupportPoint, this.calDefendSupportPoint,
+                    this.calDefendArmyPoint, this.reminder
                 );
                 this.attackHero = this.attackHeroSelector;
             } else {

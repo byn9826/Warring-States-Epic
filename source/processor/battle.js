@@ -1,6 +1,6 @@
 Vue.mixin({
     methods: {
-        processBeforeBattle: function(aHero, dHero, aSupport, dSupport) {
+        processBeforeBattle: function(aHero, dHero, aSupport, dSupport, dArmy, dcity) {
             var result = [0, 0];
             //春申君进攻
             if (aHero.code === 9) {
@@ -16,8 +16,9 @@ Vue.mixin({
             }
             //苏秦进攻
             else if (aHero.code === 17) {
-                result[0] -= aSupport;
-                result[1] -= dSupport;
+                if (aSupport === 0) {
+                    result[0] += 2;
+                }
             }
             //韩非子进攻
             else if (aHero.code === 28) {
@@ -26,7 +27,46 @@ Vue.mixin({
                     result[0] += 1;
                 }
             }
-            console.log(result);
+            //春申君防守
+            if (dHero.code === 9) {
+                if (dSupport !== 0) {
+                    result[0] -= aSupport;
+                }
+            } 
+            //申包胥防守
+            else if (dHero.code === 11) {
+                if (dSupport !== 0) {
+                    result[1] += 2;
+                }
+            }
+            //苏秦防守
+            else if (dHero.code === 17) {
+                if (dSupport === 0) {
+                    result[1] += 2;
+                }
+            }
+            //平原君防守
+            else if (dHero.code === 23) {
+                result[1] += dArmy;
+            }
+            //申不害防守
+            else if (dHero.code === 27) {
+                if (
+                    app.$data.cities[dcity].army.length < 4 && 
+                    app.statesInfo[dHero.state].army.length < this.getStateArmyMax(app.statesInfo[dHero.state].supply)
+                ) {
+                    app.$data.cities[dcity].army.push(dHero.state);
+                }
+            }
+            //韩非子防守
+            else if (dHero.code === 28) {
+                if (app.$data.power[dHero.state] !== 0) {
+                    app.$data.power.splice(dHero.state, 1, app.$data.power[dHero.state] - 1);
+                    result[1] += 1;
+                }
+            } else if (dHero.code === 35) {
+                result[1] += app.$data.cities[dcity].army.length;
+            }
             return result;
         }
     }
