@@ -13,16 +13,16 @@ Vue.mixin({
                 {code: 7, name: "支援0", type: 1, bonus: 0},
                 {code: 8, name: "支援0", type: 1, bonus: 0},
                 
-                {code: 9, name: "劫掠0", type: 2},
-                {code: 10, name: "劫掠0", type: 2},
-                {code: 11, name: "劫掠0", type: 2},
+                {code: 9, name: "劫掠0", type: 2, bonus: 0},
+                {code: 10, name: "劫掠0", type: 2, bonus: 0},
+                {code: 11, name: "劫掠0", type: 2, bonus: 0},
                 
-                {code: 12, name: "休整0", type: 3},
-                {code: 13, name: "休整0", type: 3},
-                {code: 14, name: "休整0", type: 3},
-                {code: 15, name: "休整0", type: 3},
-                {code: 16, name: "休整0", type: 3},
-                {code: 17, name: "休整0", type: 3},
+                {code: 12, name: "休整0", type: 3, bonus: 0},
+                {code: 13, name: "休整0", type: 3, bonus: 0},
+                {code: 14, name: "休整0", type: 3, bonus: 0},
+                {code: 15, name: "休整0", type: 3, bonus: 0},
+                {code: 16, name: "休整0", type: 3, bonus: 0},
+                {code: 17, name: "休整0", type: 3, bonus: 0},
             ];
         },
         getDisturbleType: function() {

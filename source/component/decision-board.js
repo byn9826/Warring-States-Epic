@@ -225,7 +225,9 @@ Vue.component("decision-board", {
                                 </option>
                             </select>
                         </td>
-                        <td>将领:{{}}</td>
+                        <td>
+                            将领:{{defendBattleHero}}
+                        </td>
                     </tr>
                 </table>
             </section>
@@ -289,8 +291,6 @@ Vue.component("decision-board", {
                 }.bind(this));
                 this.$emit("replacecitisoccupy", this.focus, this.reminder, move, null, null);
             } else {
-                console.log(this.calAttackEnvPoint + this.calAttackArmyPoint + this.calAttackSupportPoint);
-                console.log(this.calDefendArmyPoint + this.calDefendEnvPoint + this.calDefendSupportPoint);
                 this.showBattle = true;
             }
             //this.nextActive();
@@ -491,6 +491,7 @@ Vue.component("decision-board", {
                         } else {
                             this.target = [];
                             this.reminder = "";
+                            this.showBattle = false;
                         }
                     }
                 }
@@ -755,5 +756,15 @@ Vue.component("decision-board", {
             }
             return attack;
         },
+        defendBattleHero: function() {
+            if (this.reminder !== null && this.reminder !== "") {
+                return this.AIdecideBattleHero(
+                    this.activeState.code, this.cities[this.reminder].occupy, 
+                    this.calAttackEnvPoint + this.calAttackArmyPoint + this.calAttackSupportPoint,
+                    this.calDefendArmyPoint + this.calDefendEnvPoint + this.calDefendSupportPoint,
+                    this.hero
+                );
+            }
+        }
     },
 });

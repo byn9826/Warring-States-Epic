@@ -1,9 +1,9 @@
 var data = {
 	settings: {
-		delay: 3000
+		delay: 100
 	},
 	round: 0,
-	stage: 2,
+	stage: 4,
 	history: [],
 	player: [0, 2, 1, 1, 1, 1, 1, 1, 0],
 	allies: [
@@ -33,7 +33,7 @@ var data = {
 		[]
 	],
 	fame: [1, 2, 6, 7, 4, 3, 5],
-	treasure: 2,
+	force: [2, 7, 6, 4, 5, 1, 3],
 	cities: [
 		{code: 0, occupy: 0, army: [], order: null},
 		{code: 1, occupy: 0, army: [], order: null},
