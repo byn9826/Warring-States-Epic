@@ -90,7 +90,6 @@ Vue.component("state-info", {
             }.bind(this));
             return this.getArmyInfo()[0].name + a + " " 
                 + this.getArmyInfo()[8].name + b + " " 
-                + this.getArmyInfo()[9].name + c + " "
                 + this.getArmyInfo()[this.definition.code].name + d;
         }
     },

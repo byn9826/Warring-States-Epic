@@ -3,7 +3,7 @@ Vue.component("decision-board", {
         "stage", "player", "state", "cities", "relations", "rank", "orders", "settings", "focus",
         "addnewally", "addnewhistory", "tonextstage", "removeally", "increaserelation", "decreaserelation",
         "saveitemorder", "updateorderofcities", "disturbpowerpoint", "replacecitisoccupy",
-        "hero", "fame", "force"
+        "hero", "force"
     ],
     template: `
         <div v-bind:style="cardStyle">
@@ -111,7 +111,7 @@ Vue.component("decision-board", {
                 <div v-bind:style="descStyle">
                     {{getStatesAllies(state[activeState.code]) || "无盟友"}}
                 </div>
-                <div v-bind:style="descStyle">请从地图选择发兵城市</div>
+                <div v-bind:style="descStyle">请从地图选择出兵城市</div>
                 <template v-if="focus!==null">
                     <span>自{{getCitiesInfo()[focus].name}}进攻</span>
                     <select 
@@ -151,7 +151,7 @@ Vue.component("decision-board", {
                 <div v-bind:style="descStyle">
                     {{activeState.name + getStatesInfo()[cities[reminder].occupy].name}}交战于{{getCitiesInfo()[reminder].name}}
                 </div>
-                <table border="1" style="font-size:9pt;font-weight:normal;text-align:center">
+                <table border="1" style="font-size:9pt;font-weight:normal;text-align:center;margin-bottom:5pt">
                     <tr>
                         <th style="width:125pt;background-color:darkgrey;color:black">
                             {{activeState.name}}军进攻
@@ -224,12 +224,12 @@ Vue.component("decision-board", {
                             </span>
                         </td>
                     </tr>
-                    <tr v-if="fame[0]===cities[reminder].occupy||force[0]===activeState.code">
+                    <tr v-if="orders[0]===cities[reminder].occupy||force[0]===activeState.code">
                         <td>
                             <span v-if="force[0]===activeState.code">干将</span>
                         </td>
                         <td>
-                            <span v-if="fame[0]===cities[reminder].occupy">九鼎</span>
+                            <span v-if="orders[0]===cities[reminder].occupy">九鼎</span>
                         </td>
                     </tr>
                     <tr>
@@ -246,11 +246,13 @@ Vue.component("decision-board", {
                             <select v-model="attackHeroSelector">
                                 <option disabled value="">- 将领 -</option>
                                 <option 
+                                    style="background-color:white"
                                     v-for="(h, i) in getHerosInfo()[activeState.code]"
                                     v-if="hero[activeState.code][i]===1"
                                     v-bind:value="i"
+                                    v-bind:title="'斩杀: ' + h.kill + ' 防卫: '+h.safe + ' ' + h.skill"
                                 >
-                                    {{h.name}}
+                                    {{h.name + " 战力: " + h.strength}}
                                 </option>
                             </select>
                         </td>
@@ -258,18 +260,33 @@ Vue.component("decision-board", {
                             主帅:<br />
                             {{
                                 attackHero===null ?
-                                    '???':getHerosInfo()[cities[reminder].occupy][defendBattleHero].name
+                                    '???':getHerosInfo()[cities[reminder].occupy][defendHero].name
                             }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span v-if="attackHero===null">
+                                主帅技能未计算
+                            </span>
+                            <span v-else>
+                                {{getHerosInfo()[activeState.code][this.attackHero].skill}}
+                            </span>
+                        </td>
+                        <td v-if="attackHero===null">
+                            <span v-if="attackHero===null">
+                                主帅技能未计算
+                            </span>
+                            <span v-else>
+                                {{getHerosInfo()[cities[reminder].occupy][this.attackHero].skill}}
+                            </span>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             总战力:
                             <span v-if="attackHeroSelector!==''">
-                                {{
-                                    calAttackEnvPoint + calAttackArmyPoint + calAttackSupportPoint
-                                    + getHerosInfo()[activeState.code][attackHeroSelector].strength
-                                }}
+                                {{calAttackFinal}}
                             </span>
                             <span v-else>
                                 {{calAttackEnvPoint + calAttackArmyPoint + calAttackSupportPoint}}
@@ -279,18 +296,28 @@ Vue.component("decision-board", {
                             总战力:???
                         </td>
                         <td v-else>
-                            总战力:
-                            {{
-                                calDefendArmyPoint + calDefendEnvPoint + calDefendSupportPoint
-                                + getHerosInfo()[cities[reminder].occupy][defendBattleHero].strength
-                            }}
+                            总战力:{{calDefendFinal}}
                         </td>
                     </tr>
                 </table>
                 <input 
-                    v-bind:style="[submitStyle,{marginTop:'5px'}]" type="button" value="确认主帅" 
+                    v-if="attackHero===null"
+                    v-bind:style="submitStyle" type="button" value="确认主帅" 
                     v-on:click="confirmCommander"
                 />
+                <div v-else>
+                    <span style="font-size:10pt">
+                        {{
+                            battleResult?
+                                activeState.name + "国胜利!" :
+                                getStatesInfo()[cities[reminder].occupy].name + "国胜利!"
+                        }}
+                    </span>
+                    <input 
+                        v-bind:style="submitStyle" type="button" value="继续" 
+                        v-on:click="confirmBattle"
+                    />
+                </div>
             </section>
             <section v-else>
                 <div v-bind:style="descStyle">
@@ -333,8 +360,20 @@ Vue.component("decision-board", {
             }
             return true;
         },
+        confirmBattle: function() {
+            this.showBattle = false;
+        },
         confirmCommander: function() {
-            this.attackHero = this.attackHeroSelector;
+            if (this.attackHeroSelector !== "") {
+                var attackDefine = this.getHerosInfo()[this.activeState.code][this.attackHeroSelector];
+                var defendDefine = this.getHerosInfo()[this.cities[this.reminder].occupy][this.defendHero];
+                this.heroPower = this.processBeforeBattle(
+                    attackDefine, defendDefine, this.calAttackSupportPoint, this.calDefendSupportPoint
+                );
+                this.attackHero = this.attackHeroSelector;
+            } else {
+                alert("请选择领兵主帅");
+            }
         },
         confirmAttack: function() { 
             if (this.cities[this.reminder].army.length === 0) {
@@ -354,10 +393,16 @@ Vue.component("decision-board", {
                     return this.getArmyInfo()[this.cities[this.focus].army[t]].code;
                 }.bind(this));
                 this.$emit("replacecitisoccupy", this.focus, this.reminder, move, null, null);
+                this.nextActive();
             } else {
+                this.defendHero = this.AIdecideBattleHero(
+                    this.activeState.code, this.cities[this.reminder].occupy, 
+                    this.calAttackEnvPoint + this.calAttackArmyPoint + this.calAttackSupportPoint,
+                    this.calDefendArmyPoint + this.calDefendEnvPoint + this.calDefendSupportPoint,
+                    this.hero
+                );
                 this.showBattle = true;
             }
-            //this.nextActive();
         },
         chooseArmy: function(i) {
             if (this.target.indexOf(i) === -1) {
@@ -557,6 +602,8 @@ Vue.component("decision-board", {
                             this.reminder = "";
                             this.showBattle = false;
                             this.attackHero = null;
+                            this.defendHero = null;
+                            this.heroPower = [0, 0];
                             this.attackHeroSelector = "";
                         }
                     }
@@ -573,6 +620,8 @@ Vue.component("decision-board", {
             showBattle: false,
             attackHeroSelector: "",
             attackHero: null,
+            defendHero: null,
+            heroPower: [],
             cardStyle: {
                 position: "fixed",
                 left: "8pt",
@@ -698,9 +747,30 @@ Vue.component("decision-board", {
         activeState: function() {
             return this.getStatesInfo()[this.orders[this.active]];
         },
+        battleResult: function() {
+            var attack = parseFloat(this.calAttackFinal.toFixed(2));
+            var defend = parseFloat(this.calDefendFinal.toFixed(2));
+            var aRank = this.force.indexOf(this.activeState.code);
+            var bRank = this.force.indexOf(this.cities[this.reminder].occupy);
+            if (attack > defend || (attack === defend && aRank < bRank)) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        calDefendFinal: function() {
+            return this.calDefendArmyPoint + this.calDefendEnvPoint + this.calDefendSupportPoint
+                + this.getHerosInfo()[this.cities[this.reminder].occupy][this.defendHero].strength
+                + this.heroPower[1];
+        },
+        calAttackFinal: function() {
+            return this.calAttackEnvPoint + this.calAttackArmyPoint + this.calAttackSupportPoint
+                + this.getHerosInfo()[this.activeState.code][this.attackHeroSelector].strength
+                + this.heroPower[0];
+        },
         calDefendEnvPoint: function() {
             var ability = 0;
-            if (this.fame[0] === this.cities[this.reminder].occupy) {
+            if (this.orders[0] === this.cities[this.reminder].occupy) {
                 ability += 1;
             }
             ability += 2 - this.getCitiesInfo()[this.reminder].type;
@@ -829,16 +899,6 @@ Vue.component("decision-board", {
                 }.bind(this));
             }
             return attack;
-        },
-        defendBattleHero: function() {
-            if (this.reminder !== null && this.reminder !== "") {
-                return this.AIdecideBattleHero(
-                    this.activeState.code, this.cities[this.reminder].occupy, 
-                    this.calAttackEnvPoint + this.calAttackArmyPoint + this.calAttackSupportPoint,
-                    this.calDefendArmyPoint + this.calDefendEnvPoint + this.calDefendSupportPoint,
-                    this.hero
-                );
-            }
         }
     },
 });

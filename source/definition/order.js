@@ -9,7 +9,7 @@ Vue.mixin({
                 {code: 4, name: "战备0", type: 0, bonus: 0},
                 {code: 5, name: "战备0", type: 0, bonus: 0},
                 
-                {code: 6, name: "支援1", type: 1, bonus: 1},
+                {code: 6, name: "支援0", type: 1, bonus: 0},
                 {code: 7, name: "支援0", type: 1, bonus: 0},
                 {code: 8, name: "支援0", type: 1, bonus: 0},
                 
