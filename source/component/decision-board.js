@@ -3,7 +3,7 @@ Vue.component("decision-board", {
         "stage", "player", "state", "cities", "relations", "rank", "orders", "settings", "focus",
         "addnewally", "addnewhistory", "tonextstage", "removeally", "increaserelation", "decreaserelation",
         "saveitemorder", "updateorderofcities", "disturbpowerpoint", "replacecitisoccupy",
-        "hero"
+        "hero", "fame", "force"
     ],
     template: `
         <div v-bind:style="cardStyle">
@@ -167,12 +167,20 @@ Vue.component("decision-board", {
                         </td>
                         <td>
                             驻防部队:<br />
-                            {{cities[reminder].army.map(function(a){return getArmyInfo()[a].name}).join(" ")}}
+                            <span v-if="attackHero === null" class="fa fa-shield" aria-hidden="true">
+                                {{cities[reminder].army.length}}
+                            </span>
+                            <span v-else>
+                                {{
+                                    cities[reminder].army.map(function(a){return getArmyInfo()[a].name}).join(" ")
+                                }}
+                            </span>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            援军:<br />{{
+                            援军:<br />
+                            {{
                                 getCitiesInfo()[reminder].nearby.map(function(nearby) {
                                     if (
                                         (
@@ -191,45 +199,98 @@ Vue.component("decision-board", {
                             }}
                         </td>
                         <td>
-                            援军:<br />{{
-                                getCitiesInfo()[reminder].nearby.map(function(nearby) {
-                                    if (
-                                        (
-                                            cities[nearby].occupy === cities[reminder].occupy ||
+                            援军:<br />
+                            <span v-if="attackHero===null" class="fa fa-shield" aria-hidden="true">
+                                {{calDefendNum - cities[reminder].army.length}}
+                            </span>
+                            <span v-else>
+                                {{
+                                    getCitiesInfo()[reminder].nearby.map(function(nearby) {
+                                        if (
                                             (
-                                                state[cities[reminder].occupy].ally.indexOf(cities[nearby].occupy) !== -1 &&
-                                                state[cities[focus].occupy].ally.indexOf(cities[nearby].occupy) === -1
-                                            )
-                                        ) && cities[nearby].order !== null && getOrdersInfo()[cities[nearby].order].type === 1
-                                    ) {
-                                        return cities[nearby].army.map(function(a){return getArmyInfo()[a].name}.bind(this)).join(" ");
-                                    } else {
-                                        return "";
-                                    }
-                                }.bind(this)).join(" ")
-                            }}
+                                                cities[nearby].occupy === cities[reminder].occupy ||
+                                                (
+                                                    state[cities[reminder].occupy].ally.indexOf(cities[nearby].occupy) !== -1 &&
+                                                    state[cities[focus].occupy].ally.indexOf(cities[nearby].occupy) === -1
+                                                )
+                                            ) && cities[nearby].order !== null && getOrdersInfo()[cities[nearby].order].type === 1
+                                        ) {
+                                            return cities[nearby].army.map(function(a){return getArmyInfo()[a].name}.bind(this)).join(" ");
+                                        } else {
+                                            return "";
+                                        }
+                                    }.bind(this)).join(" ")
+                                }}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr v-if="fame[0]===cities[reminder].occupy||force[0]===activeState.code">
+                        <td>
+                            <span v-if="force[0]===activeState.code">干将</span>
+                        </td>
+                        <td>
+                            <span v-if="fame[0]===cities[reminder].occupy">九鼎</span>
                         </td>
                     </tr>
                     <tr>
-                        <td>总战力:{{calAttackEnvPoint + calAttackArmyPoint + calAttackSupportPoint}}</td>
-                        <td>总战力:{{calDefendArmyPoint + calDefendEnvPoint + calDefendSupportPoint}}</td>
+                        <td>
+                            <span>军令:{{calAttackEnvPoint}}</span>
+                        </td>
+                        <td>
+                            <span>军令:{{calDefendEnvPoint}}</span>
+                        </td>
                     </tr>
                     <tr>
-                        <td style="padding:3pt 0">将领:
-                            <select>
+                        <td style="padding:3pt 0">
+                            选择领兵主帅:
+                            <select v-model="attackHeroSelector">
+                                <option disabled value="">- 将领 -</option>
                                 <option 
                                     v-for="(h, i) in getHerosInfo()[activeState.code]"
                                     v-if="hero[activeState.code][i]===1"
+                                    v-bind:value="i"
                                 >
                                     {{h.name}}
                                 </option>
                             </select>
                         </td>
                         <td>
-                            将领:{{defendBattleHero}}
+                            主帅:<br />
+                            {{
+                                attackHero===null ?
+                                    '???':getHerosInfo()[cities[reminder].occupy][defendBattleHero].name
+                            }}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            总战力:
+                            <span v-if="attackHeroSelector!==''">
+                                {{
+                                    calAttackEnvPoint + calAttackArmyPoint + calAttackSupportPoint
+                                    + getHerosInfo()[activeState.code][attackHeroSelector].strength
+                                }}
+                            </span>
+                            <span v-else>
+                                {{calAttackEnvPoint + calAttackArmyPoint + calAttackSupportPoint}}
+                            </span>
+                        </td>
+                        <td v-if="attackHero===null">
+                            总战力:???
+                        </td>
+                        <td v-else>
+                            总战力:
+                            {{
+                                calDefendArmyPoint + calDefendEnvPoint + calDefendSupportPoint
+                                + getHerosInfo()[cities[reminder].occupy][defendBattleHero].strength
+                            }}
                         </td>
                     </tr>
                 </table>
+                <input 
+                    v-bind:style="[submitStyle,{marginTop:'5px'}]" type="button" value="确认主帅" 
+                    v-on:click="confirmCommander"
+                />
             </section>
             <section v-else>
                 <div v-bind:style="descStyle">
@@ -271,6 +332,9 @@ Vue.component("decision-board", {
                 }
             }
             return true;
+        },
+        confirmCommander: function() {
+            this.attackHero = this.attackHeroSelector;
         },
         confirmAttack: function() { 
             if (this.cities[this.reminder].army.length === 0) {
@@ -492,6 +556,8 @@ Vue.component("decision-board", {
                             this.target = [];
                             this.reminder = "";
                             this.showBattle = false;
+                            this.attackHero = null;
+                            this.attackHeroSelector = "";
                         }
                     }
                 }
@@ -505,6 +571,8 @@ Vue.component("decision-board", {
             target: [],
             reminder: null,
             showBattle: false,
+            attackHeroSelector: "",
+            attackHero: null,
             cardStyle: {
                 position: "fixed",
                 left: "8pt",
@@ -632,6 +700,9 @@ Vue.component("decision-board", {
         },
         calDefendEnvPoint: function() {
             var ability = 0;
+            if (this.fame[0] === this.cities[this.reminder].occupy) {
+                ability += 1;
+            }
             ability += 2 - this.getCitiesInfo()[this.reminder].type;
             if (
                 this.cities[this.reminder].order !== null && 
@@ -706,6 +777,9 @@ Vue.component("decision-board", {
         },
         calAttackEnvPoint: function() {
             var attack = 0;
+            if (this.force[0] === this.activeState.code) {
+                attack += 1;
+            }
             attack += this.getOrdersInfo()[this.cities[this.focus].order].bonus;
             if (this.reminder !== "") {
                 this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {

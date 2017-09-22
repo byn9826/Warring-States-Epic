@@ -5,6 +5,9 @@ Vue.component("treasure-info", {
             <div v-bind:style="typeStyle">
                 <i v-bind:style="iconStyle" class="fa" v-bind:class="getTreasureIcon" aria-hidden="true"></i>
                 <div v-bind:style="titleStyle">{{getTreasureName}}</div>
+                <div style="font-size:10pt;border-top:1pt solid darkslategrey;margin-top:5pt">
+                    +1 {{getTreasureBonus}}
+                </div>
             </div>
             <div v-bind:style="activeStyle">{{occupy}}</div>
         </div>
@@ -16,6 +19,14 @@ Vue.component("treasure-info", {
                     return "九鼎";
                 case 1:
                     return "干将";
+            }
+        },
+        getTreasureBonus: function() {
+            switch (this.type) {
+                case 0:
+                    return "进攻";
+                case 1:
+                    return "防守";
             }
         },
         getTreasureIcon: function() {
@@ -55,7 +66,6 @@ Vue.component("treasure-info", {
             activeStyle: {
                 border: "1pt solid lightgrey",
                 color: "black",
-                borderBottom: "1pt solid darkslategrey",
                 fontSize: "11pt",
                 textAlign: "center",
                 margin: "8pt 0",
