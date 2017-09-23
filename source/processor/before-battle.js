@@ -27,6 +27,12 @@ Vue.mixin({
                     result[0] += 1;
                 }
             }
+            //范雎进攻
+            else if (aHero.code === 41) {
+                app.$data.power.splice(aHero.state, 1, app.$data.power[aHero.state] + 2);
+            }
+            
+            
             //春申君防守
             if (dHero.code === 9) {
                 if (dSupport !== 0) {
@@ -53,7 +59,7 @@ Vue.mixin({
             else if (dHero.code === 27) {
                 if (
                     app.$data.cities[dcity].army.length < 4 && 
-                    app.statesInfo[dHero.state].army.length < this.getStateArmyMax(app.statesInfo[dHero.state].supply)
+                    app.statesInfo[dHero.state].army.length < this.getStatesSupply()[app.statesInfo[dHero.state].supply]
                 ) {
                     app.$data.cities[dcity].army.push(dHero.state);
                 }
@@ -66,6 +72,10 @@ Vue.mixin({
                 }
             } else if (dHero.code === 35) {
                 result[1] += app.$data.cities[dcity].army.length;
+            }
+            //商鞅防守
+            else if (dHero.code === 40) {
+                app.$data.power.splice(dHero.state, 1, app.$data.power[dHero.state] + 2);
             }
             return result;
         }

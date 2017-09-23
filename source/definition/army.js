@@ -24,26 +24,6 @@ Vue.mixin({
                 default:
                     return "&#9819;";
             }
-        },
-        getStateArmyMax: function(supply) {
-            switch (supply) {
-                case 0:
-                    return 4;
-                case 1:
-                    return 5;
-                case 2:
-                    return 6;
-                case 3:
-                    return 8;
-                case 4:
-                    return 10;
-                case 5:
-                    return 12;
-                case 6:
-                    return 14;
-                case 7:
-                    return 16;
-            }
         }
     }
 });

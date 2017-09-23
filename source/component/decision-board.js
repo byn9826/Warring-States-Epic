@@ -270,15 +270,15 @@ Vue.component("decision-board", {
                                 主帅技能未计算
                             </span>
                             <span v-else>
-                                {{getHerosInfo()[activeState.code][this.attackHero].skill}}
+                                {{getHerosInfo()[activeState.code][attackHero].skill}}
                             </span>
                         </td>
-                        <td v-if="attackHero===null">
+                        <td>
                             <span v-if="attackHero===null">
                                 主帅技能未计算
                             </span>
                             <span v-else>
-                                {{getHerosInfo()[cities[reminder].occupy][this.attackHero].skill}}
+                                {{getHerosInfo()[cities[reminder].occupy][defendHero].skill}}
                             </span>
                         </td>
                     </tr>
@@ -361,6 +361,11 @@ Vue.component("decision-board", {
             return true;
         },
         confirmBattle: function() {
+            var attackDefine = this.getHerosInfo()[this.activeState.code][this.attackHeroSelector];
+            var defendDefine = this.getHerosInfo()[this.cities[this.reminder].occupy][this.defendHero];
+            this.processAfterBattle(
+                this.battleResult, attackDefine, this.focus, this.target
+            );
             this.showBattle = false;
         },
         confirmCommander: function() {

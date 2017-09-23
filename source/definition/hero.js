@@ -9,7 +9,7 @@ Vue.mixin({
                     {code: 2, name: "田单", state: 1, strength: 3, kill: 0, safe: 4, skill: ""},
                     {code: 3, name: "田忌", state: 1, strength: 2, kill: 2, safe: 2, skill: ""},
                     {code: 4, name: "邹忌", state: 1, strength: 2, kill: 2, safe: 2, skill: ""},
-                    {code: 5, name: "孟尝君", state: 1, strength: 1, kill: 0, safe: 0, skill: "防守失败后,将部队撤退至已方任意一个控制区域"},
+                    {code: 5, name: "孟尝君", state: 1, strength: 1, kill: 0, safe: 0, skill: "防守失败后,己方军队不受伤亡"},
                 ],
                 [
                     {code: 6, name: "楚怀王", state: 2, strength: 2, kill: 0, safe: 0, skill: "战斗胜利后,将一个军团升级为" + this.getArmyInfo()[2].name},
@@ -61,6 +61,9 @@ Vue.mixin({
                 ],
                 []
             ];
+        },
+        getHeroLeaderCode: function() {
+            return [0, 6, 12, 18, 24, 30, 36];
         }
     }
 });

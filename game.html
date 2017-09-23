@@ -41,8 +41,9 @@
 					[1, 1, 1, 1, 1, 1], 
 					[1, 1, 1, 1, 1, 1],
 					[1, 1, 1, 1, 1, 1], 
-					[1, 1, 1, 1, 1, 1], 
 					[1, 1, 1, 1, 1, 1],
+					[0, 0, 0, 0, 0, 1],
+					//[1, 1, 1, 1, 1, 1],
 					[1, 1, 1, 1, 1, 1],
 					[]
 				],
@@ -86,7 +87,7 @@
 					{code: 27, occupy: 6, army: [0], order: null},
 					{code: 28, occupy: 5, army: [5, 8], order: 1},
 					//{code: 28, occupy: 5, army: [5, 8], order: null},
-					{code: 29, occupy: 6, army: [6], order: 6},
+					{code: 29, occupy: 6, army: [6], order: null},
 					//{code: 29, occupy: 0, army: [], order: null},
 					{code: 30, occupy: 8, army: [0], order: null},
 					{code: 31, occupy: 0, army: [], order: null},
@@ -210,7 +211,8 @@
 		<script type="text/javascript" src="source/ai/plan.js"></script>
 		<script type="text/javascript" src="source/ai/disturb.js"></script>
 		<script type="text/javascript" src="source/ai/hero.js"></script>
-		<script type="text/javascript" src="source/processor/battle.js"></script>
+		<script type="text/javascript" src="source/processor/before-battle.js"></script>
+		<script type="text/javascript" src="source/processor/after-battle.js"></script>
 		<script type="text/javascript" src="source/component/decision-board.js"></script>
 		<script type="text/javascript" src="source/epic.js"></script>
 	</body>
