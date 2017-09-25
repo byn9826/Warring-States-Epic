@@ -270,7 +270,11 @@ Vue.component("decision-board", {
                                 主帅技能未计算
                             </span>
                             <span v-else>
-                                {{getHerosInfo()[activeState.code][attackHero].skill}}
+                                {{
+                                    "斩杀:" + getHerosInfo()[activeState.code][attackHero].kill + 
+                                    " 防卫:" + getHerosInfo()[activeState.code][attackHero].safe +
+                                    " " + getHerosInfo()[activeState.code][attackHero].skill
+                                }}
                             </span>
                         </td>
                         <td>
@@ -278,7 +282,11 @@ Vue.component("decision-board", {
                                 主帅技能未计算
                             </span>
                             <span v-else>
-                                {{getHerosInfo()[cities[reminder].occupy][defendHero].skill}}
+                                {{
+                                    "斩杀:" + getHerosInfo()[cities[reminder].occupy][defendHero].kill + 
+                                    " 防卫:" + getHerosInfo()[cities[reminder].occupy][defendHero].safe +
+                                    " " + getHerosInfo()[cities[reminder].occupy][defendHero].skill
+                                }}
                             </span>
                         </td>
                     </tr>
@@ -364,7 +372,8 @@ Vue.component("decision-board", {
             var attackDefine = this.getHerosInfo()[this.activeState.code][this.attackHeroSelector];
             var defendDefine = this.getHerosInfo()[this.cities[this.reminder].occupy][this.defendHero];
             this.processAfterBattle(
-                this.battleResult, attackDefine, this.focus, this.target
+                this.battleResult, attackDefine, this.focus, this.target, defendDefine, this.reminder,
+                this.cities[this.reminder].army
             );
             this.showBattle = false;
         },

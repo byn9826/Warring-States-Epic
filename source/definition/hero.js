@@ -64,6 +64,32 @@ Vue.mixin({
         },
         getHeroLeaderCode: function() {
             return [0, 6, 12, 18, 24, 30, 36];
+        },
+        getHeroKillNum: function(code) {
+            if ([15, 20, 25, 26, 33, 34, 39].indexOf(code) !== -1) {
+                return 1;
+            } else if ([1, 3, 4, 8, 14, 19, 21, 32].indexOf(code) !== -1) {
+                return 2;
+            } else if ([7, 31, 38].indexOf(code) !== -1) {
+                return 3;
+            } else if ([13, 37].indexOf(code) !== -1) {
+                return 4;
+            } else {
+                return 0;
+            }
+        },
+        getHeroSafeNum: function(code) {
+            if ([7, 13, 14, 15, 26, 31, 32, 34, 39].indexOf(code) !== -1) {
+                return 1;
+            } else if ([3, 4, 8, 19, 21, 25, 33, 38].indexOf(code) !== -1) {
+                return 2;
+            } else if ([1].indexOf(code) !== -1) {
+                return 3;
+            } else if ([2, 20].indexOf(code) !== -1) {
+                return 4;
+            } else {
+                return 0;
+            }
         }
     }
 });

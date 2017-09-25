@@ -70,7 +70,9 @@ Vue.mixin({
                     app.$data.power.splice(dHero.state, 1, app.$data.power[dHero.state] - 1);
                     result[1] += 1;
                 }
-            } else if (dHero.code === 35) {
+            } 
+            //李悝防守
+            else if (dHero.code === 35) {
                 result[1] += app.$data.cities[dcity].army.length;
             }
             //商鞅防守
