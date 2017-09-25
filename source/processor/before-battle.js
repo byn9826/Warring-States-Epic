@@ -62,6 +62,7 @@ Vue.mixin({
                     app.statesInfo[dHero.state].army.length < this.getStatesSupply()[app.statesInfo[dHero.state].supply]
                 ) {
                     app.$data.cities[dcity].army.push(dHero.state);
+                    app.$data.cities[dcity].status.push(1);
                 }
             }
             //韩非子防守

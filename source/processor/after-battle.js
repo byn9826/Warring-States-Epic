@@ -36,6 +36,7 @@ Vue.mixin({
                 else if (dHero.code === 29) {
                     app.$data.power.splice(dHero.state, 1, app.$data.power[dHero.state] + 2);
                 }
+                this.AISelectRetreatTarget(dCity, app.$data.cities, dHero.state);
                 console.log(defendArmy);
                 console.log(marchArmy);
                 console.log(kill);
