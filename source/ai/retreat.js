@@ -15,6 +15,7 @@ Vue.mixin({
                         chance[index] += 1;
                     }
                 }.bind(this));
+                chance[index] = chance[index] / (cities[o].army.length + 1);
             }.bind(this));
             var total = chance.reduce(function(a, b) {return a + b;}, 0);
             var dice = Math.random(), final;

@@ -371,11 +371,22 @@ Vue.component("decision-board", {
         confirmBattle: function() {
             var attackDefine = this.getHerosInfo()[this.activeState.code][this.attackHeroSelector];
             var defendDefine = this.getHerosInfo()[this.cities[this.reminder].occupy][this.defendHero];
+            this.showBattle = false;
+            this.$emit(
+                "decreaserelation", this.cities[this.reminder].occupy, this.activeState.code, 2
+            );
+            this.$emit(
+                "decreaserelation", this.activeState.code, this.cities[this.reminder].occupy, 1
+            );
+            this.info = this.activeState.name + "国攻占了" + this.getStatesInfo()[this.cities[this.reminder].occupy].name + "国的" + this.getCitiesInfo()[this.reminder].name;
+            this.$emit("addnewhistory", this.info);
             this.processAfterBattle(
                 this.battleResult, attackDefine, this.focus, this.target, defendDefine, this.reminder,
-                this.cities[this.reminder].army
+                this.cities[this.reminder].army, this.activeState.code, 
+                this.getStatesInfo()[this.cities[this.reminder].occupy].code, this.target,
+                this.attackHero, this.defendHero
             );
-            this.showBattle = false;
+            this.nextActive();
         },
         confirmCommander: function() {
             if (this.attackHeroSelector !== "") {
@@ -865,7 +876,9 @@ Vue.component("decision-board", {
             if (this.force[0] === this.activeState.code) {
                 attack += 1;
             }
-            attack += this.getOrdersInfo()[this.cities[this.focus].order].bonus;
+            if (this.cities[this.focus].order !== null) {
+                attack += this.getOrdersInfo()[this.cities[this.focus].order].bonus;
+            }
             if (this.reminder !== "") {
                 this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
                     if (this.cities[n].order !== null) {
@@ -888,7 +901,9 @@ Vue.component("decision-board", {
         calAttackArmyPoint: function() {
             var attack = 0;
             this.target.forEach(function(t) {
-                attack += this.getArmyInfo()[this.cities[this.focus].army[t]].attack;
+                if (this.cities[this.focus].army[t]) {
+                    attack += this.getArmyInfo()[this.cities[this.focus].army[t]].attack;
+                }
             }.bind(this));
             return attack;
         },
