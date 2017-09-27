@@ -32,7 +32,7 @@ Vue.mixin({
                     {code: 19, name: "李牧", state: 4, strength: 4, kill: 2, safe: 2, skill: ""},
                     {code: 20, name: "廉颇", state: 4, strength: 3, kill: 1, safe: 4, skill: ""},
                     {code: 21, name: "赵奢", state: 4, strength: 3, kill: 2, safe: 2, skill: ""},
-                    {code: 22, name: "蔺相如", state: 4, strength: 2, kill: 0, safe: 0, skill: "防守失败后,敌军无法占领交战区"},
+                    {code: 22, name: "蔺相如", state: 4, strength: 2, kill: 0, safe: 0, skill: "防守失败后无需撤退,敌军无法占领交战区"},
                     {code: 23, name: "平原君", state: 4, strength: 1, kill: 0, safe: 0, skill: "防守时,已方驻防各军团战力乘以2"},
                 ],
                 [

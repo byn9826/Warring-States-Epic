@@ -378,7 +378,27 @@ Vue.component("decision-board", {
             this.$emit(
                 "decreaserelation", this.activeState.code, this.cities[this.reminder].occupy, 1
             );
-            this.info = this.activeState.name + "国攻占了" + this.getStatesInfo()[this.cities[this.reminder].occupy].name + "国的" + this.getCitiesInfo()[this.reminder].name;
+            if (this.battleResult) {
+                if (defendDefine.code === 22) {
+                    this.info = this.activeState.name + "国" + 
+                        this.getHerosInfo()[this.activeState.code][this.attackHero].name +
+                        "在" + this.getCitiesInfo()[this.reminder].name +
+                        "打败了" + this.getStatesInfo()[this.cities[this.reminder].occupy].name + "国" +
+                        this.getHerosInfo()[this.cities[this.reminder].occupy][this.defendHero].name;
+                } else {
+                    this.info = this.activeState.name + "国" + 
+                        this.getHerosInfo()[this.activeState.code][this.attackHero].name +
+                        "打败了" + this.getStatesInfo()[this.cities[this.reminder].occupy].name + "国" +
+                        this.getHerosInfo()[this.cities[this.reminder].occupy][this.defendHero].name +
+                        "攻占了" + this.getCitiesInfo()[this.reminder].name;
+                }
+            } else {
+                this.info = this.getStatesInfo()[this.cities[this.reminder].occupy].name + "国" +
+                    this.getHerosInfo()[this.cities[this.reminder].occupy][this.defendHero].name +
+                    "打败了" + this.activeState.name + "国" +
+                    this.getHerosInfo()[this.activeState.code][this.attackHero].name +
+                    "守住了" + this.getCitiesInfo()[this.reminder].name;
+            }
             this.$emit("addnewhistory", this.info);
             this.processAfterBattle(
                 this.battleResult, attackDefine, this.focus, this.target, defendDefine, this.reminder,
