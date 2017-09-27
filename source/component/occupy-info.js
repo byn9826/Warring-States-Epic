@@ -24,7 +24,7 @@ Vue.component("occupy-info", {
                 <template 
                     v-else-if="data.army.length!==0" v-for="(a, i) in data.army" v-bind:style="iconStyle"
                 >
-                    <span v-bind:style="data.status[i]===1?'':'color:darkslategrey'" v-html="getArmyIcon(a)"></span>
+                    <span v-bind:style="data.status[i]===1?'color:white':'color:darkgrey'" v-html="getArmyIcon(a)"></span>
                 </template>
             </div>
         </div>

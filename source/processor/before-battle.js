@@ -74,7 +74,7 @@ Vue.mixin({
             } 
             //李悝防守
             else if (dHero.code === 35) {
-                result[1] += app.$data.cities[dcity].army.length;
+                result[1] += app.$data.cities[dcity].status.filter(function(a) {return a === 1;}).length;
             }
             //商鞅防守
             else if (dHero.code === 40) {

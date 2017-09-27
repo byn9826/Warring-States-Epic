@@ -33,7 +33,7 @@ Vue.mixin({
                     {code: 20, name: "廉颇", state: 4, strength: 3, kill: 1, safe: 4, skill: ""},
                     {code: 21, name: "赵奢", state: 4, strength: 3, kill: 2, safe: 2, skill: ""},
                     {code: 22, name: "蔺相如", state: 4, strength: 2, kill: 0, safe: 0, skill: "防守失败后无需撤退,敌军无法占领交战区"},
-                    {code: 23, name: "平原君", state: 4, strength: 1, kill: 0, safe: 0, skill: "防守时,已方驻防各军团战力乘以2"},
+                    {code: 23, name: "平原君", state: 4, strength: 1, kill: 0, safe: 0, skill: "防守时,已方驻地参战各军团战力乘以2"},
                 ],
                 [
                     {code: 24, name: "韩昭侯", state: 5, strength: 2, kill: 0, safe: 0, skill: "战斗胜利后,将一个本地参战军团升级为" + this.getArmyInfo()[5].name},
@@ -49,7 +49,7 @@ Vue.mixin({
                     {code: 32, name: "公叔痤", state: 6, strength: 2, kill: 2, safe: 1, skill: ""},
                     {code: 33, name: "西门豹", state: 6, strength: 2, kill: 1, safe: 2, skill: ""},
                     {code: 34, name: "信陵君", state: 6, strength: 2, kill: 1, safe: 1, skill: ""},
-                    {code: 35, name: "李悝", state: 6, strength: 2, kill: 0, safe: 0, skill: "防守时，已方驻防各军团+1战力"},
+                    {code: 35, name: "李悝", state: 6, strength: 2, kill: 0, safe: 0, skill: "防守时，已方驻地参战各军团+1战力"},
                 ],
                 [
                     {code: 36, name: "秦昭襄王", state: 7, strength: 2, kill: 0, safe: 0, skill: "战斗胜利后,将一个本地参战军团升级为" + this.getArmyInfo()[7].name},

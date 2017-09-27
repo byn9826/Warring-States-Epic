@@ -20,12 +20,18 @@ var app = new Vue({
         toNextStage: function() {
             this.stage += 1;  
         },
-        replaceCitisOccupy: function(from, to, move, retreat, kill) {
+        replaceCitisOccupy: function(from, to, move) {
+            if (this.cities[to].occupy !== this.cities[from].occupy) {
+                this.cities[to].army = [];
+                this.cities[to].status = [];
+            }
             this.cities[to].occupy = this.cities[from].occupy;
             this.cities[from].order = null;
             this.cities[to].order = null;
             move.forEach(function(m) {
                 this.cities[to].army.push(m);
+                this.cities[to].status.push(1);
+                this.cities[from].status.splice(this.cities[from].army.indexOf(m), 1);
                 this.cities[from].army.splice(this.cities[from].army.indexOf(m), 1);
             }.bind(this));
         },
