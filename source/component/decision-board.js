@@ -131,7 +131,7 @@ Vue.component("decision-board", {
                         选择我军出征部队 战力:{{calAttackEnvPoint + calAttackArmyPoint + calAttackSupportPoint}}
                     </div>
                     <span 
-                        v-for="(a, i) in cities[focus].army" 
+                        v-for="(a, i) in cities[focus].army" v-if="cities[focus].status[i]===1"
                         v-bind:style="[forceStyle, target.indexOf(i)!==-1?borderStyle:'']" 
                         v-on:click="chooseArmy(i)"
                     >
@@ -168,11 +168,17 @@ Vue.component("decision-board", {
                         <td>
                             驻防部队:<br />
                             <span v-if="attackHero === null" class="fa fa-shield" aria-hidden="true">
-                                {{cities[reminder].army.length}}
+                                {{cities[reminder].status.filter(function(s){return s===1;}).length}}
                             </span>
                             <span v-else>
                                 {{
-                                    cities[reminder].army.map(function(a){return getArmyInfo()[a].name}).join(" ")
+                                    cities[reminder].army.map(
+                                        function(a, i){
+                                            if (cities[reminder].status[i] === 1) {
+                                                return getArmyInfo()[a].name;
+                                            }
+                                        }
+                                    ).join(" ")
                                 }}
                             </span>
                         </td>
@@ -191,7 +197,13 @@ Vue.component("decision-board", {
                                             )
                                         ) && getOrdersInfo()[cities[nearby].order].type === 1
                                     ) {
-                                        return cities[nearby].army.map(function(a){return getArmyInfo()[a].name}).join(" ");
+                                        return cities[nearby].army.map(
+                                            function(a, i){ 
+                                                if (cities[nearby].status[i] === 1) {
+                                                    return getArmyInfo()[a].name;
+                                                }
+                                            }
+                                        ).join(" ");
                                     } else {
                                         return "";
                                     }
@@ -201,7 +213,7 @@ Vue.component("decision-board", {
                         <td>
                             援军:<br />
                             <span v-if="attackHero===null" class="fa fa-shield" aria-hidden="true">
-                                {{calDefendNum - cities[reminder].army.length}}
+                                {{calDefendNum - cities[reminder].status.filter(function(s){return s===1;}).length}}
                             </span>
                             <span v-else>
                                 {{
@@ -215,7 +227,13 @@ Vue.component("decision-board", {
                                                 )
                                             ) && cities[nearby].order !== null && getOrdersInfo()[cities[nearby].order].type === 1
                                         ) {
-                                            return cities[nearby].army.map(function(a){return getArmyInfo()[a].name}.bind(this)).join(" ");
+                                            return cities[nearby].army.map(
+                                                function(a, i) {
+                                                    if (cities[nearby].status[i] === 1) {
+                                                        return getArmyInfo()[a].name;
+                                                    }
+                                                }.bind(this)
+                                            ).join(" ");
                                         } else {
                                             return "";
                                         }
@@ -388,14 +406,14 @@ Vue.component("decision-board", {
                 } else {
                     this.info = this.activeState.name + "国" + 
                         this.getHerosInfo()[this.activeState.code][this.attackHero].name +
-                        "打败了" + this.getStatesInfo()[this.cities[this.reminder].occupy].name + "国" +
+                        "打败" + this.getStatesInfo()[this.cities[this.reminder].occupy].name + "国" +
                         this.getHerosInfo()[this.cities[this.reminder].occupy][this.defendHero].name +
                         "攻占了" + this.getCitiesInfo()[this.reminder].name;
                 }
             } else {
                 this.info = this.getStatesInfo()[this.cities[this.reminder].occupy].name + "国" +
                     this.getHerosInfo()[this.cities[this.reminder].occupy][this.defendHero].name +
-                    "打败了" + this.activeState.name + "国" +
+                    "打败" + this.activeState.name + "国" +
                     this.getHerosInfo()[this.activeState.code][this.attackHero].name +
                     "守住了" + this.getCitiesInfo()[this.reminder].name;
             }
@@ -826,27 +844,14 @@ Vue.component("decision-board", {
             ) {
                 ability += this.getOrdersInfo()[this.cities[this.reminder].order].bonus;
             }
-            this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
-                if (this.cities[n].order !== null) {
-                    if (
-                        (
-                            this.cities[n].occupy === this.cities[this.reminder].occupy ||
-                            (
-                                this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) !== -1 &&
-                                this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) === -1
-                            )
-                        ) && this.getOrdersInfo()[this.cities[n].order].type === 1
-                    ) {
-                        ability += this.getOrdersInfo()[this.cities[n].order].bonus;
-                    }
-                }
-            }.bind(this));
             return ability;
         },
         calDefendArmyPoint: function() {
             var total = 0;
-            this.cities[this.reminder].army.forEach(function(a) {
-                total += this.getArmyInfo()[a].defend;
+            this.cities[this.reminder].army.forEach(function(a, i) {
+                if (this.cities[this.reminder].status[i] === 1) {
+                    total += this.getArmyInfo()[a].defend;
+                }
             }.bind(this));
             return total;
         },
@@ -863,8 +868,10 @@ Vue.component("decision-board", {
                             )
                         ) && this.getOrdersInfo()[this.cities[n].order].type === 1
                     ) {
-                        this.cities[n].army.forEach(function(a) {
-                            total += this.getArmyInfo()[a].defend;
+                        this.cities[n].army.forEach(function(a, i) {
+                            if (this.cities[n].status[i] === 1) {
+                                total += this.getArmyInfo()[a].defend;
+                            }
                         }.bind(this));
                     }
                 }
@@ -873,7 +880,9 @@ Vue.component("decision-board", {
         },
         calDefendNum: function() {
             var num = 0;
-            num += this.cities[this.reminder].army.length;
+            num += this.cities[this.reminder].status.filter(
+                function(s) { return s === 1;}
+            ).length;
             this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
                 if (this.cities[n].order !== null) {
                     if (
@@ -885,7 +894,9 @@ Vue.component("decision-board", {
                             )
                         ) && this.getOrdersInfo()[this.cities[n].order].type === 1
                     ) {
-                        num += this.cities[n].army.length;
+                        num += this.cities[n].status.filter(
+                            function(s) { return s === 1;}
+                        ).length;
                     }
                 }
             }.bind(this));
@@ -898,23 +909,6 @@ Vue.component("decision-board", {
             }
             if (this.cities[this.focus].order !== null) {
                 attack += this.getOrdersInfo()[this.cities[this.focus].order].bonus;
-            }
-            if (this.reminder !== "") {
-                this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
-                    if (this.cities[n].order !== null) {
-                        if (
-                            (
-                                this.cities[n].occupy === this.activeState.code ||
-                                (
-                                    this.state[this.activeState.code].ally.indexOf(this.cities[n].occupy) !== -1 &&
-                                    this.state[this.cities[this.reminder].occupy].ally.indexOf(this.cities[n].occupy) === -1
-                                )
-                            ) && this.getOrdersInfo()[this.cities[n].order].type === 1
-                        ) {
-                            attack += this.getOrdersInfo()[this.cities[n].order].bonus;
-                        }
-                    }
-                }.bind(this));
             }
             return attack;
         },
@@ -941,8 +935,10 @@ Vue.component("decision-board", {
                                 )
                             ) && this.getOrdersInfo()[this.cities[n].order].type === 1
                         ) {
-                            this.cities[n].army.forEach(function(a) {
-                                attack += this.getArmyInfo()[a].attack;
+                            this.cities[n].army.forEach(function(a, i) {
+                                if (this.cities[n].status[i] === 1) {
+                                    attack += this.getArmyInfo()[a].attack;
+                                }
                             }.bind(this));
                         }
                     }

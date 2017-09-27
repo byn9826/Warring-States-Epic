@@ -19,12 +19,12 @@ Vue.component("occupy-info", {
                     v-if="data.army.length!==0&&data.occupy!==player&&states[player].ally.indexOf(data.occupy)===-1" 
                     class="fa fa-shield" aria-hidden="true"
                 >
-                    {{data.army.length}}
+                    {{data.status.filter(function(a) {return a === 1}).length + "/" +  data.army.length}}
                 </span>
                 <template 
-                    v-else-if="data.army.length!==0" v-for="a in data.army" v-bind:style="iconStyle"
+                    v-else-if="data.army.length!==0" v-for="(a, i) in data.army" v-bind:style="iconStyle"
                 >
-                    <span v-html="getArmyIcon(a)"></span>
+                    <span v-bind:style="data.status[i]===1?'':'color:darkslategrey'" v-html="getArmyIcon(a)"></span>
                 </template>
             </div>
         </div>

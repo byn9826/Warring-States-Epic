@@ -6,18 +6,15 @@ Vue.mixin({
             aArmy.forEach(function(a) {
                 marchArmy.push(app.$data.cities[aCity].army[a]);
             });
-            var defendArmy = dArmy.slice();
+            var defendArmy = [];
+            dArmy.forEach(function(d, i) {
+                if (app.$data.cities[dCity].status[i] === 1) {
+                    defendArmy.push(d);
+                }
+            });
             if (result) {
-                //国君进攻胜利
-                if (this.getHeroLeaderCode().indexOf(aHero.code) !== -1) {
-                    if (marchArmy.indexOf(0) !== -1) {
-                        marchArmy[marchArmy.indexOf(0)] = aHero.state;
-                    } else if (marchArmy.indexOf(8) !== -1) {
-                        marchArmy[marchArmy.indexOf(8)] = aHero.state;
-                    }
-                } 
                 //屈原进攻胜利
-                else if (aHero.code === 10) {
+                if (aHero.code === 10) {
                     app.$data.power.splice(aHero.state, 1, app.$data.power[aHero.state] + 2);
                 }
                 //有杀伤武将进攻胜利
@@ -46,8 +43,23 @@ Vue.mixin({
                 }
                 //蔺相如防守失败
                 if (dHero.code === 22) {
-                    app.$data.cities[dCity].army = defendArmy;
-                    app.$data.cities[dCity].status = new Array(defendArmy.length).fill(0);
+                    app.$data.cities[dCity].army = app.$data.cities[dCity].army.filter(function(a, i) {
+                        if (app.$data.cities[dCity].status[i] === 0) {
+                            return true;
+                        }
+                    }.bind(this));
+                    app.$data.cities[dCity].army = app.$data.cities[dCity].army.concat(defendArmy);
+                    app.$data.cities[dCity].status = new Array(
+                        app.$data.cities[dCity].army.length
+                    ).fill(0);
+                    //国君进攻胜利
+                    if (this.getHeroLeaderCode().indexOf(aHero.code) !== -1) {
+                        if (app.$data.cities[aCity].army.indexOf(0) !== -1) {
+                            app.$data.cities[aCity].army.splice(app.$data.cities[aCity].army.indexOf(0), 1, aHero.state);
+                        } else if (app.$data.cities[aCity].army.indexOf(8) !== -1) {
+                            app.$data.cities[aCity].army.splice(app.$data.cities[aCity].army.indexOf(8), 1, aHero.state);
+                        }
+                    }
                 } else {
                     var retreat = this.AISelectRetreatTarget(dCity, app.$data.cities, dHero.state);
                     if (defendArmy.length > 0) {
@@ -70,6 +82,14 @@ Vue.mixin({
                             new Array(defendArmy.length).fill(0)
                         );
                         app.$data.cities[retreat].occupy = dState;
+                    }
+                    //国君进攻胜利
+                    if (this.getHeroLeaderCode().indexOf(aHero.code) !== -1) {
+                        if (marchArmy.indexOf(0) !== -1) {
+                            marchArmy[marchArmy.indexOf(0)] = aHero.state;
+                        } else if (marchArmy.indexOf(8) !== -1) {
+                            marchArmy[marchArmy.indexOf(8)] = aHero.state;
+                        }
                     }
                     app.$data.cities[dCity].army = marchArmy;
                     app.$data.cities[dCity].status = new Array(marchArmy.length).fill(1);
@@ -94,6 +114,18 @@ Vue.mixin({
                     } else if (defendArmy.indexOf(8) !== -1) {
                         defendArmy[defendArmy.indexOf(8)] = dHero.state;
                     }
+                    app.$data.cities[dCity].army = app.$data.cities[dCity].army.filter(function(a, i) {
+                        if (app.$data.cities[dCity].status[i] === 0) {
+                            return true;
+                        }
+                    }.bind(this));
+                    app.$data.cities[dCity].status = new Array(
+                        app.$data.cities[dCity].army.length
+                    ).fill(0);
+                    app.$data.cities[dCity].army = app.$data.cities[dCity].army.concat(defendArmy);
+                    app.$data.cities[dCity].status = app.$data.cities[dCity].status.concat(
+                        new Array(defendArmy.length).fill(1)
+                    );
                 } 
                 //屈原防守胜利收益
                 else if (dHero.code === 10) {
