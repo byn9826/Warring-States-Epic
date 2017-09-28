@@ -423,12 +423,28 @@ Vue.component("decision-board", {
                         this.getHerosInfo()[this.cities[this.reminder].occupy][this.defendHero].name +
                         "攻占了" + this.getCitiesInfo()[this.reminder].name;
                 }
+                if (
+                    this.force.indexOf(this.activeState.code) > this.force.indexOf(this.cities[this.reminder].occupy)
+                ) {
+                    app.$data.force.splice(this.force.indexOf(this.activeState.code), 1);
+                    app.$data.force.splice(
+                        this.force.indexOf(this.cities[this.reminder].occupy), 0, this.activeState.code
+                    );
+                }
             } else {
                 this.info = this.getStatesInfo()[this.cities[this.reminder].occupy].name + "国" +
                     this.getHerosInfo()[this.cities[this.reminder].occupy][this.defendHero].name +
                     "打败" + this.activeState.name + "国" +
                     this.getHerosInfo()[this.activeState.code][this.attackHero].name +
                     "守住了" + this.getCitiesInfo()[this.reminder].name;
+                if (
+                    this.force.indexOf(this.cities[this.reminder].occupy) > this.force.indexOf(this.activeState.code)
+                ) {
+                    app.$data.force.splice(this.force.indexOf(this.cities[this.reminder].occupy), 1);
+                    app.$data.force.splice(
+                        this.force.indexOf(this.activeState.code), 0, this.cities[this.reminder].occupy
+                    );
+                }
             }
             this.$emit("addnewhistory", this.info);
             this.processAfterBattle(
@@ -437,6 +453,10 @@ Vue.component("decision-board", {
                 this.getStatesInfo()[this.cities[this.reminder].occupy].code, this.target,
                 this.attackHero, this.defendHero
             );
+            
+            console.log(this.battleResult);
+            console.log();
+            console.log();
             this.nextActive();
         },
         confirmCommander: function() {
