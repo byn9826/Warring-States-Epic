@@ -113,7 +113,7 @@ Vue.component("decision-board", {
                 </div>
                 <div v-bind:style="descStyle">请从地图选择出兵城市</div>
                 <template v-if="focus!==null">
-                    <span>自{{getCitiesInfo()[focus].name}}进攻</span>
+                    <span>自{{getCitiesInfo()[focus].name}}出兵</span>
                     <select 
                         v-bind:style="selectStyle" v-model="reminder"
                     >
@@ -137,14 +137,30 @@ Vue.component("decision-board", {
                     >
                         {{getArmyInfo()[a].name}}
                     </span>
-                    <div v-if="reminder!==''" v-bind:style="lineStyle">
+                    <div 
+                        v-if="reminder!==''&&cities[reminder].occupy===activeState.code&&(cities[reminder].army.length+target.length)<=4" 
+                        v-bind:style="lineStyle"
+                    >
+                        目标为己方城市
+                    </div>
+                    <div 
+                        v-else-if="reminder!==''&&cities[reminder].occupy===activeState.code&&(cities[reminder].army.length+target.length)>4" 
+                        v-bind:style="lineStyle"
+                    >
+                        {{getCitiesInfo()[reminder].name}}超过补给上限无法行军
+                    </div>
+                    <div v-else-if="reminder!==''" v-bind:style="lineStyle">
                         敌军军团数{{calDefendNum}} + 已知战力{{calDefendEnvPoint}}
                     </div>
-                    <input
-                        v-if="reminder!==''&&target.length!==0"
-                        v-bind:style="confirmStyle" type="button" value="出征" 
-                        v-on:click="confirmAttack()"
-                    />
+                    <div 
+                        v-if="!(reminder!==''&&cities[reminder].occupy===activeState.code&&(cities[reminder].army.length+target.length)>4)"
+                    >
+                        <input
+                            v-if="target.length!==0"
+                            v-bind:style="confirmStyle" type="button" value="行军" 
+                            v-on:click="confirmAttack()"
+                        />
+                    </div>
                 </section>
             </section>
             <section v-else-if="stage===4&&player[orders[active]]===2&&showBattle">
@@ -377,9 +393,6 @@ Vue.component("decision-board", {
                     return false;
                 }
             } else if (stage === 4) {
-                if (this.cities[i].occupy===this.activeState.code) {
-                    return false;
-                }
                 if (this.state[this.activeState.code].ally.indexOf(this.cities[i].occupy) !== -1) {
                     return false;
                 }
@@ -440,7 +453,29 @@ Vue.component("decision-board", {
             }
         },
         confirmAttack: function() { 
-            if (this.cities[this.reminder].status.filter(function(s) {return s === 1;}).length === 0) {
+            if (this.cities[this.reminder].occupy === this.activeState.code) {
+                this.info = this.activeState.name + "国移兵" + this.getCitiesInfo()[this.reminder].name;
+                var move = this.target.map(function(t) {
+                    return this.getArmyInfo()[this.cities[this.focus].army[t]].code;
+                }.bind(this));
+                app.$data.cities[this.reminder].army = app.$data.cities[this.reminder].army.concat(move);
+                app.$data.cities[this.reminder].status = app.$data.cities[this.reminder].status.concat(
+                    new Array(move.length).fill(1)
+                );
+                this.target.forEach(function(t) {
+                    app.$data.cities[this.focus].army[t] = null;
+                    app.$data.cities[this.focus].status[t] = null;
+                }.bind(this));
+                app.$data.cities[this.focus].army = app.$data.cities[this.focus].army.filter(function(f) {
+                    return f !== null;
+                });
+                app.$data.cities[this.focus].status = app.$data.cities[this.focus].status.filter(function(f) {
+                    return f !== null;
+                });
+                app.$data.cities[this.focus].order = null;
+                this.$emit("addnewhistory", this.info);
+                this.nextActive();
+            } else if (this.cities[this.reminder].status.filter(function(s) {return s === 1;}).length === 0) {
                 if (this.player[this.cities[this.reminder].occupy] === 0) {
                     this.info = this.activeState.name + "国占领了" + this.getCitiesInfo()[this.reminder].name;
                 } else {
