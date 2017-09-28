@@ -45,14 +45,14 @@ Vue.mixin({
             forces = forces.map(function(f) {
                 var sum = 0;
                 f.forEach(function(t) {
-                    sum += this.getArmyEstimate(t, 0);
+                    sum += this.getArmyInfo()[t].attack;
                 }.bind(this));
                 return sum;
             }.bind(this));
             enemy = enemy.map(function(f) {
                 var sum = 0;
                 f.forEach(function(t) {
-                    sum += this.getArmyEstimate(t, 0);
+                    sum += this.getArmyInfo()[t].attack;
                 }.bind(this));
                 return sum;
             }.bind(this));
@@ -99,7 +99,7 @@ Vue.mixin({
             final[state[own].occupy.indexOf(firstOrder)] = 0;
             var primaryForce = 0;
             cities[firstOrder].army.forEach(function(p) {
-                primaryForce += this.getArmyEstimate(p, 0);
+                primaryForce += this.getArmyInfo()[p].attack;
             }.bind(this));
             if (
                 (primaryForce <= enemy[mainTarget] + 2) && 

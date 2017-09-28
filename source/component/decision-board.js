@@ -453,10 +453,6 @@ Vue.component("decision-board", {
                 this.getStatesInfo()[this.cities[this.reminder].occupy].code, this.target,
                 this.attackHero, this.defendHero
             );
-            
-            console.log(this.battleResult);
-            console.log();
-            console.log();
             this.nextActive();
         },
         confirmCommander: function() {
@@ -739,7 +735,7 @@ Vue.component("decision-board", {
                         this.nextActive();
                     } else {
                         if (this.player[this.orders[newVal]] !== 2) {
-                            
+                            console.log(this.state[this.activeState.code]);
                         } else {
                             this.target = [];
                             this.reminder = "";
