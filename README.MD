@@ -1,4 +1,4 @@
-#Warring States Epic
+# Warring States Epic
 PC board game based on Warring States history by Vue & Electron
 
 Hack the game

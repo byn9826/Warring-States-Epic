@@ -491,7 +491,7 @@ Vue.component("decision-board", {
                 app.$data.cities[this.focus].order = null;
                 this.$emit("addnewhistory", this.info);
                 this.nextActive();
-            } else if (this.cities[this.reminder].status.filter(function(s) {return s === 1;}).length === 0) {
+            } else if ((this.calDefendArmyPoint + this.calDefendSupportPoint) === 0) {
                 if (this.player[this.cities[this.reminder].occupy] === 0) {
                     this.info = this.activeState.name + "国占领了" + this.getCitiesInfo()[this.reminder].name;
                 } else {
@@ -735,7 +735,9 @@ Vue.component("decision-board", {
                         this.nextActive();
                     } else {
                         if (this.player[this.orders[newVal]] !== 2) {
-                            console.log(this.state[this.activeState.code]);
+                            this.AIselectAttackOrder(
+                                this.state[this.activeState.code], this.cities, this.getCitiesInfo()
+                            );
                         } else {
                             this.target = [];
                             this.reminder = "";
