@@ -3,7 +3,7 @@ Vue.component("decision-board", {
         "stage", "player", "state", "cities", "relations", "rank", "orders", "settings", "focus",
         "addnewally", "addnewhistory", "tonextstage", "removeally", "increaserelation", "decreaserelation",
         "saveitemorder", "updateorderofcities", "disturbpowerpoint", "replacecitisoccupy",
-        "hero", "force"
+        "hero", "force", "updatefocusvariable"
     ],
     template: `
         <div v-bind:style="cardStyle">
@@ -735,8 +735,11 @@ Vue.component("decision-board", {
                         this.nextActive();
                     } else {
                         if (this.player[this.orders[newVal]] !== 2) {
-                            this.AIselectAttackOrder(
-                                this.state[this.activeState.code], this.cities, this.getCitiesInfo()
+                            this.$emit(
+                                "updatefocusvariable", this.AIselectAttackOrder(
+                                    this.state[this.activeState.code], this.cities, 
+                                    this.getCitiesInfo()
+                                )
                             );
                         } else {
                             this.target = [];
@@ -747,6 +750,7 @@ Vue.component("decision-board", {
                             this.heroPower = [0, 0];
                             this.attackHeroSelector = "";
                         }
+                        
                     }
                 }
             }.bind(this));

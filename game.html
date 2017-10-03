@@ -84,7 +84,7 @@
 					{code: 24, occupy: 0, army: [], status: [], order: null},
 					{code: 25, occupy: 0, army: [], status: [], order: null},
 					{code: 26, occupy: 0, army: [], status: [], order: null},
-					{code: 27, occupy: 6, army: [0], status: [0], order: 1},
+					{code: 27, occupy: 6, army: [0], status: [1], order: 1},
 					//{code: 27, occupy: 6, army: [0], status: [1], order: null},
 					{code: 28, occupy: 5, army: [5, 8], status: [0, 1], order: 1},
 					//{code: 28, occupy: 5, army: [5, 8], status: [1, 1], order: null},
@@ -126,6 +126,7 @@
 				@updateOrderOfCities="updateOrderOfCities"
 				@disturbPowerPoint="disturbPowerPoint"
 				@replaceCitisOccupy="replaceCitisOccupy"
+				@updateFocusVariable="updateFocusVariable"
 			></decision-board>
 		    <main id="main">
 		    	<template v-for="(c, index) in getCitiesInfo()">
