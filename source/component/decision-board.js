@@ -3,7 +3,7 @@ Vue.component("decision-board", {
         "stage", "player", "state", "cities", "relations", "rank", "orders", "settings", "focus",
         "addnewally", "addnewhistory", "tonextstage", "removeally", "increaserelation", "decreaserelation",
         "saveitemorder", "updateorderofcities", "disturbpowerpoint", "replacecitisoccupy",
-        "hero", "force", "updatefocusvariable"
+        "hero", "force"
     ],
     template: `
         <div v-bind:style="cardStyle">
@@ -735,12 +735,18 @@ Vue.component("decision-board", {
                         this.nextActive();
                     } else {
                         if (this.player[this.orders[newVal]] !== 2) {
-                            this.$emit(
-                                "updatefocusvariable", this.AIselectAttackOrder(
-                                    this.state[this.activeState.code], this.cities, 
-                                    this.getCitiesInfo()
-                                )
+                            var focus = this.AIselectAttackOrder(
+                                this.state[this.activeState.code], this.cities, 
+                                this.getCitiesInfo()
                             );
+                            var reminder = this.AIselectMarchDestination(
+                                focus, this.cities, this.getCitiesInfo(), this.state, this.player
+                            )
+                            console.log(this.focus);
+                            console.log(reminder);
+                            Vue.nextTick(function () {
+                                console.log(this.focus);
+                            }.bind(this));
                         } else {
                             this.target = [];
                             this.reminder = "";

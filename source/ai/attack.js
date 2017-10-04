@@ -43,6 +43,47 @@ Vue.mixin({
                     break;
                 }
             }
+            app.$data.focus = target;
+            return target;
+        },
+        AIselectMarchDestination: function(from, cityData, cityInfo, stateData, player) {
+            var nearby = cityInfo[from].nearby.filter(function(n) {
+                if (stateData[cityData[from].occupy].ally.indexOf(cityData[n].occupy) === -1) {
+                    return true;
+                }
+            });
+            var basic;
+            var options = nearby.map(function(c) {
+                basic = 0;
+                if (player[cityData[c].occupy] === 0) {
+                    basic = 3;
+                } else if (cityData[c].occupy !== cityData[from].occupy) {
+                    basic = 2;
+                } else {
+                    basic = 1;
+                }
+                return (
+                    cityInfo[c].resource.length + 2 - cityInfo[c].type + 4 
+                    - cityData[c].status.filter(function(d) {return d === 1;}).length
+                    + 4 - cityData[c].army.length
+                ) * basic;
+            });
+            var sum = options.reduce(function(a, b) {return a + b;}, 0);
+            var chance = Math.random();
+            var target, i = 0;
+            for (i; i < options.length; i++) {
+                if (i === 0) {
+                    options[i] = options[i] / sum;
+                } else if (i === options.length - 1) {
+                    options[i] = 1;
+                } else {
+                    options[i] = options[i] / sum + options[i - 1];
+                }
+                if (options[i] >= chance) {
+                    target = nearby[i];
+                    break;
+                }
+            }
             return target;
         }
     }
