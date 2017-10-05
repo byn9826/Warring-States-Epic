@@ -43,7 +43,6 @@ Vue.mixin({
                     break;
                 }
             }
-            app.$data.focus = target;
             return target;
         },
         AIselectMarchDestination: function(from, cityData, cityInfo, stateData, player) {
@@ -87,8 +86,6 @@ Vue.mixin({
             return target;
         },
         AIselectMarchForce: function(from, to, cityInfo, cityData) {
-            console.log(cityInfo[from].name);
-            console.log(cityInfo[to].name);
             var target = [];
             var random;
             if (cityData[from].occupy !== cityData[to].occupy) {
@@ -146,7 +143,7 @@ Vue.mixin({
                     }
                 }.bind(this));
             }
-            console.log(target);
+            return target;
         }
     }
 });

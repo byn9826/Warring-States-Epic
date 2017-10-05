@@ -163,7 +163,7 @@ Vue.component("decision-board", {
                     </div>
                 </section>
             </section>
-            <section v-else-if="stage===4&&player[orders[active]]===2&&showBattle">
+            <section v-else-if="stage===4&&showBattle">
                 <div v-bind:style="descStyle">
                     {{activeState.name + getStatesInfo()[cities[reminder].occupy].name}}交战于{{getCitiesInfo()[reminder].name}}
                 </div>
@@ -275,7 +275,7 @@ Vue.component("decision-board", {
                         </td>
                     </tr>
                     <tr>
-                        <td style="padding:3pt 0">
+                        <td style="padding:3pt 0" v-if="attackHero===null">
                             选择领兵主帅:
                             <select v-model="attackHeroSelector">
                                 <option disabled value="">- 将领 -</option>
@@ -289,6 +289,12 @@ Vue.component("decision-board", {
                                     {{h.name + " 战力: " + h.strength}}
                                 </option>
                             </select>
+                        </td>
+                        <td v-else>
+                            主帅:<br />
+                            {{
+                                getHerosInfo()[activeState.code][attackHero].name
+                            }}
                         </td>
                         <td>
                             主帅:<br />
@@ -534,13 +540,28 @@ Vue.component("decision-board", {
                 this.$emit("addnewhistory", this.info);
                 this.nextActive();
             } else {
-                this.defendHero = this.AIdecideBattleHero(
-                    this.activeState.code, this.cities[this.reminder].occupy, 
-                    this.calAttackEnvPoint + this.calAttackArmyPoint + this.calAttackSupportPoint,
-                    this.calDefendArmyPoint + this.calDefendEnvPoint + this.calDefendSupportPoint,
-                    this.hero
-                );
-                this.showBattle = true;
+                if (this.player[this.cities[this.reminder].occupy] === 2) {
+                    alert("You are under attack");
+                } else {
+                    this.defendHero = this.AIdecideBattleHero(
+                        this.activeState.code, this.cities[this.reminder].occupy, 
+                        this.calAttackEnvPoint + this.calAttackArmyPoint + this.calAttackSupportPoint,
+                        this.calDefendArmyPoint + this.calDefendEnvPoint + this.calDefendSupportPoint,
+                        this.hero
+                    );
+                    if (this.player[this.activeState.code] === 2) {
+                        this.showBattle = true;
+                    } else {
+                        this.attackHeroSelector = this.AIdecideBattleHero(
+                            this.cities[this.reminder].occupy, this.activeState.code, 
+                            this.calDefendArmyPoint + this.calDefendEnvPoint + this.calDefendSupportPoint,
+                            this.calAttackEnvPoint + this.calAttackArmyPoint + this.calAttackSupportPoint,
+                            this.hero
+                        );
+                        this.confirmCommander();
+                        this.showBattle = true;
+                    } 
+                }
             }
         },
         chooseArmy: function(i) {
@@ -734,31 +755,31 @@ Vue.component("decision-board", {
                     if (this.state[this.activeState.code].orderType.indexOf(0) === -1) {
                         this.nextActive();
                     } else {
+                        this.target = [];
+                        this.reminder = "";
+                        this.attackHero = null;
+                        this.defendHero = null;
+                        this.heroPower = [0, 0];
+                        this.attackHeroSelector = "";
+                        this.showBattle = false;
                         if (this.player[this.orders[newVal]] !== 2) {
                             var focus = this.AIselectAttackOrder(
                                 this.state[this.activeState.code], this.cities, 
                                 this.getCitiesInfo()
                             );
-                            var reminder = this.AIselectMarchDestination(
-                                focus, this.cities, this.getCitiesInfo(), this.state, this.player
-                            );
+                            app.$data.focus = focus;
                             Vue.nextTick(function () {
-                                this.reminder = reminder;
-                                this.AIselectMarchForce(
-                                    this.focus, this.reminder, this.getCitiesInfo(), 
-                                    this.cities
-                                );
+                                setTimeout(function () {
+                                    this.reminder = this.AIselectMarchDestination(
+                                        focus, this.cities, this.getCitiesInfo(), this.state, this.player
+                                    );
+                                    this.target = this.AIselectMarchForce(
+                                        this.focus, this.reminder, this.getCitiesInfo(), this.cities
+                                    );
+                                    this.confirmAttack();
+                                }.bind(this), this.settings.delay);
                             }.bind(this));
-                        } else {
-                            this.target = [];
-                            this.reminder = "";
-                            this.showBattle = false;
-                            this.attackHero = null;
-                            this.defendHero = null;
-                            this.heroPower = [0, 0];
-                            this.attackHeroSelector = "";
                         }
-                        
                     }
                 }
             }.bind(this));
@@ -1003,11 +1024,13 @@ Vue.component("decision-board", {
         },
         calAttackArmyPoint: function() {
             var attack = 0;
-            this.target.forEach(function(t) {
-                if (this.cities[this.focus].army[t] !== null) {
-                    attack += this.getArmyInfo()[this.cities[this.focus].army[t]].attack;
-                }
-            }.bind(this));
+            if (this.activeState.code === this.cities[this.focus].occupy) {
+                this.target.forEach(function(t) {
+                    if (this.cities[this.focus].army[t] !== null) {
+                        attack += this.getArmyInfo()[this.cities[this.focus].army[t]].attack;
+                    }
+                }.bind(this));
+            }
             return attack;
         },
         calAttackSupportPoint: function() {
