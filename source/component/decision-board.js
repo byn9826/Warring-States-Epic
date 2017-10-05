@@ -125,6 +125,10 @@ Vue.component("decision-board", {
                             {{getCitiesInfo()[c].name}}
                         </option>
                     </select>
+                    <input
+                        v-bind:style="buttonStyle" type="button" value="取消战备" 
+                        v-on:click="skipAttack()"
+                    />
                 </template>
                 <section v-bind:style="marchStyle" v-if="focus!==null">
                     <div v-bind:style="lineStyle">
@@ -474,6 +478,10 @@ Vue.component("decision-board", {
                 alert("请选择领兵主帅");
             }
         },
+        skipAttack: function() {
+            app.$data.cities[this.focus].order = null;
+            this.nextActive();
+        },
         confirmAttack: function() { 
             if (this.cities[this.reminder].occupy === this.activeState.code) {
                 this.info = this.activeState.name + "国移兵" + this.getCitiesInfo()[this.reminder].name;
@@ -537,10 +545,12 @@ Vue.component("decision-board", {
                         app.$data.cities[this.focus].status.splice(t, 1, 0);
                     }.bind(this));
                 }
+                app.$data.cities[this.focus].order = null;
                 this.$emit("addnewhistory", this.info);
                 this.nextActive();
             } else {
                 if (this.player[this.cities[this.reminder].occupy] === 2) {
+                
                     alert("You are under attack");
                 } else {
                     this.defendHero = this.AIdecideBattleHero(
@@ -665,7 +675,22 @@ Vue.component("decision-board", {
             if (this.active < (this.rank.length - 1)) {
                 this.active += 1; 
             } else {
-                this.$emit("tonextstage");
+                if (this.stage === 4) {
+                    var i = 0, loop = false;
+                    for (i = 0; i < this.state.length; i++) {
+                        if (this.state[i].orderType.indexOf(0) !== -1) {
+                            loop = true;
+                            break;
+                        }
+                    }
+                    if (loop) {
+                        this.active = 0;
+                    } else {
+                        this.$emit("tonextstage");
+                    }
+                } else {
+                    this.$emit("tonextstage");
+                }
             }
         }
     },
@@ -768,6 +793,7 @@ Vue.component("decision-board", {
                                 this.getCitiesInfo()
                             );
                             app.$data.focus = focus;
+                            console.log(focus);
                             Vue.nextTick(function () {
                                 setTimeout(function () {
                                     this.reminder = this.AIselectMarchDestination(
@@ -776,7 +802,11 @@ Vue.component("decision-board", {
                                     this.target = this.AIselectMarchForce(
                                         this.focus, this.reminder, this.getCitiesInfo(), this.cities
                                     );
-                                    this.confirmAttack();
+                                    if (this.target.length === 0) {
+                                        this.skipAttack();
+                                    } else {
+                                        this.confirmAttack();
+                                    }
                                 }.bind(this), this.settings.delay);
                             }.bind(this));
                         }
@@ -845,12 +875,14 @@ Vue.component("decision-board", {
                 display: "inline-block",
                 verticalAlign: "middle",
                 fontSize: "9pt",
+                cursor: "pointer"
             },
             submitStyle: {
                 display: "inline-block",
                 verticalAlign: "middle",
                 fontSize: "9pt",
-                marginBottom: "5pt"
+                marginBottom: "5pt",
+                cursor: "pointer"
             },
             confirmStyle: {
                 display: "block",

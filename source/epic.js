@@ -132,6 +132,8 @@ var app = new Vue({
                 states[city.occupy].order.push(city.order);
                 if (city.order !== null || city.order === 0) {
                     states[city.occupy].orderType.push(this.getOrdersInfo()[city.order].type);
+                } else {
+                    states[city.occupy].orderType.push(null);
                 }
                 states[city.occupy].army = states[city.occupy].army.concat(city.army);
                 states[city.occupy].nearby = [...new Set([...states[city.occupy].nearby ,...this.getCitiesInfo()[city.code].nearby])];
