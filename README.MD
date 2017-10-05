@@ -11,7 +11,8 @@ AI for use disturb order: /source/ai/disturb.js
 AI for select hero in battle: /source/ai/hero.js  
 AI for select orders in plan phase: /source/ai/plan.js  
 AI for select retreat destination: /source/ai/retreat.js  
-AI for decide march order: /source/ai/attack.js
+AI for decide march order: /source/ai/attack.js  
+AI for decide march destination: /source/ai/attack.js  
 
 State Name: /source/definition/state.js  
 Supply Maximun: /source/definition/state.js  

@@ -741,11 +741,13 @@ Vue.component("decision-board", {
                             );
                             var reminder = this.AIselectMarchDestination(
                                 focus, this.cities, this.getCitiesInfo(), this.state, this.player
-                            )
-                            console.log(this.focus);
-                            console.log(reminder);
+                            );
                             Vue.nextTick(function () {
-                                console.log(this.focus);
+                                this.reminder = reminder;
+                                this.AIselectMarchForce(
+                                    this.focus, this.reminder, this.getCitiesInfo(), 
+                                    this.cities
+                                );
                             }.bind(this));
                         } else {
                             this.target = [];

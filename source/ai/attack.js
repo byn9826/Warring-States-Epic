@@ -85,6 +85,68 @@ Vue.mixin({
                 }
             }
             return target;
+        },
+        AIselectMarchForce: function(from, to, cityInfo, cityData) {
+            console.log(cityInfo[from].name);
+            console.log(cityInfo[to].name);
+            var target = [];
+            var random;
+            if (cityData[from].occupy !== cityData[to].occupy) {
+                if (
+                    cityData[from].status.filter(function(c) {return c === 1;}).length >
+                    cityData[to].status.filter(function(c) {return c === 1;}).length + 1
+                ) {
+                    cityData[from].status.forEach(function(s, i) {
+                        if (s === 1) {
+                            random = Math.random();
+                            if (this.getArmyInfo()[cityData[from].army[i]].level === 0) {
+                                if (random < 0.86) {
+                                    target.push(i);
+                                }
+                            } else if (this.getArmyInfo()[cityData[from].army[i]].level === 1) {
+                                if (random < 0.9) {
+                                    target.push(i);
+                                }
+                            } else {
+                                if (random < 0.94) {
+                                    target.push(i);
+                                }
+                            }
+                        }
+                    }.bind(this));
+                } else {
+                    cityData[from].status.forEach(function(s, i) {
+                        if (s === 1) {
+                            random = Math.random();
+                            if (this.getArmyInfo()[cityData[from].army[i]].level === 0) {
+                                if (random < 0.9) {
+                                    target.push(i);
+                                }
+                            } else if (this.getArmyInfo()[cityData[from].army[i]].level === 1) {
+                                if (random < 0.94) {
+                                    target.push(i);
+                                }
+                            } else {
+                                if (random < 0.98) {
+                                    target.push(i);
+                                }
+                            }
+                        }
+                    }.bind(this));
+                }
+            } else {
+                cityData[from].status.forEach(function(s, i) {
+                    if (s === 1) {
+                        random = Math.random();
+                        if (cityData[to].army.length + target.length < 4) {
+                            if (random < 0.9) {
+                                target.push(i);
+                            }
+                        }
+                    }
+                }.bind(this));
+            }
+            console.log(target);
         }
     }
 });
