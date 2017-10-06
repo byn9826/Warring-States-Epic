@@ -31,7 +31,7 @@ Vue.component("occupy-info", {
     `,
     methods: {
         onDrop: function(e) {
-            if (this.data.occupy === this.player) {
+            if (this.data.occupy === this.player && this.data.army.length !== 0) {
                 this.$emit("saveitemorder", e.code, 1);
             }
         },

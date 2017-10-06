@@ -511,26 +511,6 @@ Vue.component("decision-board", {
                 app.$data.cities[this.focus].order = null;
                 this.$emit("addnewhistory", this.info);
                 this.nextActive();
-            } else if ((this.calDefendArmyPoint + this.calDefendSupportPoint) === 0) {
-                if (this.player[this.cities[this.reminder].occupy] === 0) {
-                    this.info = this.activeState.name + "国占领了" + this.getCitiesInfo()[this.reminder].name;
-                } else {
-                    this.$emit(
-                        "decreaserelation", this.cities[this.reminder].occupy, this.activeState.code, 2
-                    );
-                    this.$emit(
-                        "decreaserelation", this.activeState.code, this.cities[this.reminder].occupy, 1
-                    );
-                    this.info = this.activeState.name + "国攻占了" + 
-                        this.getStatesInfo()[this.cities[this.reminder].occupy].name + "国的" + 
-                        this.getCitiesInfo()[this.reminder].name;
-                }
-                this.$emit("addnewhistory", this.info);
-                var move = this.target.map(function(t) {
-                    return this.getArmyInfo()[this.cities[this.focus].army[t]].code;
-                }.bind(this));
-                this.$emit("replacecitisoccupy", this.focus, this.reminder, move);
-                this.nextActive();
             } else if (this.player[this.cities[this.reminder].occupy] === 0) {
                 if (
                     (this.calAttackEnvPoint + this.calAttackArmyPoint + this.calAttackSupportPoint) >=
@@ -553,6 +533,26 @@ Vue.component("decision-board", {
                 }
                 app.$data.cities[this.focus].order = null;
                 this.$emit("addnewhistory", this.info);
+                this.nextActive();
+            } else if (this.cities[this.reminder].army.length === 0) {
+                if (this.player[this.cities[this.reminder].occupy] === 0) {
+                    this.info = this.activeState.name + "国占领了" + this.getCitiesInfo()[this.reminder].name;
+                } else {
+                    this.$emit(
+                        "decreaserelation", this.cities[this.reminder].occupy, this.activeState.code, 2
+                    );
+                    this.$emit(
+                        "decreaserelation", this.activeState.code, this.cities[this.reminder].occupy, 1
+                    );
+                    this.info = this.activeState.name + "国攻占了" + 
+                        this.getStatesInfo()[this.cities[this.reminder].occupy].name + "国的" + 
+                        this.getCitiesInfo()[this.reminder].name;
+                }
+                this.$emit("addnewhistory", this.info);
+                var move = this.target.map(function(t) {
+                    return this.getArmyInfo()[this.cities[this.focus].army[t]].code;
+                }.bind(this));
+                this.$emit("replacecitisoccupy", this.focus, this.reminder, move);
                 this.nextActive();
             } else {
                 if (this.player[this.cities[this.reminder].occupy] === 2) {
@@ -751,15 +751,15 @@ Vue.component("decision-board", {
                 //运筹阶段
                     if (this.player[this.orders[newVal]] !== 2) {
                         this.target = null;
+                        var available = this.state[this.activeState.code].occupy.filter(function(f) {
+                            return this.cities[f].army.length !== 0;
+                        }.bind(this));
                         this.target = this.AIplanResult(
                             this.activeState.code, this.state[this.activeState.code].ally, 
-                            this.state, this.cities, this.relations
-                        )
+                            this.state, this.cities, this.relations, available
+                        );
                         setTimeout(function () {
-                            this.$emit(
-                                "updateorderofcities", this.state[this.activeState.code].occupy, 
-                                this.target
-                            );
+                            this.$emit("updateorderofcities", available, this.target);
                             this.info = this.activeState.name + "国完成筹备";
                             this.nextActive();
                         }.bind(this), this.settings.delay);
@@ -814,6 +814,8 @@ Vue.component("decision-board", {
                                     }
                                 }.bind(this), this.settings.delay);
                             }.bind(this));
+                        } else {
+                            app.$data.focus = null;
                         }
                     }
                 }

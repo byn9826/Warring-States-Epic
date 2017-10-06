@@ -1,16 +1,14 @@
 Vue.mixin({
     methods: {
-        AIplanResult: function(own, ally, state, cities, relations) {
+        AIplanResult: function(own, ally, state, cities, relations, available) {
             var avoid = [];
             ally.forEach(function(a) {
                 avoid = avoid.concat(state[a].occupy);
             });
             var targets = state[own].nearby.filter(function(n) {
-                if (avoid.indexOf(n) === -1) {
-                    return true;
-                }
+                return avoid.indexOf(n) === -1;
             });
-            var final = new Array(state[own].occupy.length);
+            var final = new Array(available.length);
             var benefits = new Array(targets.length).fill(0);
             var forces = new Array(targets.length);
             var enemy = new Array(targets.length);
@@ -96,7 +94,7 @@ Vue.mixin({
                     break;
                 }
             }
-            final[state[own].occupy.indexOf(firstOrder)] = 0;
+            final[available.indexOf(firstOrder)] = 0;
             var primaryForce = 0;
             cities[firstOrder].army.forEach(function(p) {
                 primaryForce += this.getArmyInfo()[p].attack;
@@ -108,37 +106,39 @@ Vue.mixin({
                 attackCities[mainTarget].splice(attackCities[mainTarget].indexOf(firstOrder), 1);
                 var odds = null;
                 attackCities[mainTarget].forEach(function(h) {
-                    if ((cities[h].army.length + cities[firstOrder].army.length) <= 4) {
-                        if (cities[h].army.length <= 1) {
-                            odds = [0.3, 0.8, 1];
+                    if (cities[h].army.length !== 0) {
+                        if ((cities[h].army.length + cities[firstOrder].army.length) <= 4) {
+                            if (cities[h].army.length <= 1) {
+                                odds = [0.3, 0.8, 1];
+                            } else {
+                                odds = [0.5, 0.8, 1];
+                            }
                         } else {
-                            odds = [0.5, 0.8, 1];
+                            odds = [0.2, 0.9, 1];
                         }
-                    } else {
-                        odds = [0.2, 0.9, 1];
-                    }
-                    var random = Math.random(), assistOrder = null;
-                    for (var i = 0; i < 3; i++) {
-                        if (random <= odds[i]) {
-                            assistOrder = i;
-                            break;
+                        var random = Math.random(), assistOrder = null;
+                        for (var i = 0; i < 3; i++) {
+                            if (random <= odds[i]) {
+                                assistOrder = i;
+                                break;
+                            }
                         }
-                    }
-                    switch (assistOrder) {
-                        case 0:
-                            final[state[own].occupy.indexOf(h)] = "attack";
-                            break;
-                        case 1:
-                            final[state[own].occupy.indexOf(h)] = "helper";
-                            break;
-                        case 2:
-                            final[state[own].occupy.indexOf(h)] = "disturb";
-                            break;
+                        switch (assistOrder) {
+                            case 0:
+                                final[available.indexOf(h)] = "attack";
+                                break;
+                            case 1:
+                                final[available.indexOf(h)] = "helper";
+                                break;
+                            case 2:
+                                final[available.indexOf(h)] = "disturb";
+                                break;
+                        }
                     }
                 }.bind(this));
             }
             var chance = null;
-            state[own].occupy.forEach(function(o, i) {
+            available.forEach(function(o, i) {
                 if (final[i] !== 0 && !final[i]) {
                     if(cities[o].army.length !== 0) {
                         chance = 0.45 * cities[o].army.length;

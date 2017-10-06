@@ -17,6 +17,7 @@ AI for decide march destination: /source/ai/attack.js
 State Name: /source/definition/state.js  
 Supply Maximun: /source/definition/state.js  
 Hero Name, Strength: /source/definition/hero.js  
+Hero Skill: /source/definition/skill.js   
 City Name, Location, Resource, Type: /source/definition/city.js  
 State Name, Strength: /source/definition/state.js  
 Army Name, Strength: /source/definition/army.js  
