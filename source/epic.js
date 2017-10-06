@@ -18,7 +18,7 @@ var app = new Vue({
     },
     methods: {
         toNextStage: function() {
-            this.stage += 1;  
+            this.stage += 1;
         },
         replaceCitisOccupy: function(from, to, move) {
             if (this.cities[to].occupy !== this.cities[from].occupy) {

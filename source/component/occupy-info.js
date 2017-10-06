@@ -54,8 +54,8 @@ Vue.component("occupy-info", {
                 borderRadius: "3pt",
                 padding: "1pt 0",
                 textAlign: "center",
-                borderBottom: "1px solid black",
-                borderRight: "1px solid black",
+                borderBottom: "1pt solid black",
+                borderRight: "1pt solid black",
                 cursor: this.stage===4&&this.data.occupy===this.player&&this.data.order!==null&&this.getOrdersInfo()[this.data.order].type===0?"pointer":"default"
             },
             armyStyle: {

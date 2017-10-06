@@ -13,10 +13,10 @@
 		<script>
 			var data = {
 				settings: {
-					delay: 5000
+					delay: 100
 				},
 				round: 0,
-				stage: 4,
+				stage: 2,
 				history: [],
 				player: [0, 2, 1, 1, 1, 1, 1, 1, 0],
 				//player: [0, 2, 1, 1, 1, 1, 1, 1, 0],
@@ -53,7 +53,7 @@
 				cities: [
 					{code: 0, occupy: 0, army: [], status: [], order: null},
 					{code: 1, occupy: 0, army: [], status: [], order: null},
-					{code: 2, occupy: 4, army: [0], status: [1], order: 6},
+					{code: 2, occupy: 4, army: [0], status: [1], order: null},
 					//{code: 2, occupy: 4, army: [0], status: [1], order: null},
 					{code: 3, occupy: 0, army: [], status: [], order: null},
 					{code: 4, occupy: 4, army: [4, 8], status: [1, 1], order: null},
@@ -73,9 +73,9 @@
 					{code: 15, occupy: 0, army: [], status: [], order: null},
 					{code: 16, occupy: 0, army: [], status: [], order: null},
 					{code: 17, occupy: 0, army: [], status: [], order: null},
-					{code: 18, occupy: 5, army: [0], status: [0], order: 6},
+					{code: 18, occupy: 5, army: [0], status: [1], order: null},
 					//{code: 18, occupy: 5, army: [0], status: [1], order: null},
-					{code: 19, occupy: 6, army: [6, 8, 0], status: [1, 1, 1], order: 1},
+					{code: 19, occupy: 6, army: [6, 8, 0], status: [1, 1, 1], order: null},
 					//{code: 19, occupy: 6, army: [6, 8], status: [1, 1], order: null},
 					{code: 20, occupy: 0, army: [], status: [], order: null},
 					{code: 21, occupy: 1, army: [1, 8], status: [1, 1], order: null},
@@ -84,11 +84,11 @@
 					{code: 24, occupy: 0, army: [], status: [], order: null},
 					{code: 25, occupy: 0, army: [], status: [], order: null},
 					{code: 26, occupy: 0, army: [], status: [], order: null},
-					{code: 27, occupy: 6, army: [0], status: [1], order: 1},
+					{code: 27, occupy: 6, army: [0], status: [1], order: null},
 					//{code: 27, occupy: 6, army: [0], status: [1], order: null},
-					{code: 28, occupy: 5, army: [5, 8], status: [0, 1], order: 1},
+					{code: 28, occupy: 5, army: [5, 8], status: [0, 1], order: null},
 					//{code: 28, occupy: 5, army: [5, 8], status: [1, 1], order: null},
-					{code: 29, occupy: 6, army: [6, 0], status: [0, 1], order: 0},
+					{code: 29, occupy: 6, army: [6, 0], status: [0, 1], order: null},
 					//{code: 29, occupy: 0, army: [], status: [], order: null},
 					{code: 30, occupy: 8, army: [0], status: [1], order: null},
 					{code: 31, occupy: 0, army: [], status: [], order: null},
@@ -200,6 +200,7 @@
 		<script type="text/javascript" src="source/definition/army.js"></script>
 		<script type="text/javascript" src="source/definition/stage.js"></script>
 		<script type="text/javascript" src="source/definition/hero.js"></script>
+		<script type="text/javascript" src="source/definition/skill.js"></script>
 		<script type="text/javascript" src="source/definition/order.js"></script>
 		<script type="text/javascript" src="source/component/city-info.js"></script>
 		<script type="text/javascript" src="source/component/occupy-info.js"></script>

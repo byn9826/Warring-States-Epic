@@ -14,7 +14,7 @@ Vue.mixin({
             });
             if (result) {
                 //屈原进攻胜利
-                if (aHero.code === 10) {
+                if (aHero.skill === 4) {
                     app.$data.power.splice(aHero.state, 1, app.$data.power[aHero.state] + 2);
                 }
                 //有杀伤武将进攻胜利
@@ -22,11 +22,11 @@ Vue.mixin({
                 //有守护武将防守失败
                 kill -= this.getHeroSafeNum(dHero.code);
                 //孟尝君防守失败
-                if (dHero.code === 5) {
+                if (dHero.skill === 2) {
                     kill = 0;
                 } 
                 //張平防守失败
-                else if (dHero.code === 29) {
+                else if (dHero.skill === 12) {
                     app.$data.power.splice(dHero.state, 1, app.$data.power[dHero.state] + 2);
                 }
                 for (var i = 0; i < kill; i++) {
@@ -42,7 +42,7 @@ Vue.mixin({
                     }
                 }
                 //蔺相如防守失败
-                if (dHero.code === 22) {
+                if (dHero.skill === 8) {
                     app.$data.cities[dCity].army = app.$data.cities[dCity].army.filter(function(a, i) {
                         if (app.$data.cities[dCity].status[i] === 0) {
                             return true;
@@ -53,7 +53,7 @@ Vue.mixin({
                         app.$data.cities[dCity].army.length
                     ).fill(0);
                     //国君进攻胜利
-                    if (this.getHeroLeaderCode().indexOf(aHero.code) !== -1) {
+                    if (aHero.skill === 1) {
                         if (app.$data.cities[aCity].army.indexOf(0) !== -1) {
                             app.$data.cities[aCity].army.splice(app.$data.cities[aCity].army.indexOf(0), 1, aHero.state);
                         } else if (app.$data.cities[aCity].army.indexOf(8) !== -1) {
@@ -84,7 +84,7 @@ Vue.mixin({
                         app.$data.cities[retreat].occupy = dState;
                     }
                     //国君进攻胜利
-                    if (this.getHeroLeaderCode().indexOf(aHero.code) !== -1) {
+                    if (aHero.skill === 1) {
                         if (marchArmy.indexOf(0) !== -1) {
                             marchArmy[marchArmy.indexOf(0)] = aHero.state;
                         } else if (marchArmy.indexOf(8) !== -1) {
@@ -103,12 +103,12 @@ Vue.mixin({
                 app.$data.hero[aHero.state].splice(aHeroIndex, 1, 0);
                 app.$data.hero[dHero.state].splice(dHeroIndex, 1, 0);
                 //郭隗防守失败
-                if (dHero.code === 16) {
+                if (dHero.skill === 6) {
                     app.$data.hero[dHero.state] = new Array(app.$data.hero[dHero.state].length).fill(1);
                 }
             } else {
                 //国君防守胜利收益
-                if (this.getHeroLeaderCode().indexOf(dHero.code) !== -1) {
+                if (dHero.skill === 1) {
                     if (defendArmy.indexOf(0) !== -1) {
                         defendArmy[defendArmy.indexOf(0)] = dHero.state;
                     } else if (defendArmy.indexOf(8) !== -1) {
@@ -128,7 +128,7 @@ Vue.mixin({
                     );
                 } 
                 //屈原防守胜利收益
-                else if (dHero.code === 10) {
+                else if (dHero.skill === 4) {
                     app.$data.power.splice(dHero.state, 1, app.$data.power[dHero.state] + 2);
                 }
                 //有杀伤武将防守胜利
@@ -136,7 +136,7 @@ Vue.mixin({
                 //有守护武将进攻失败
                 kill -= this.getHeroSafeNum(aHero.code);
                 //張平进攻失败
-                if (aHero.code === 29) {
+                if (aHero.skill === 12) {
                     app.$data.power.splice(aHero.state, 1, app.$data.power[aHero.state] + 2);
                 }
                 for (var i = 0; i < kill; i++) {
@@ -162,7 +162,7 @@ Vue.mixin({
                 app.$data.hero[aHero.state].splice(aHeroIndex, 1, 0);
                 app.$data.hero[dHero.state].splice(dHeroIndex, 1, 0);
                 //郭隗进攻失败
-                if (aHero.code === 16) {
+                if (aHero.skill === 6) {
                     app.$data.hero[aHero.state] = new Array(app.$data.hero[aHero.state].length).fill(1);
                 }
             }

@@ -215,7 +215,8 @@ Vue.component("decision-board", {
                                                 state[activeState.code].ally.indexOf(cities[nearby].occupy) !== -1 &&
                                                 state[cities[reminder].occupy].ally.indexOf(cities[nearby].occupy) === -1
                                             )
-                                        ) && getOrdersInfo()[cities[nearby].order].type === 1
+                                        ) && cities[nearby].order !== null &&
+                                        getOrdersInfo()[cities[nearby].order].type === 1
                                     ) {
                                         return cities[nearby].army.map(
                                             function(a, i){ 
@@ -288,7 +289,8 @@ Vue.component("decision-board", {
                                     v-for="(h, i) in getHerosInfo()[activeState.code]"
                                     v-if="hero[activeState.code][i]===1"
                                     v-bind:value="i"
-                                    v-bind:title="'斩杀: ' + h.kill + ' 防卫: '+h.safe + ' ' + h.skill"
+                                    v-bind:title="'斩杀: ' + h.kill + ' 防卫: '+h.safe + ' ' 
+                                        + getSkillsInfo()[h.skill].skil"
                                 >
                                     {{h.name + " 战力: " + h.strength}}
                                 </option>
@@ -315,9 +317,10 @@ Vue.component("decision-board", {
                             </span>
                             <span v-else>
                                 {{
-                                    "斩杀:" + getHerosInfo()[activeState.code][attackHero].kill + 
+                                    "战力:" + getHerosInfo()[activeState.code][attackHero].strength +
+                                    " 斩杀:" + getHerosInfo()[activeState.code][attackHero].kill + 
                                     " 防卫:" + getHerosInfo()[activeState.code][attackHero].safe +
-                                    " " + getHerosInfo()[activeState.code][attackHero].skill
+                                    " " + getSkillsInfo()[getHerosInfo()[activeState.code][attackHero].skill].skill
                                 }}
                             </span>
                         </td>
@@ -327,9 +330,10 @@ Vue.component("decision-board", {
                             </span>
                             <span v-else>
                                 {{
-                                    "斩杀:" + getHerosInfo()[cities[reminder].occupy][defendHero].kill + 
+                                    "战力:" + getHerosInfo()[cities[reminder].occupy][defendHero].strength + 
+                                    " 斩杀:" + getHerosInfo()[cities[reminder].occupy][defendHero].kill + 
                                     " 防卫:" + getHerosInfo()[cities[reminder].occupy][defendHero].safe +
-                                    " " + getHerosInfo()[cities[reminder].occupy][defendHero].skill
+                                    " " + getSkillsInfo()[getHerosInfo()[cities[reminder].occupy][defendHero].skill].skill
                                 }}
                             </span>
                         </td>
@@ -375,7 +379,9 @@ Vue.component("decision-board", {
                 <div v-bind:style="descStyle">
                     {{activeState.name}}国正在{{getStageDescName(stage)}} ...
                 </div>
-                <div v-bind:style="flagStyle">{{this.getHerosInfo()[orders[active]][0].name}}行动中</div>
+                <div v-bind:style="flagStyle">
+                    {{getHerosInfo()[activeState.code][getHeroLeaderIndex()[activeState.code]].name}}行动中
+                </div>
             </section>
             <div v-show="info" v-bind:style="infoStyle">{{info}}</div>
         </div>
@@ -420,7 +426,7 @@ Vue.component("decision-board", {
                 "decreaserelation", this.activeState.code, this.cities[this.reminder].occupy, 1
             );
             if (this.battleResult) {
-                if (defendDefine.code === 22) {
+                if (defendDefine.skill === 8) {
                     this.info = this.activeState.name + "国" + 
                         this.getHerosInfo()[this.activeState.code][this.attackHero].name +
                         "在" + this.getCitiesInfo()[this.reminder].name +
@@ -793,7 +799,6 @@ Vue.component("decision-board", {
                                 this.getCitiesInfo()
                             );
                             app.$data.focus = focus;
-                            console.log(focus);
                             Vue.nextTick(function () {
                                 setTimeout(function () {
                                     this.reminder = this.AIselectMarchDestination(
