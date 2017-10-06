@@ -598,19 +598,21 @@ Vue.component("decision-board", {
         },
         disturbProcess: function(remover) {
             remover.forEach(function(r) {
-                if (this.getOrdersInfo()[this.cities[r].order].type === 3) {
+                if (r !== null && r !== undefined) {
+                    if (this.getOrdersInfo()[this.cities[r].order].type === 3) {
+                        this.$emit(
+                            "disturbpowerpoint", this.activeState.code, 
+                            this.getStatesInfo()[this.cities[r].occupy].code
+                        );
+                    }
+                    this.info = this.activeState.name + "国劫掠了" + this.getStatesInfo()[this.cities[r].occupy].name + "国的" + this.getCitiesInfo()[r].name;
+                    this.$emit("addnewhistory", this.info);
                     this.$emit(
-                        "disturbpowerpoint", this.activeState.code, 
-                        this.getStatesInfo()[this.cities[r].occupy].code
+                        "decreaserelation", this.getStatesInfo()[this.cities[r].occupy].code, 
+                        this.activeState.code, 1
                     );
+                    this.$emit("updateorderofcities", [r], [null]);
                 }
-                this.info = this.activeState.name + "国劫掠了" + this.getStatesInfo()[this.cities[r].occupy].name + "国的" + this.getCitiesInfo()[r].name;
-                this.$emit("addnewhistory", this.info);
-                this.$emit(
-                    "decreaserelation", this.getStatesInfo()[this.cities[r].occupy].code, 
-                    this.activeState.code, 1
-                );
-                this.$emit("updateorderofcities", [r], [null]);
             }.bind(this));
             var own = this.state[this.activeState.code].occupy.filter(function(o, index) {
                 if (this.state[this.activeState.code].orderType[index] === 2) {

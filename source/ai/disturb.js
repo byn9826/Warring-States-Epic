@@ -22,11 +22,10 @@ Vue.mixin({
                 }
             }.bind(this));
             nearbys.forEach(function(nearby) {
-                if (nearby.length === 1) {
+                if (nearby !== null && nearby.length === 1) {
                     nearbys.forEach(function(n) {
-                        if (n.length !== 1 && n.indexOf(nearby[0]) !== -1) {
+                        if (n !== null && n.length !== 1 && n.indexOf(nearby[0]) !== -1) {
                             n.splice(n.indexOf(nearby[0]), 1);
-                            
                         }
                     })
                 } 
@@ -47,7 +46,11 @@ Vue.mixin({
             }.bind(this));
             var result = [];
             target.forEach(function(t, i) {
-                result.push(nearbys[i][this.getRandomDecision(t)]);
+                if (t !== null) {
+                    result.push(nearbys[i][this.getRandomDecision(t)]);
+                } else {
+                    result.push(null);
+                }
             }.bind(this));
             return result;
         },
