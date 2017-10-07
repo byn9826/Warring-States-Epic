@@ -399,10 +399,12 @@ Vue.component("decision-board", {
                             <span v-if="player[cities[reminder].occupy] === 2 && defendHero === null">
                                 ???
                             </span>
-                            <span v-else-if="player[activeState.code] === 2 && attackHero === null">
+                            <span v-else-if="player[activeState.code] === 2 && attackHero === null && heroSelector === ''">
+                                {{calAttackEnvPoint + calAttackArmyPoint + calAttackSupportPoint}}
+                            </span>
+                            <span v-else-if="player[activeState.code] === 2 && attackHero === null && heroSelector !== ''">
                                 {{
-                                    calAttackEnvPoint + calAttackArmyPoint + calAttackSupportPoint +
-                                    heroSelector === '' ? 0 : getHerosInfo()[activeState.code][heroSelector].strength
+                                    calAttackEnvPoint + calAttackArmyPoint + calAttackSupportPoint + getHerosInfo()[activeState.code][heroSelector].strength
                                 }}
                             </span>
                             <span v-else>
@@ -414,10 +416,12 @@ Vue.component("decision-board", {
                             <span v-if="player[activeState.code] === 2 && attackHero===null">
                                 ???
                             </span>
-                            <span v-else-if="player[cities[reminder].occupy] === 2 && defendHero === null">
+                            <span v-else-if="player[cities[reminder].occupy] === 2 && defendHero === null && heroSelector === ''">
+                                {{calDefendEnvPoint + calDefendArmyPoint + calDefendSupportPoint}}
+                            </span>
+                            <span v-else-if="player[cities[reminder].occupy] === 2 && defendHero === null && heroSelector !== ''">
                                 {{
-                                    calDefendEnvPoint + calDefendArmyPoint + calDefendSupportPoint +
-                                    heroSelector === '' ? 0 : getHerosInfo()[cities[reminder]][heroSelector].strength
+                                    calDefendEnvPoint + calDefendArmyPoint + calDefendSupportPoint + getHerosInfo()[cities[reminder].occupy][heroSelector].strength
                                 }}
                             </span>
                             <span v-else>
@@ -449,6 +453,14 @@ Vue.component("decision-board", {
                         v-on:click="confirmBattle"
                     />
                 </div>
+            </section>
+            <section v-else-if="stage === 5">
+                <div v-for="(p, i) in player" v-if="p !== 0" style="font-size:11pt;color:lightgrey;margin-bottom:2pt">
+                    {{getStatesInfo()[i].name}}国国库+{{target[i]}} 
+                </div>
+                <input type="button" v-bind:style="confirmStyle" value="继续" 
+                    v-on:click="$emit('tonextstage')"
+                />
             </section>
             <section v-else>
                 <div v-bind:style="descStyle">
@@ -533,7 +545,6 @@ Vue.component("decision-board", {
                 }
             }
             this.$emit("addnewhistory", this.info);
-            console.log(this.attackHero);
             this.processAfterBattle(
                 this.battleResult, attackDefine, this.focus, this.target, defendDefine, this.reminder,
                 this.cities[this.reminder].army, this.activeState.code, 
@@ -634,7 +645,6 @@ Vue.component("decision-board", {
                         this.hero
                     );
                     this.showBattle = true;
-                    //alert("You are under attack");
                 } else {
                     this.defendHero = this.AIdecideBattleHero(
                         this.activeState.code, this.cities[this.reminder].occupy, 
@@ -897,6 +907,24 @@ Vue.component("decision-board", {
                             app.$data.focus = null;
                         }
                     }
+                } else if (this.stage === 5) {
+                //征税阶段
+                    this.target = new Array(this.player.length).fill(0);
+                    this.cities.forEach(function(c) {
+                        if (c.order !== null && this.getOrdersInfo()[c.order].type === 3) {
+                            this.target[c.occupy] += 1;
+                            this.target[c.occupy] += this.getCitiesInfo()[c.code].resource.filter(function(f) {
+                                return f === 0; 
+                            }).length;
+                        }
+                        app.$data.cities[c.code].order = null;
+                        app.$data.cities[c.code].status = new Array(
+                            app.$data.cities[c.code].army.length
+                        ).fill(1);
+                    }.bind(this));
+                    this.target.forEach(function(t, i) {
+                        app.$data.power[i] += t;    
+                    });
                 }
             }.bind(this));
         }  
@@ -973,7 +1001,8 @@ Vue.component("decision-board", {
             confirmStyle: {
                 display: "block",
                 fontSize: "9pt",
-                marginBottom: "5pt"
+                marginBottom: "5pt",
+                cursor: "pointer"
             },
             infoStyle: {
                 display: "block",

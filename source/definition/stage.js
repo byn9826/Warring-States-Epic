@@ -12,6 +12,10 @@ Vue.mixin({
                     return "劫掠";
                 case 4:
                     return "行军";
+                case 5:
+                    return "征税";
+                case 6:
+                    return "募兵";
             }
         }
     }
