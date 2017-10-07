@@ -98,7 +98,6 @@ var app = new Vue({
         }
     },
     created: function() {
-        //console.log(this.statesInfo);
     },
     computed: {
         statesInfo: function() {
@@ -176,3 +175,20 @@ var app = new Vue({
         }
     }
 });
+
+var mouseX = null, mouseY = null, drag = false;
+document.getElementById("main").addEventListener('mousemove', function(e) { 
+    if(drag === true){
+        window.scrollTo(window.scrollX + mouseX - e.pageX, window.scrollY + mouseY - e.pageY);
+    }
+});
+document.getElementById("main").addEventListener('mousedown', function(e){ 
+    drag = true; 
+    mouseX = e.pageX; 
+    mouseY = e.pageY;
+});
+document.getElementById("main").addEventListener('mouseup', function(e){ 
+    drag = false; 
+    mouseX = null; 
+    mouseY = null; 
+}); 
