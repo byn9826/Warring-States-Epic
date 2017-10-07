@@ -3,25 +3,15 @@ Vue.mixin({
         getStageName: function(i) {
             switch(i) {
                 case 0:
-                    return "缔盟阶段";
+                    return "缔盟";
                 case 1:
-                    return "毁约阶段";
+                    return "毁约";
                 case 2:
-                    return "运筹阶段";
+                    return "运筹";
                 case 3:
-                    return "劫掠阶段";
+                    return "劫掠";
                 case 4:
-                    return "行军阶段";
-            }
-        },
-        getStageDescName: function(i) {
-            switch(i) {
-                case 0:
-                    return "议事";
-                case 1:
-                    return "密谋";
-                case 2:
-                    return "筹备";
+                    return "行军";
             }
         }
     }

@@ -167,10 +167,10 @@ Vue.mixin({
                 }
             }
             app.$data.cities[aCity].order = null;
-            if (app.$data.hero[aHero.state].sort()[app.$data.hero[aHero.state].length -1] === 0) {
+            if (app.$data.hero[aHero.state].indexOf(1) === -1) {
                 app.$data.hero[aHero.state] = new Array(app.$data.hero[aHero.state].length).fill(1);
             }
-            if (app.$data.hero[dHero.state].sort()[app.$data.hero[dHero.state].length -1] === 0) {
+            if (app.$data.hero[dHero.state].indexOf(1) === -1) {
                 app.$data.hero[dHero.state] = new Array(app.$data.hero[dHero.state].length).fill(1);
             }
         }
