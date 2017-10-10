@@ -3,7 +3,7 @@ Vue.component("decision-board", {
         "stage", "player", "state", "cities", "relations", "rank", "orders", "settings", "focus",
         "addnewally", "addnewhistory", "tonextstage", "removeally", "increaserelation", "decreaserelation",
         "saveitemorder", "updateorderofcities", "disturbpowerpoint", "replacecitisoccupy",
-        "hero", "force"
+        "hero", "force", "power"
     ],
     template: `
         <div v-bind:style="cardStyle">
@@ -462,6 +462,116 @@ Vue.component("decision-board", {
                     v-on:click="$emit('tonextstage')"
                 />
             </section>
+            <section v-else-if="stage === 6 && player[orders[active]] === 2">
+                <div v-bind:style="descStyle">
+                    最高军团数{{getStatesSupply()[state[activeState.code].supply]}} 
+                    现有军团数{{state[activeState.code].army.length}}
+                </div>
+                <select v-model="reminder" v-on:change="copyArmy">
+                    <option disabled value="">- 城市 -</option>
+                    <option 
+                        style="background-color:white"
+                        v-for="c in (state[activeState.code].capital.concat(state[activeState.code].city))"
+                        v-bind:value="c"
+                    >
+                        {{getCitiesInfo()[c].name}}
+                    </option>
+                </select>
+                <input 
+                    v-show="reminder === ''" v-on:click="completeRecruit" 
+                    type="button" value="完成募兵" 
+                />
+                <div v-if="reminder !== null && reminder !== ''" style="margin-top:5pt;font-size:10pt;color:white">
+                    <div style="margin-bottom:5pt;color:lightgrey;font-weight:bold">
+                        驻扎军团: {{target.map(function(c) {return getArmyInfo()[c].name;}).join(" ")}}<br/>
+                        原有国力: {{power[activeState.code]}} 耗费国力: {{heroSelector}}
+                    </div>
+                    <div 
+                        v-show="
+                            target.length <= 4 
+                            && getStatesSupply()[state[activeState.code].supply] >= (state[activeState.code].army.length - cities[reminder].army.length + target.length)
+                            && power[activeState.code] >= heroSelector
+                        "
+                    >
+                        <div
+                            v-show="
+                                target.length < 4
+                                && getStatesSupply()[state[activeState.code].supply] > (state[activeState.code].army.length - cities[reminder].army.length + target.length)
+                                && power[activeState.code] > heroSelector
+                            "
+                        >
+                            <div v-bind:style="lineStyle">
+                                <span 
+                                    v-on:click="target.push(0); heroSelector += 1" 
+                                    v-bind:style="orderStyle"
+                                >
+                                    征募步兵军团
+                                </span>
+                                花费一点国力
+                            </div>
+                            <div v-bind:style="lineStyle">
+                                <span 
+                                    v-on:click="target.push(8); heroSelector += 2" 
+                                    v-bind:style="orderStyle"
+                                >
+                                    征募骑兵军团
+                                </span>
+                                花费两点国力
+                            </div>
+                            <div 
+                                v-bind:style="lineStyle" 
+                                v-show="getCitySpecialArmy(activeState.code, reminder)"
+                            >
+                                <span 
+                                    v-on:click="target.push(activeState.code); heroSelector += 2" 
+                                    v-bind:style="orderStyle"
+                                >
+                                    征募{{getArmyInfo()[activeState.code].name}}军团
+                                </span>
+                                花费两点国力
+                            </div>
+                        </div>
+                        <div v-show="power[activeState.code] > heroSelector">
+                            <div 
+                                v-on:click="target.splice(target.indexOf(0), 1, 8); heroSelector += 1" 
+                                v-bind:style="lineStyle"
+                                v-show="target.indexOf(0) !== -1"
+                            >
+                                <span v-bind:style="orderStyle">升级步兵为骑兵军团</span>花费一点国力
+                            </div>
+                            <div 
+                                v-on:click="target.splice(target.indexOf(0), 1, activeState.code); heroSelector += 1" 
+                                v-bind:style="lineStyle"
+                                v-show="target.indexOf(0) !== -1 && getCitySpecialArmy(activeState.code, reminder)"
+                            >
+                                <span v-bind:style="orderStyle">
+                                    升级步兵为{{getArmyInfo()[activeState.code].name}}军团
+                                </span>
+                                花费一点国力
+                            </div>
+                        </div>
+                        <div 
+                            v-on:click="target.splice(target.indexOf(8), 1, activeState.code)" 
+                            v-bind:style="lineStyle"
+                            v-show="target.indexOf(8) !== -1 && getCitySpecialArmy(activeState.code, reminder)"
+                        >
+                            <span v-bind:style="orderStyle">
+                                升级骑兵为{{getArmyInfo()[activeState.code].name}}军团
+                            </span>
+                        </div>
+                    </div>
+                    <div v-bind:style="lineStyle">
+                        <input 
+                            v-on:click="confirmRecruit" type="button" 
+                            v-bind:style="submitStyle" value="确定" 
+                        />
+                        <input 
+                            v-on:click="emptyRecruit" type="button" 
+                            v-bind:style="submitStyle" value="取消" 
+                        />
+                    </div>
+                </div>
+            </section>
             <section v-else>
                 <div v-bind:style="descStyle">
                     {{activeState.name}}国正在{{getStageName(stage)}} ...
@@ -501,6 +611,25 @@ Vue.component("decision-board", {
                 }
             }
             return true;
+        },
+        completeRecruit: function() {
+            this.nextActive();
+        },
+        confirmRecruit: function() {
+            app.$data.cities[this.reminder].army = this.target;
+            app.$data.power[this.activeState.code] -= this.heroSelector;
+            this.info = this.activeState.name + "在" + this.getCitiesInfo()[this.reminder].name + "募兵";
+            this.$emit("addnewhistory", this.info);
+            this.emptyRecruit();
+        },
+        emptyRecruit: function() {
+            this.reminder = "";
+            this.target = [];
+            this.heroSelector = 0;
+        },
+        copyArmy: function() {
+            this.target = this.cities[this.reminder].army.slice();
+            this.heroSelector = 0;
         },
         confirmBattle: function() {
             this.showBattle = false;
@@ -925,6 +1054,11 @@ Vue.component("decision-board", {
                     this.target.forEach(function(t, i) {
                         app.$data.power[i] += t;    
                     });
+                } else if (this.stage === 6) {
+                //募兵阶段
+                    this.target = [];
+                    this.reminder = "";
+                    this.heroSelector = 0;
                 }
             }.bind(this));
         }  

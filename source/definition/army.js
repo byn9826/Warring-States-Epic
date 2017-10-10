@@ -15,6 +15,25 @@ Vue.mixin({
                 {code: 8, name: "骑兵", attack: 2, defend: 2, cost: 2, level: 1}
             ];
         },
+        getCitySpecialArmy: function(state, city) {
+            if (state === 1 && city === 21) {
+                return true;
+            } else if (state === 2 && city === 33) {
+                return true;
+            } else if (state === 3 && city === 7) {
+                return true;
+            } else if (state === 4 && city === 4) {
+                return true;
+            } else if (state === 5 && city === 28) {
+                return true;
+            } else if (state === 6 && city === 19) {
+                return true;
+            } else if (state === 7 && city === 14) {
+                return true;
+            } else {
+                return false;
+            }
+        },
         getArmyIcon: function(t) {
             switch (t) {
                 case 0:
