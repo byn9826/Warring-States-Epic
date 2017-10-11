@@ -467,20 +467,22 @@ Vue.component("decision-board", {
                     最高军团数{{getStatesSupply()[state[activeState.code].supply]}} 
                     现有军团数{{state[activeState.code].army.length}}
                 </div>
-                <select v-model="reminder" v-on:change="copyArmy">
-                    <option disabled value="">- 城市 -</option>
-                    <option 
-                        style="background-color:white"
-                        v-for="c in (state[activeState.code].capital.concat(state[activeState.code].city))"
-                        v-bind:value="c"
-                    >
-                        {{getCitiesInfo()[c].name}}
-                    </option>
-                </select>
-                <input 
-                    v-show="reminder === ''" v-on:click="completeRecruit" 
-                    type="button" value="完成募兵" 
-                />
+                <div style="margin-bottom:5pt">
+                    <select v-model="reminder" v-on:change="copyArmy">
+                        <option disabled value="">- 城市 -</option>
+                        <option 
+                            style="background-color:white"
+                            v-for="c in (state[activeState.code].capital.concat(state[activeState.code].city))"
+                            v-bind:value="c"
+                        >
+                            {{getCitiesInfo()[c].name}}
+                        </option>
+                    </select>
+                    <input 
+                        v-show="reminder === ''" v-on:click="completeRecruit" 
+                        type="button" value="完成募兵" 
+                    />
+                </div>
                 <div v-if="reminder !== null && reminder !== ''" style="margin-top:5pt;font-size:10pt;color:white">
                     <div style="margin-bottom:5pt;color:lightgrey;font-weight:bold">
                         驻扎军团: {{target.map(function(c) {return getArmyInfo()[c].name;}).join(" ")}}<br/>
@@ -1059,6 +1061,18 @@ Vue.component("decision-board", {
                     this.target = [];
                     this.reminder = "";
                     this.heroSelector = 0;
+                    if (this.player[this.orders[newVal]] !== 2) {
+                        var recruit = this.AIdecideRecruitResult(
+                            this.state[this.activeState.code], this.power, this.getCitiesInfo(),
+                            this.cities
+                        );
+                        setTimeout(function () {}, this.settings.delay);  
+                        recruit.forEach(function(r) {
+                            this.info = this.activeState.name + "在" + this.getCitiesInfo()[r].name + "募兵";
+                            this.$emit("addnewhistory", this.info);
+                        }.bind(this));
+                        this.nextActive();
+                    }
                 }
             }.bind(this));
         }  

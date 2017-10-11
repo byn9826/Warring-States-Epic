@@ -16,6 +16,8 @@ Vue.mixin({
                     return "征税";
                 case 6:
                     return "募兵";
+                case 7:
+                    return "时运";
             }
         }
     }
