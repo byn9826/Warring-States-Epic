@@ -18,7 +18,12 @@ var app = new Vue({
     },
     methods: {
         toNextStage: function() {
-            this.stage += 1;
+            if (this.stage < 6) {
+                this.stage += 1;
+            } else {
+                this.round += 1;
+                this.stage = 0;
+            }
         },
         replaceCitisOccupy: function(from, to, move) {
             if (this.cities[to].occupy !== this.cities[from].occupy) {

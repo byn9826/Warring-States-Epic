@@ -926,7 +926,11 @@ Vue.component("decision-board", {
             this.reminder = "";
         },
         stage: function() {
-            this.active = 0;
+            if (this.stage === 5) {
+                this.active = 1;
+            } else {
+                this.active = 0;
+            }
         },
         active: function (newVal) {
             this.$nextTick(function () {
@@ -1066,7 +1070,7 @@ Vue.component("decision-board", {
                             this.state[this.activeState.code], this.power, this.getCitiesInfo(),
                             this.cities
                         );
-                        setTimeout(function () {}, this.settings.delay);  
+                        setTimeout(function () {return false;}, this.settings.delay);  
                         recruit.forEach(function(r) {
                             this.info = this.activeState.name + "在" + this.getCitiesInfo()[r].name + "募兵";
                             this.$emit("addnewhistory", this.info);

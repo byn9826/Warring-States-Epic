@@ -58,7 +58,7 @@ Vue.component("fame-info", {
             },
             activeStyle: {
                 border: "1pt solid lightgrey",
-                backgroundColor: this.getStatesInfo()[this.player].color,
+                backgroundColor: this.player !== -1 ? this.getStatesInfo()[this.player].color : '',
                 color: "white",
                 minWidth: "20pt",
                 height: "20pt",

@@ -16,7 +16,7 @@ Vue.component("occupy-info", {
             </div>
             <div v-bind:style="armyStyle">
                 <span 
-                    v-if="data.army.length!==0&&data.occupy!==player&&states[player].ally.indexOf(data.occupy)===-1" 
+                    v-if="player!==-1&&data.army.length!==0&&data.occupy!==player&&states[player].ally.indexOf(data.occupy)===-1" 
                     class="fa fa-shield" aria-hidden="true"
                 >
                     {{data.status.filter(function(a) {return a === 1}).length + "/" +  data.army.length}}
