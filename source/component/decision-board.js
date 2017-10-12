@@ -664,10 +664,16 @@ Vue.component("decision-board", {
                         "在" + this.getCitiesInfo()[this.reminder].name +
                         "打败了" + this.getStatesInfo()[this.cities[this.reminder].occupy].name 
                         + "国" + defendDefine.name;
+                    this.$emit("addnewhistory", this.info);
                 } else {
                     this.info = this.activeState.name + "国" + attackDefine.name +
                         "打败" + this.getStatesInfo()[this.cities[this.reminder].occupy].name + 
                         "国" + defendDefine.name + "攻占了" + this.getCitiesInfo()[this.reminder].name;
+                    this.$emit("addnewhistory", this.info);
+                    if (this.state[this.cities[this.reminder].occupy].occupy.length === 1) {
+                        this.info = this.getStatesInfo()[this.cities[this.reminder].occupy].name + "国灭亡";
+                        this.$emit("addnewhistory", this.info);
+                    }
                 }
                 if (
                     this.force.indexOf(this.activeState.code) > this.force.indexOf(this.cities[this.reminder].occupy)
@@ -681,6 +687,7 @@ Vue.component("decision-board", {
                 this.info = this.getStatesInfo()[this.cities[this.reminder].occupy].name + "国" +
                     defendDefine.name + "击退了" + this.activeState.name + "国" +
                     attackDefine.name + "对" + this.getCitiesInfo()[this.reminder].name + "的进攻";
+                this.$emit("addnewhistory", this.info);
                 if (
                     this.force.indexOf(this.cities[this.reminder].occupy) > this.force.indexOf(this.activeState.code)
                 ) {
@@ -690,7 +697,6 @@ Vue.component("decision-board", {
                     );
                 }
             }
-            this.$emit("addnewhistory", this.info);
             this.processAfterBattle(
                 this.battleResult, attackDefine, this.focus, this.target, defendDefine, this.reminder,
                 this.cities[this.reminder].army, this.activeState.code, 
@@ -777,6 +783,10 @@ Vue.component("decision-board", {
                     this.getStatesInfo()[this.cities[this.reminder].occupy].name + "国的" + 
                     this.getCitiesInfo()[this.reminder].name;
                 this.$emit("addnewhistory", this.info);
+                if (this.state[this.cities[this.reminder].occupy].occupy.length === 1) {
+                    this.info = this.getStatesInfo()[this.cities[this.reminder].occupy].name + "国灭亡";
+                    this.$emit("addnewhistory", this.info);
+                }
                 var move = this.target.map(function(t) {
                     return this.getArmyInfo()[this.cities[this.focus].army[t]].code;
                 }.bind(this));
@@ -942,7 +952,7 @@ Vue.component("decision-board", {
         },
         stage: function() {
             if (this.stage === 5) {
-                this.active = 1;
+                this.active = null;
             } else {
                 this.active = 0;
             }
@@ -951,7 +961,9 @@ Vue.component("decision-board", {
             this.$nextTick(function () {
                 if (this.stage === 0) {
                 //缔盟阶段
-                    if (this.player[this.orders[newVal]] !== 2) {
+                    if (!this.state[this.orders[newVal]].live) {
+                        this.nextActive();
+                    } else if (this.player[this.orders[newVal]] !== 2) {
                         this.target = this.AIrequestAllyOrNot(
                             this.activeState.code, this.state, this.relations, this.rank
                         );
@@ -975,7 +987,9 @@ Vue.component("decision-board", {
                     }
                 } else if (this.stage === 1) {
                 //毁约阶段
-                    if (this.player[this.orders[newVal]] !== 2) {
+                    if (!this.state[this.orders[newVal]].live) {
+                        this.nextActive();
+                    } else if (this.player[this.orders[newVal]] !== 2) {
                         this.target = this.AIbreachAllyOrNot(
                             this.activeState.code, this.state[this.activeState.code].ally, this.state,
                             this.relations[this.activeState.code]
@@ -988,7 +1002,9 @@ Vue.component("decision-board", {
                     }
                 } else if (this.stage === 2) {
                 //运筹阶段
-                    if (this.player[this.orders[newVal]] !== 2) {
+                    if (!this.state[this.orders[newVal]].live) {
+                        this.nextActive();
+                    } else if (this.player[this.orders[newVal]] !== 2) {
                         this.target = null;
                         var available = this.state[this.activeState.code].occupy.filter(function(f) {
                             return this.cities[f].army.length !== 0;
@@ -1005,7 +1021,9 @@ Vue.component("decision-board", {
                     }
                 } else if (this.stage === 3) {
                 //劫掠阶段
-                    if (this.state[this.activeState.code].orderType.indexOf(2) === -1) {
+                    if (!this.state[this.orders[newVal]].live) {
+                        this.nextActive();
+                    } else if (this.state[this.activeState.code].orderType.indexOf(2) === -1) {
                         this.nextActive();
                     } else {
                         if (this.player[this.orders[newVal]] !== 2) {
@@ -1022,7 +1040,9 @@ Vue.component("decision-board", {
                     }
                 } else if (this.stage === 4) {
                 //行军阶段
-                    if (this.state[this.activeState.code].orderType.indexOf(0) === -1) {
+                    if (!this.state[this.orders[newVal]].live) {
+                        this.nextActive();
+                    } else if (this.state[this.activeState.code].orderType.indexOf(0) === -1) {
                         this.nextActive();
                     } else {
                         this.target = [];
@@ -1077,7 +1097,9 @@ Vue.component("decision-board", {
                     });
                 } else if (this.stage === 6) {
                 //募兵阶段
-                    if (this.player[this.orders[newVal]] !== 2) {
+                    if (!this.state[this.orders[newVal]].live) {
+                        this.nextActive();
+                    } else if (this.player[this.orders[newVal]] !== 2) {
                         var recruit = this.AIdecideRecruitResult(
                             this.state[this.activeState.code], this.power, this.getCitiesInfo(),
                             this.cities

@@ -31,7 +31,7 @@ Vue.mixin({
             }
             var currentAllies = states[active].ally;
             var targetAllies = rank.filter(function(t) {
-                return currentAllies.indexOf(t.code) === -1 && t.code !== active;
+                return currentAllies.indexOf(t.code) === -1 && t.code !== active && states[t.code].live;
             });
             var targetRatios = [];
             targetAllies.forEach(function(target) {

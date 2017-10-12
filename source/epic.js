@@ -119,7 +119,8 @@ var app = new Vue({
                     code: i,
                     nearby: [],
                     order: [],
-                    orderType: []
+                    orderType: [],
+                    live: true
                 }
             }
             this.allies.forEach(function(ally) {
@@ -152,6 +153,12 @@ var app = new Vue({
                     }
                 });
             }.bind(this));
+            states = states.map(function(s) {
+                if (s.occupy.length === 0) {
+                    s.live = false;
+                }
+                return s;
+            });
             return states;
         },
         rank: function() {
