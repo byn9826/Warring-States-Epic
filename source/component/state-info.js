@@ -32,7 +32,7 @@ Vue.component("state-info", {
                         {{hero[i]===1?"待命":"休整"}}
                     </span>
                     {{h.name}} 战力{{h.strength}} {{h.kill!==0?'斩杀'+h.kill:''}} 
-                    {{h.safe!==0?'防卫'+h.safe:''}} {{h.skill!==null?h.skill:''}}
+                    {{h.safe!==0?'防卫'+h.safe:''}} {{getSkillsInfo()[h.skill].skill}}
                 </div>
             </div>
             <div v-bind:style="strengthStyle">

@@ -694,7 +694,7 @@ Vue.component("decision-board", {
             this.processAfterBattle(
                 this.battleResult, attackDefine, this.focus, this.target, defendDefine, this.reminder,
                 this.cities[this.reminder].army, this.activeState.code, 
-                this.getStatesInfo()[this.cities[this.reminder].occupy].code, this.target,
+                this.getStatesInfo()[this.cities[this.reminder].occupy].code,
                 this.attackHero, this.defendHero
             );
             this.nextActive();
@@ -1077,20 +1077,22 @@ Vue.component("decision-board", {
                     });
                 } else if (this.stage === 6) {
                 //募兵阶段
-                    this.target = [];
-                    this.reminder = "";
-                    this.heroSelector = 0;
                     if (this.player[this.orders[newVal]] !== 2) {
                         var recruit = this.AIdecideRecruitResult(
                             this.state[this.activeState.code], this.power, this.getCitiesInfo(),
                             this.cities
                         );
-                        setTimeout(function () {return false;}, this.settings.delay);  
-                        recruit.forEach(function(r) {
-                            this.info = this.activeState.name + "在" + this.getCitiesInfo()[r].name + "募兵";
-                            this.$emit("addnewhistory", this.info);
-                        }.bind(this));
-                        this.nextActive();
+                        setTimeout(function () {
+                            recruit.forEach(function(r) {
+                                this.info = this.activeState.name + "在" + this.getCitiesInfo()[r].name + "募兵";
+                                this.$emit("addnewhistory", this.info);
+                            }.bind(this));
+                            this.nextActive();
+                        }.bind(this), this.settings.delay);
+                    } else {
+                        this.target = [];
+                        this.reminder = "";
+                        this.heroSelector = 0;
                     }
                 }
             }.bind(this));

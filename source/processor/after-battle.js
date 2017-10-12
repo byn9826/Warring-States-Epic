@@ -1,6 +1,6 @@
 Vue.mixin({
     methods: {
-        processAfterBattle: function(result, aHero, aCity, aArmy, dHero, dCity, dArmy, aState, dState, aMove, aHeroIndex, dHeroIndex) {
+        processAfterBattle: function(result, aHero, aCity, aArmy, dHero, dCity, dArmy, aState, dState, aHeroIndex, dHeroIndex) {
             var kill = 0;
             var marchArmy = [];
             aArmy.forEach(function(a) {
@@ -41,14 +41,8 @@ Vue.mixin({
                         defendArmy.pop();
                     }
                 }
-                //蔺相如防守失败
                 if (dHero.skill === 8) {
-                    app.$data.cities[dCity].army = app.$data.cities[dCity].army.filter(function(a, i) {
-                        if (app.$data.cities[dCity].status[i] === 0) {
-                            return true;
-                        }
-                    }.bind(this));
-                    app.$data.cities[dCity].army = app.$data.cities[dCity].army.concat(defendArmy);
+                //蔺相如防守失败
                     app.$data.cities[dCity].status = new Array(
                         app.$data.cities[dCity].army.length
                     ).fill(0);
@@ -61,10 +55,11 @@ Vue.mixin({
                         }
                     }
                 } else {
+                //非蔺相如防守
                     var retreat = this.AISelectRetreatTarget(dCity, app.$data.cities, dHero.state);
-                    if (retreat !== null && retreat !== undefined && defendArmy.length > 0) {
-                        if ((app.$data.cities[retreat].army.length + defendArmy.length) > 4) {
-                            for (var j = 0; j < (app.$data.cities[retreat].army.length + defendArmy.length - 4); j++) {
+                    if (retreat !== null && retreat !== undefined) {
+                        if (app.$data.cities[retreat].army.length + defendArmy.length > 4) {
+                            for (var j = 0; j < app.$data.cities[retreat].army.length + defendArmy.length - 4; j++) {
                                 if (defendArmy.length === 0) {
                                     break;
                                 }
@@ -94,9 +89,15 @@ Vue.mixin({
                     app.$data.cities[dCity].army = marchArmy;
                     app.$data.cities[dCity].status = new Array(marchArmy.length).fill(1);
                     app.$data.cities[dCity].occupy = aState;
-                    aMove.forEach(function(m) {
-                        app.$data.cities[aCity].army.splice(m, 1); 
-                        app.$data.cities[aCity].status.splice(m, 1); 
+                    aArmy.forEach(function(m) {
+                        app.$data.cities[aCity].army.splice(m, 1, null); 
+                        app.$data.cities[aCity].status.splice(m, 1, null); 
+                    });
+                    app.$data.cities[aCity].army = app.$data.cities[aCity].army.filter(function(a) {
+                        return a !== null;    
+                    });
+                    app.$data.cities[aCity].status = app.$data.cities[aCity].status.filter(function(a) {
+                        return a !== null;    
                     });
                 }
                 app.$data.cities[dCity].order = null;
@@ -152,9 +153,15 @@ Vue.mixin({
                     }
                 }
                 aArmy.forEach(function(a) {
-                    app.$data.cities[aCity].army.splice(a, 1);
-                    app.$data.cities[aCity].status.splice(a, 1);
+                    app.$data.cities[aCity].army.splice(a, 1, null);
+                    app.$data.cities[aCity].status.splice(a, 1, null);
                 });
+                app.$data.cities[aCity].army = app.$data.cities[aCity].army.filter(function(a) {
+                    return a !== null;
+                })
+                app.$data.cities[aCity].status = app.$data.cities[aCity].status.filter(function(a) {
+                    return a !== null;
+                })
                 marchArmy.forEach(function(m) {
                     app.$data.cities[aCity].army.push(m);
                     app.$data.cities[aCity].status.push(0);
