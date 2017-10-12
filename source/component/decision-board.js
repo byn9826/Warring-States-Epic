@@ -488,79 +488,93 @@ Vue.component("decision-board", {
                         驻扎军团: {{target.map(function(c) {return getArmyInfo()[c].name;}).join(" ")}}<br/>
                         原有国力: {{power[activeState.code]}} 耗费国力: {{heroSelector}}
                     </div>
-                    <div 
+                    <div v-bind:style="lineStyle"
                         v-show="
-                            target.length <= 4 
-                            && getStatesSupply()[state[activeState.code].supply] >= (state[activeState.code].army.length - cities[reminder].army.length + target.length)
-                            && power[activeState.code] >= heroSelector
+                            target.length < 4 
+                            && getStatesSupply()[state[activeState.code].supply] > (state[activeState.code].army.length - cities[reminder].army.length + target.length)
+                            && power[activeState.code] > heroSelector
                         "
                     >
-                        <div
-                            v-show="
-                                target.length < 4
-                                && getStatesSupply()[state[activeState.code].supply] > (state[activeState.code].army.length - cities[reminder].army.length + target.length)
-                                && power[activeState.code] > heroSelector
-                            "
+                        <span 
+                            v-on:click="target.push(0); heroSelector += 1" 
+                            v-bind:style="orderStyle"
                         >
-                            <div v-bind:style="lineStyle">
-                                <span 
-                                    v-on:click="target.push(0); heroSelector += 1" 
-                                    v-bind:style="orderStyle"
-                                >
-                                    征募步兵军团
-                                </span>
-                                花费一点国力
-                            </div>
-                            <div v-bind:style="lineStyle">
-                                <span 
-                                    v-on:click="target.push(8); heroSelector += 2" 
-                                    v-bind:style="orderStyle"
-                                >
-                                    征募骑兵军团
-                                </span>
-                                花费两点国力
-                            </div>
-                            <div 
-                                v-bind:style="lineStyle" 
-                                v-show="getCitySpecialArmy(activeState.code, reminder)"
-                            >
-                                <span 
-                                    v-on:click="target.push(activeState.code); heroSelector += 2" 
-                                    v-bind:style="orderStyle"
-                                >
-                                    征募{{getArmyInfo()[activeState.code].name}}军团
-                                </span>
-                                花费两点国力
-                            </div>
-                        </div>
-                        <div v-show="power[activeState.code] > heroSelector">
-                            <div 
-                                v-on:click="target.splice(target.indexOf(0), 1, 8); heroSelector += 1" 
-                                v-bind:style="lineStyle"
-                                v-show="target.indexOf(0) !== -1"
-                            >
-                                <span v-bind:style="orderStyle">升级步兵为骑兵军团</span>花费一点国力
-                            </div>
-                            <div 
-                                v-on:click="target.splice(target.indexOf(0), 1, activeState.code); heroSelector += 1" 
-                                v-bind:style="lineStyle"
-                                v-show="target.indexOf(0) !== -1 && getCitySpecialArmy(activeState.code, reminder)"
-                            >
-                                <span v-bind:style="orderStyle">
-                                    升级步兵为{{getArmyInfo()[activeState.code].name}}军团
-                                </span>
-                                花费一点国力
-                            </div>
-                        </div>
-                        <div 
+                            征募步兵军团
+                        </span>
+                        花费一点国力
+                    </div>
+                    <div v-bind:style="lineStyle"
+                        v-show="
+                            target.length < 4 
+                            && getStatesSupply()[state[activeState.code].supply] > (state[activeState.code].army.length - cities[reminder].army.length + target.length)
+                            && power[activeState.code] > heroSelector + 1
+                        "
+                    >
+                        <span 
+                            v-on:click="target.push(8); heroSelector += 2" 
+                            v-bind:style="orderStyle"
+                        >
+                            征募骑兵军团
+                        </span>
+                        花费两点国力
+                    </div>
+                    <div v-bind:style="lineStyle" 
+                        v-show="
+                            target.length < 4 
+                            && getStatesSupply()[state[activeState.code].supply] > (state[activeState.code].army.length - cities[reminder].army.length + target.length)
+                            && power[activeState.code] > heroSelector + 1
+                            && getCitySpecialArmy(activeState.code, reminder)
+                        "
+                    >
+                        <span 
+                            v-on:click="target.push(activeState.code); heroSelector += 2" 
+                            v-bind:style="orderStyle"
+                        >
+                            征募{{getArmyInfo()[activeState.code].name}}军团
+                        </span>
+                        花费两点国力
+                    </div>
+                    <div v-bind:style="lineStyle"
+                        v-show="
+                            power[activeState.code] > heroSelector
+                            && target.indexOf(0) !== -1
+                        "
+                    >
+                        <span 
+                            v-on:click="target.splice(target.indexOf(0), 1, 8); heroSelector += 1"
+                            v-bind:style="orderStyle"
+                        >
+                            升级步兵为骑兵军团
+                        </span>
+                        花费一点国力
+                    </div>
+                    <div v-bind:style="lineStyle"
+                        v-show="
+                            power[activeState.code] > heroSelector
+                            && target.indexOf(0) !== -1
+                            && getCitySpecialArmy(activeState.code, reminder)
+                        "
+                    >
+                        <span 
+                            v-on:click="target.splice(target.indexOf(0), 1, activeState.code); heroSelector += 1" 
+                            v-bind:style="orderStyle"
+                        >
+                            升级步兵为{{getArmyInfo()[activeState.code].name}}军团
+                        </span>
+                        花费一点国力
+                    </div>
+                    <div v-bind:style="lineStyle"
+                        v-show="
+                            target.indexOf(8) !== -1 
+                            && getCitySpecialArmy(activeState.code, reminder)
+                        "
+                    >
+                        <span 
                             v-on:click="target.splice(target.indexOf(8), 1, activeState.code)" 
-                            v-bind:style="lineStyle"
-                            v-show="target.indexOf(8) !== -1 && getCitySpecialArmy(activeState.code, reminder)"
+                            v-bind:style="orderStyle"
                         >
-                            <span v-bind:style="orderStyle">
-                                升级骑兵为{{getArmyInfo()[activeState.code].name}}军团
-                            </span>
-                        </div>
+                            升级骑兵为{{getArmyInfo()[activeState.code].name}}军团
+                        </span>
                     </div>
                     <div v-bind:style="lineStyle">
                         <input 
@@ -619,6 +633,7 @@ Vue.component("decision-board", {
         },
         confirmRecruit: function() {
             app.$data.cities[this.reminder].army = this.target;
+            app.$data.cities[this.reminder].status = new Array(this.target.length).fill(1);
             app.$data.power[this.activeState.code] -= this.heroSelector;
             this.info = this.activeState.name + "在" + this.getCitiesInfo()[this.reminder].name + "募兵";
             this.$emit("addnewhistory", this.info);
