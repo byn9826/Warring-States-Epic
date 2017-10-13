@@ -82,28 +82,34 @@ Vue.component("decision-board", {
                 <div v-bind:style="descStyle">
                     {{getStatesAllies(state[activeState.code]) || "无盟友"}}
                 </div>
-                <div
-                    v-for="(o, i) in state[activeState.code].order" 
-                    v-if="o!==null&&getOrdersInfo()[o].type===2"
-                    v-bind:style="boxStyle"
-                >
-                    <div>
-                        {{getCitiesInfo()[state[activeState.code].occupy[i]].name}}
-                    </div>
+                <div style="margin-bottom:5pt">
                     <select 
-                        v-bind:style="selectStyle" v-on:change="setDisturbTarget(i)"
+                        v-bind:style="selectStyle" v-model="reminder" v-on:change="target=''"
                     >
+                        <option selected value="">-城市-</option>
+                        <option 
+                            v-for="(o, i) in state[activeState.code].order"
+                            v-if="o!==null&&getOrdersInfo()[o].type===2"
+                            v-bind:value="state[activeState.code].occupy[i]"
+                        >
+                            {{getCitiesInfo()[state[activeState.code].occupy[i]].name}}
+                        </option>
+                    </select>
+                    <span style="font-size:11pt">劫掠</span>
+                    <select v-if="reminder!==''" v-bind:style="selectStyle" v-model="target">
                         <option selected value="">无目标</option>
                         <option 
-                            v-for="c in getCitiesInfo()[state[activeState.code].occupy[i]].nearby"
-                            v-if="filterTargetOptions(c, 3)" v-bind:value="c"
+                            v-for="c in getCitiesInfo()[reminder].nearby"
+                            v-show="filterTargetOptions(c, 3)" 
+                            v-bind:value="c"
                         >
                             {{getCitiesInfo()[c].name}}
                         </option>
                     </select>
                 </div>
                 <input 
-                    v-bind:style="confirmStyle" type="button" value="确认劫掠目标" 
+                    v-show="reminder!==''"
+                    v-bind:style="confirmStyle" type="button" value="确认" 
                     v-on:click="submitDisturb()"
                 />
             </section>
@@ -831,13 +837,16 @@ Vue.component("decision-board", {
             }
         },
         submitDisturb: function() {
-            var remover = [];
-            Object.keys(this.target).forEach(function(key) { 
-                if (this.target[key] !== "" && remover.indexOf(parseInt(this.target[key])) === -1) {
-                    remover.push(parseInt(this.target[key]));
-                }
-            }.bind(this));
-            this.disturbProcess(remover);
+            if (this.target !== "") {
+                var remover = [this.reminder, this.target];
+                this.reminder = "";
+                this.target = "";
+                this.disturbProcess(remover);
+            } else {
+                this.$emit("updateorderofcities", [this.reminder], [null]);
+                this.reminder = "";
+                this.nextActive();
+            }
         },
         disturbProcess: function(remover) {
             if (remover[0] !== null && remover[0] !== undefined) {
@@ -856,9 +865,6 @@ Vue.component("decision-board", {
                 this.$emit("updateorderofcities", remover, [null, null]);
             }
             this.nextActive();
-        },
-        setDisturbTarget(i) {
-            this.target[i] = event.target.value;
         },
         recordSelectedOrder(i) {
             this.$emit("saveitemorder", i, 0);
@@ -958,6 +964,10 @@ Vue.component("decision-board", {
         stage: function() {
             if (this.stage === 5) {
                 this.active = null;
+            } else if (this.stage === 3) {
+                this.target = "";
+                this.reminder = "";
+                this.active = 0;
             } else {
                 this.active = 0;
             }
@@ -1040,8 +1050,6 @@ Vue.component("decision-board", {
                             setTimeout(function () {
                                 this.disturbProcess(result);
                             }.bind(this), this.settings.delay);
-                        } else {
-                            this.target = {};
                         }
                     }
                 } else if (this.stage === 4) {
@@ -1198,7 +1206,7 @@ Vue.component("decision-board", {
             confirmStyle: {
                 display: "block",
                 fontSize: "9pt",
-                marginBottom: "5pt",
+                margin: "5pt 0",
                 cursor: "pointer"
             },
             infoStyle: {

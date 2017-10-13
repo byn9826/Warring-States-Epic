@@ -123,10 +123,6 @@ var app = new Vue({
                     live: true
                 }
             }
-            this.allies.forEach(function(ally) {
-                states[ally[0]].ally.push(ally[1]);
-                states[ally[1]].ally.push(ally[0]);
-            }.bind(this));
             this.cities.forEach(function(city) {
                 if (this.getCitiesInfo()[city.code].type === 0) {
                     states[city.occupy].capital.push(city.code);
@@ -159,6 +155,12 @@ var app = new Vue({
                 }
                 return s;
             });
+            this.allies.forEach(function(ally) {
+                if (states[ally[0]].live && states[ally[1]].live) {
+                    states[ally[0]].ally.push(ally[1]);
+                    states[ally[1]].ally.push(ally[0]);
+                }
+            }.bind(this));
             return states;
         },
         rank: function() {

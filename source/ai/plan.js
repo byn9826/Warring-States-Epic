@@ -8,14 +8,13 @@ Vue.mixin({
                 nearbys.push(cityInfo[c].nearby);
             });
             var enemies = new Array(available.length).fill(0);
+            var defender = new Array(available.length).fill(0);
             var friends = new Array(available.length).fill(0);
             nearbys.forEach(function(n, i) {
                 n.forEach(function(s) {
                     if (cities[s].occupy !== own && ally.indexOf(cities[s].occupy) === -1) {
                         enemies[i] += cities[s].army.length;
                     } else if (cities[s].occupy === own) {
-                        friends[i] += cities[s].army.length * 2;
-                    } else {
                         friends[i] += cities[s].army.length;
                     }
                 });
@@ -64,7 +63,7 @@ Vue.mixin({
             odds.forEach(function(o, index) {
                 dice = Math.random();
                 for (i = 0; i < o.length; i++) {
-                    if (o[i] > dice) {
+                    if (o[i] >= dice) {
                         switch (i) {
                             case 0:
                                 if (attack.length !== 0) {
@@ -100,12 +99,12 @@ Vue.mixin({
                 }
             });
             var options = attack.concat(rest);
-            var dice, holder;
+            var holder;
             orders = orders.map(function(o) {
-                if (o === null) {
+                if (o === null || o === undefined) {
                     dice = Math.random();
-                    holder = options[Math.floor(dice * options.length) - 1];
-                    options.splice(Math.floor(dice * options.length) - 1, 1);
+                    holder = options[Math.floor(dice * options.length)];
+                    options.splice(Math.floor(dice * options.length), 1);
                     return holder;
                 } else {
                     return o;
