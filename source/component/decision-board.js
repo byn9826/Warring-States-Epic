@@ -840,29 +840,21 @@ Vue.component("decision-board", {
             this.disturbProcess(remover);
         },
         disturbProcess: function(remover) {
-            remover.forEach(function(r) {
-                if (r !== null && r !== undefined) {
-                    if (this.getOrdersInfo()[this.cities[r].order].type === 3) {
-                        this.$emit(
-                            "disturbpowerpoint", this.activeState.code, 
-                            this.getStatesInfo()[this.cities[r].occupy].code
-                        );
-                    }
-                    this.info = this.activeState.name + "国劫掠了" + this.getStatesInfo()[this.cities[r].occupy].name + "国的" + this.getCitiesInfo()[r].name;
-                    this.$emit("addnewhistory", this.info);
+            if (remover[0] !== null && remover[0] !== undefined) {
+                if (this.getOrdersInfo()[this.cities[remover[1]].order].type === 3) {
                     this.$emit(
-                        "decreaserelation", this.getStatesInfo()[this.cities[r].occupy].code, 
-                        this.activeState.code, 1
+                        "disturbpowerpoint", this.activeState.code, 
+                        this.getStatesInfo()[this.cities[remover[1]].occupy].code
                     );
-                    this.$emit("updateorderofcities", [r], [null]);
                 }
-            }.bind(this));
-            var own = this.state[this.activeState.code].occupy.filter(function(o, index) {
-                if (this.state[this.activeState.code].orderType[index] === 2) {
-                    return true;
-                }
-            }.bind(this));
-            this.$emit("updateorderofcities", own, new Array(own.length).fill(null));
+                this.info = this.activeState.name + "国劫掠了" + this.getStatesInfo()[this.cities[remover[1]].occupy].name + "国的" + this.getCitiesInfo()[remover[1]].name;
+                this.$emit("addnewhistory", this.info);
+                this.$emit(
+                    "decreaserelation", this.getStatesInfo()[this.cities[remover[1]].occupy].code, 
+                    this.activeState.code, 1
+                );
+                this.$emit("updateorderofcities", remover, [null, null]);
+            }
             this.nextActive();
         },
         setDisturbTarget(i) {
@@ -926,7 +918,20 @@ Vue.component("decision-board", {
             if (this.active < (this.rank.length - 1)) {
                 this.active += 1; 
             } else {
-                if (this.stage === 4) {
+                if (this.stage === 3) {
+                    var i = 0, loop = false;
+                    for (i = 0; i < this.state.length; i++) {
+                        if (this.state[i].orderType.indexOf(2) !== -1) {
+                            loop = true;
+                            break;
+                        }
+                    }
+                    if (loop) {
+                        this.active = 0;
+                    } else {
+                        this.$emit("tonextstage");
+                    }
+                } else if (this.stage === 4) {
                     var i = 0, loop = false;
                     for (i = 0; i < this.state.length; i++) {
                         if (this.state[i].orderType.indexOf(0) !== -1) {

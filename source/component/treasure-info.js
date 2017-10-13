@@ -24,9 +24,9 @@ Vue.component("treasure-info", {
         getTreasureBonus: function() {
             switch (this.type) {
                 case 0:
-                    return "进攻";
-                case 1:
                     return "防守";
+                case 1:
+                    return "进攻";
             }
         },
         getTreasureIcon: function() {

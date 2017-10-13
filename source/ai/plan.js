@@ -22,37 +22,37 @@ Vue.mixin({
             });
             var odds = [];
             available.forEach(function(a, i) {
-                if (protecters[i] === 1 && enemies === 0 && friends === 0) {
+                if (protecters[i] === 1 && enemies[i] === 0 && friends[i] === 0) {
                     odds.push([0.2, 0.2, 0.2, 1]);
-                } else if (protecters[i] === 1 && enemies === 0 && friends !== 0) {
-                    odds.push([0.15, 0.3, 0.3, 1]);
-                } else if (protecters[i] === 1 && enemies !== 0 && friends !== 0) {
-                    odds.push([0.2, 0.5, 0.8, 1]);
-                } else if (protecters[i] === 1 && enemies !== 0 && friends == 0) {
-                    odds.push([0.3, 0.3, 0.6, 1]);
-                } else if (protecters[i] === 2 && enemies === 0 && friends === 0) {
-                    odds.push([0.35, 0.35, 0.35, 1]);
-                } else if (protecters[i] === 2 && enemies === 0 && friends !== 0) {
-                    odds.push([0.2, 0.4, 0.4, 1]);
-                } else if (protecters[i] === 2 && enemies !== 0 && friends !== 0) {
-                    odds.push([0.35, 0.7, 0.9, 1]);
-                } else if (protecters[i] === 2 && enemies !== 0 && friends == 0) {
-                    odds.push([0.4, 0.4, 0.7, 1]);
-                } else if (protecters[i] === 3 && enemies === 0 && friends === 0) {
+                } else if (protecters[i] === 1 && enemies[i] === 0 && friends[i] !== 0) {
+                    odds.push([0.3, 0.35, 0.35, 1]);
+                } else if (protecters[i] === 1 && enemies[i] !== 0 && friends[i] !== 0) {
+                    odds.push([0.4, 0.6, 0.8, 1]);
+                } else if (protecters[i] === 1 && enemies[i] !== 0 && friends[i] == 0) {
+                    odds.push([0.55, 0.55, 0.8, 1]);
+                } else if (protecters[i] === 2 && enemies[i] === 0 && friends[i] === 0) {
+                    odds.push([0.4, 0.4, 0.4, 1]);
+                } else if (protecters[i] === 2 && enemies[i] === 0 && friends[i] !== 0) {
+                    odds.push([0.5, 0.55, 0.55, 1]);
+                } else if (protecters[i] === 2 && enemies[i] !== 0 && friends[i] !== 0) {
+                    odds.push([0.5, 0.7, 0.9, 1]);
+                } else if (protecters[i] === 2 && enemies[i] !== 0 && friends[i] == 0) {
+                    odds.push([0.65, 0.65, 0.8, 1]);
+                } else if (protecters[i] === 3 && enemies[i] === 0 && friends[i] === 0) {
                     odds.push([0.7, 0.7, 0.7, 1]);
-                } else if (protecters[i] === 3 && enemies === 0 && friends !== 0) {
-                    odds.push([0.5, 0.8, 0.8, 1]);
-                } else if (protecters[i] === 3 && enemies !== 0 && friends !== 0) {
-                    odds.push([0.6, 0.8, 0.9, 1]);
-                } else if (protecters[i] === 3 && enemies !== 0 && friends == 0) {
+                } else if (protecters[i] === 3 && enemies[i] === 0 && friends[i] !== 0) {
+                    odds.push([0.7, 0.9, 0.9, 1]);
+                } else if (protecters[i] === 3 && enemies[i] !== 0 && friends[i] !== 0) {
+                    odds.push([0.75, 0.85, 0.95, 1]);
+                } else if (protecters[i] === 3 && enemies[i] !== 0 && friends[i] == 0) {
                     odds.push([0.85, 0.85, 0.95, 1]);
-                } else if (protecters[i] === 4 && enemies === 0 && friends === 0) {
+                } else if (protecters[i] === 4 && enemies[i] === 0 && friends[i] === 0) {
                     odds.push([0.95, 0.95, 0.95, 1]);
-                } else if (protecters[i] === 4 && enemies === 0 && friends !== 0) {
-                    odds.push([0.85, 0.95, 0.95, 1]);
-                } else if (protecters[i] === 4 && enemies !== 0 && friends !== 0) {
-                    odds.push([0.85, 0.9, 0.95, 1]);
-                } else if (protecters[i] === 4 && enemies !== 0 && friends == 0) {
+                } else if (protecters[i] === 4 && enemies[i] === 0 && friends[i] !== 0) {
+                    odds.push([0.9, 0.95, 0.95, 1]);
+                } else if (protecters[i] === 4 && enemies[i] !== 0 && friends[i] !== 0) {
+                    odds.push([0.9, 0.95, 1, 1]);
+                } else if (protecters[i] === 4 && enemies[i] !== 0 && friends[i] == 0) {
                     odds.push([0.95, 0.95, 1, 1]);
                 }
             });
@@ -74,21 +74,21 @@ Vue.mixin({
                                 }
                                 break;
                             case 1:
-                                if (attack.length !== 0) {
+                                if (support.length !== 0) {
                                     orders.push(support.shift());
                                 } else {
                                     orders.push(null);
                                 }
                                 break;
                             case 2:
-                                if (attack.length !== 0) {
+                                if (disturb.length !== 0) {
                                     orders.push(disturb.shift());
                                 } else {
                                     orders.push(null);
                                 }
                                 break;
                             case 3:
-                                if (attack.length !== 0) {
+                                if (rest.length !== 0) {
                                     orders.push(rest.shift());
                                 } else {
                                     orders.push(null);
