@@ -1,188 +1,117 @@
 Vue.mixin({
     methods: {
-        AIplanResult: function(own, ally, state, cities, relations, available) {
-            var avoid = [];
-            ally.forEach(function(a) {
-                avoid = avoid.concat(state[a].occupy);
+        AIplanResult: function(own, ally, state, cities, relations, available, cityInfo) {
+            var protecters = [];
+            var nearbys = [];
+            available.forEach(function(c) {
+                protecters.push(cities[c].army.length);
+                nearbys.push(cityInfo[c].nearby);
             });
-            var targets = state[own].nearby.filter(function(n) {
-                return avoid.indexOf(n) === -1;
-            });
-            var final = new Array(available.length);
-            var benefits = new Array(targets.length).fill(0);
-            var forces = new Array(targets.length);
-            var enemy = new Array(targets.length);
-            var attackCities = new Array(targets.length);
-            targets.forEach(function(t, i) {
-                enemy[i] = cities[t].army;
-                this.getCitiesInfo()[t].resource.forEach(function(r) {
-                    if (r === 0) {
-                        benefits[i] += state[own].supply / state[own].tax;
+            var enemies = new Array(available.length).fill(0);
+            var friends = new Array(available.length).fill(0);
+            nearbys.forEach(function(n, i) {
+                n.forEach(function(s) {
+                    if (cities[s].occupy !== own && ally.indexOf(cities[s].occupy) === -1) {
+                        enemies[i] += cities[s].army.length;
+                    } else if (cities[s].occupy === own) {
+                        friends[i] += cities[s].army.length * 2;
                     } else {
-                        benefits[i] += state[own].tax / state[own].supply;
+                        friends[i] += cities[s].army.length;
                     }
                 });
-                if (this.getCitiesInfo()[t].type === 0) {
-                    benefits[i] += 3;
-                    enemy[i] = enemy[i].concat([8]);
-                } else if (this.getCitiesInfo()[t].type === 1) {
-                    benefits[i] += 2;
-                    enemy[i] = enemy[i].concat([0]);
-                }
-                this.getCitiesInfo()[t].nearby.forEach(function(n) {
-                    if (state[own].occupy.indexOf(n) !== -1) {
-                        if (!forces[i]) {
-                            forces[i] = [];
-                            attackCities[i] = [];
-                        }
-                        attackCities[i].push(n);
-                        forces[i] = forces[i].concat(cities[n].army);
-                    }
-                });
-            }.bind(this));
-            forces = forces.map(function(f) {
-                var sum = 0;
-                f.forEach(function(t) {
-                    sum += this.getArmyInfo()[t].attack;
-                }.bind(this));
-                return sum;
-            }.bind(this));
-            enemy = enemy.map(function(f) {
-                var sum = 0;
-                f.forEach(function(t) {
-                    sum += this.getArmyInfo()[t].attack;
-                }.bind(this));
-                return sum;
-            }.bind(this));
-            benefits = benefits.map(function(p, i) {
-                return (forces[i] - enemy[i]) >=0 ? (forces[i] - enemy[i]) * p : 0;
             });
-            var totalBenefits = benefits.reduce(function(a, b) { return a + b;}, 0);
-            for (var i = 0; i < benefits.length; i++) {
-                if (i === 0) {
-                    benefits[0] = benefits[0] / totalBenefits;
-                } else if (i === benefits.length - 1) {
-                    benefits[i] = 1;
-                } else {
-                    benefits[i] = benefits[i] / totalBenefits + benefits[i - 1];
+            var odds = [];
+            available.forEach(function(a, i) {
+                if (protecters[i] === 1 && enemies === 0 && friends === 0) {
+                    odds.push([0.2, 0.2, 0.2, 1]);
+                } else if (protecters[i] === 1 && enemies === 0 && friends !== 0) {
+                    odds.push([0.15, 0.3, 0.3, 1]);
+                } else if (protecters[i] === 1 && enemies !== 0 && friends !== 0) {
+                    odds.push([0.2, 0.5, 0.8, 1]);
+                } else if (protecters[i] === 1 && enemies !== 0 && friends == 0) {
+                    odds.push([0.3, 0.3, 0.6, 1]);
+                } else if (protecters[i] === 2 && enemies === 0 && friends === 0) {
+                    odds.push([0.35, 0.35, 0.35, 1]);
+                } else if (protecters[i] === 2 && enemies === 0 && friends !== 0) {
+                    odds.push([0.2, 0.4, 0.4, 1]);
+                } else if (protecters[i] === 2 && enemies !== 0 && friends !== 0) {
+                    odds.push([0.35, 0.7, 0.9, 1]);
+                } else if (protecters[i] === 2 && enemies !== 0 && friends == 0) {
+                    odds.push([0.4, 0.4, 0.7, 1]);
+                } else if (protecters[i] === 3 && enemies === 0 && friends === 0) {
+                    odds.push([0.7, 0.7, 0.7, 1]);
+                } else if (protecters[i] === 3 && enemies === 0 && friends !== 0) {
+                    odds.push([0.5, 0.8, 0.8, 1]);
+                } else if (protecters[i] === 3 && enemies !== 0 && friends !== 0) {
+                    odds.push([0.6, 0.8, 0.9, 1]);
+                } else if (protecters[i] === 3 && enemies !== 0 && friends == 0) {
+                    odds.push([0.85, 0.85, 0.95, 1]);
+                } else if (protecters[i] === 4 && enemies === 0 && friends === 0) {
+                    odds.push([0.95, 0.95, 0.95, 1]);
+                } else if (protecters[i] === 4 && enemies === 0 && friends !== 0) {
+                    odds.push([0.85, 0.95, 0.95, 1]);
+                } else if (protecters[i] === 4 && enemies !== 0 && friends !== 0) {
+                    odds.push([0.85, 0.9, 0.95, 1]);
+                } else if (protecters[i] === 4 && enemies !== 0 && friends == 0) {
+                    odds.push([0.95, 0.95, 1, 1]);
                 }
-            }
-            var dice = Math.random();
-            var mainTarget = null;
-            for (var i = 0; i < benefits.length; i++) {
-                if (benefits[i] >= dice) {
-                    mainTarget = i;
-                    break;
-                }
-            }
-            var fromCities = attackCities[mainTarget].map(function(m) {
-                return cities[m].army.length;    
             });
-            var sum = fromCities.reduce(function(a, b) {return a + b;}, 0);
-            var chance = Math.random();
-            var firstOrder = null, i = 0;
-            for (i; i < fromCities.length; i++) {
-                if (i === 0) {
-                    fromCities[i] = fromCities[i] / sum;
-                } else if (i === fromCities.length - 1) {
-                    fromCities[i] = 1;
-                } else {
-                    fromCities[i] = fromCities[i] / sum + fromCities[i - 1];
-                }
-                if (fromCities[i] >= chance) {
-                    firstOrder = attackCities[mainTarget][i];
-                    break;
-                }
-            }
-            final[available.indexOf(firstOrder)] = 0;
-            var primaryForce = 0;
-            cities[firstOrder].army.forEach(function(p) {
-                primaryForce += this.getArmyInfo()[p].attack;
-            }.bind(this));
-            if (
-                (primaryForce <= enemy[mainTarget] + 2) && 
-                cities[targets[mainTarget]].army.length !== 0
-            ) {
-                attackCities[mainTarget].splice(attackCities[mainTarget].indexOf(firstOrder), 1);
-                var odds = null;
-                attackCities[mainTarget].forEach(function(h) {
-                    if (cities[h].army.length !== 0) {
-                        if ((cities[h].army.length + cities[firstOrder].army.length) <= 4) {
-                            if (cities[h].army.length <= 1) {
-                                odds = [0.3, 0.8, 1];
-                            } else {
-                                odds = [0.5, 0.8, 1];
-                            }
-                        } else {
-                            odds = [0.2, 0.9, 1];
-                        }
-                        var random = Math.random(), assistOrder = null;
-                        for (var i = 0; i < 3; i++) {
-                            if (random <= odds[i]) {
-                                assistOrder = i;
-                                break;
-                            }
-                        }
-                        switch (assistOrder) {
+            var orders = [], dice, i;
+            var attack = [0, 1, 2, 3, 4, 5];
+            var support = [6, 7, 8];
+            var disturb = [9, 10, 11];
+            var rest = [12, 13, 14, 15, 16, 17];
+            odds.forEach(function(o, index) {
+                dice = Math.random();
+                for (i = 0; i < o.length; i++) {
+                    if (o[i] > dice) {
+                        switch (i) {
                             case 0:
-                                final[available.indexOf(h)] = "attack";
+                                if (attack.length !== 0) {
+                                    orders.push(attack.shift());
+                                } else {
+                                    orders.push(null);
+                                }
                                 break;
                             case 1:
-                                final[available.indexOf(h)] = "helper";
+                                if (attack.length !== 0) {
+                                    orders.push(support.shift());
+                                } else {
+                                    orders.push(null);
+                                }
                                 break;
                             case 2:
-                                final[available.indexOf(h)] = "disturb";
+                                if (attack.length !== 0) {
+                                    orders.push(disturb.shift());
+                                } else {
+                                    orders.push(null);
+                                }
+                                break;
+                            case 3:
+                                if (attack.length !== 0) {
+                                    orders.push(rest.shift());
+                                } else {
+                                    orders.push(null);
+                                }
                                 break;
                         }
-                    }
-                }.bind(this));
-            }
-            var chance = null;
-            available.forEach(function(o, i) {
-                if (final[i] !== 0 && !final[i]) {
-                    if(cities[o].army.length !== 0) {
-                        chance = 0.45 * cities[o].army.length;
-                        var random = Math.random();
-                        final[i] = random <= chance ? "attack" : "rest";
-                    } else {
-                        final[i] = "rest";
+                        break;
                     }
                 }
-            }.bind(this));
-            var i = 0;
-            for (i; i < final.length; i++) {
-                var mode = null;
-                switch(final[i]) {
-                    case "attack":
-                        mode = 0;
-                        break;
-                    case "helper":
-                        mode = 1;
-                        break;
-                    case "disturb":
-                        mode = 2;
-                        break;
-                    case "rest":
-                        mode = 3;
-                        break;
-                    default:
-                        mode = false;
-                        break
-                } 
-                if (mode === 0 || mode) {
-                    var f = 0;
-                    for (f; f < this.getOrdersInfo().length; f++) {
-                        if (
-                            this.getOrdersInfo()[f].type === mode && 
-                            final.indexOf(this.getOrdersInfo()[f].code) === -1
-                        ) {
-                            final[i] = this.getOrdersInfo()[f].code;
-                            break;
-                        }
-                    }
+            });
+            var options = attack.concat(rest);
+            var dice, holder;
+            orders = orders.map(function(o) {
+                if (o === null) {
+                    dice = Math.random();
+                    holder = options[Math.floor(dice * options.length) - 1];
+                    options.splice(Math.floor(dice * options.length) - 1, 1);
+                    return holder;
+                } else {
+                    return o;
                 }
-            }
-            return final;
+            });
+            return orders;
         }
     }
 });

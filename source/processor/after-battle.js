@@ -57,7 +57,7 @@ Vue.mixin({
                 } else {
                 //非蔺相如防守
                     var retreat = this.AISelectRetreatTarget(dCity, app.$data.cities, dHero.state);
-                    if (retreat !== null && retreat !== undefined) {
+                    if (retreat !== null && retreat !== undefined && defendArmy.length !== 0) {
                         if (app.$data.cities[retreat].army.length + defendArmy.length > 4) {
                             for (var j = 0; j < app.$data.cities[retreat].army.length + defendArmy.length - 4; j++) {
                                 if (defendArmy.length === 0) {

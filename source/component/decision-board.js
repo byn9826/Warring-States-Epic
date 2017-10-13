@@ -1011,13 +1011,14 @@ Vue.component("decision-board", {
                         }.bind(this));
                         this.target = this.AIplanResult(
                             this.activeState.code, this.state[this.activeState.code].ally, 
-                            this.state, this.cities, this.relations, available
+                            this.state, this.cities, this.relations, available,
+                            this.getCitiesInfo()
                         );
                         setTimeout(function () {
                             this.$emit("updateorderofcities", available, this.target);
                             this.info = this.activeState.name + "国完成筹备";
                             this.nextActive();
-                        }.bind(this), this.settings.delay);
+                        }.bind(this), 500);
                     }
                 } else if (this.stage === 3) {
                 //劫掠阶段

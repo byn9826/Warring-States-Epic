@@ -7,7 +7,7 @@ Vue.mixin({
                         if (
                             cities[n].occupy !== own && 
                             state[own].ally.indexOf(cities[n].occupy) === -1 &&
-                            this.getOrdersInfo()[cities[n].order] &&
+                            cities[n].order !== null &&
                             this.getDisturbleType().indexOf(
                                 this.getOrdersInfo()[cities[n].order].type
                             ) !== -1

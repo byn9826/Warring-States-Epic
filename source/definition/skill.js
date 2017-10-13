@@ -4,7 +4,7 @@ Vue.mixin({
             return [
                 {code: 0, skill: ""},
                 {code: 1, skill: "战斗胜利后,将一个本地参战军团升级为精兵"},
-                {code: 2, skill: "防守失败后,己方军队不受伤亡"},
+                {code: 2, skill: "防守失败后,己方军队不被敌军将领斩杀"},
                 {code: 3, skill: "当己方有援军时,敌方援军战力为0"},
                 {code: 4, skill: "战斗胜利后,国力增长两点"},
                 {code: 5, skill: "当已方有援军时,将领战力+2"},
