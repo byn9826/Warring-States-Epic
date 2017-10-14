@@ -2,7 +2,7 @@ Vue.component("supply-info", {
     props: ["data", "player"],
     template: `
         <div v-bind:style="cardStyle">
-            <div v-for="(supply, i) in getStatesSupply()" v-bind:style="supplyStyle">
+            <div v-for="(supply, i) in getStatesSupply()" v-if="i<8" v-bind:style="supplyStyle">
                 <div v-html="getCityResourceIcon(1)+'*'+i" v-bind:style="iconStyle"></div>
                 <div v-bind:style="limitStyle">
                     <span v-bind:style="maxStyle">兵力上限{{supply}}</span>
@@ -18,7 +18,7 @@ Vue.component("supply-info", {
         getSupplyMatches: function(i) {
             var matches = "";
             this.data.forEach(function(d, index) {
-               if (d.supply === i && (this.player[index] === 1 || this.player[index] === 2)) {
+               if ((d.supply === i || (d.supply > 7 && i === 7)) && this.player[index] !== 0) {
                    matches += this.getStatesInfo()[index].name + " ";
                } 
             }.bind(this));

@@ -105,6 +105,9 @@ Vue.mixin({
                     dice = Math.random();
                     holder = options[Math.floor(dice * options.length)];
                     options.splice(Math.floor(dice * options.length), 1);
+                    if (holder === undefined) {
+                        return null;
+                    }
                     return holder;
                 } else {
                     return o;

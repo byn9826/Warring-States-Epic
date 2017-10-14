@@ -957,6 +957,36 @@ Vue.component("decision-board", {
         }
     },
     watch: {
+        attackHero: function() {
+            if (
+                this.attackHero !== null && this.defendHero !== null 
+                && this.settings.mode === 0 && this.showBattle
+            ) {
+                setTimeout(function () {
+                    if (
+                        this.attackHero !== null && this.defendHero !== null 
+                        && this.settings.mode === 0 && this.showBattle
+                    ) {
+                        this.confirmBattle();  
+                    }
+                }.bind(this), this.settings.delay);
+            }    
+        },
+        defendHero: function() {
+            if (
+                this.attackHero !== null && this.defendHero !== null 
+                && this.settings.mode === 0 && this.showBattle
+            ) {
+                setTimeout(function () {
+                    if (
+                        this.attackHero !== null && this.defendHero !== null 
+                        && this.settings.mode === 0 && this.showBattle
+                    ) {
+                        this.confirmBattle();  
+                    }   
+                }.bind(this), this.settings.delay);
+            } 
+        },
         focus: function() {
             this.target = [];
             this.reminder = "";
@@ -964,6 +994,13 @@ Vue.component("decision-board", {
         stage: function() {
             if (this.stage === 5) {
                 this.active = null;
+                if (this.settings.mode === 0) {
+                    setTimeout(function () {
+                        if (this.stage === 5) {
+                            this.$emit('tonextstage')
+                        }
+                    }.bind(this), this.settings.delay);
+                }
             } else if (this.stage === 3) {
                 this.target = "";
                 this.reminder = "";
@@ -983,7 +1020,7 @@ Vue.component("decision-board", {
                             this.activeState.code, this.state, this.relations, this.rank
                         );
                         setTimeout(function () {
-                            if (this.target !== "") {
+                            if (this.target !== "" && this.target !== undefined) {
                                 var result;
                                 if (this.player[this.target] !== 2) {
                                     result = this.AIacceptAllyOrNot(
@@ -1077,13 +1114,17 @@ Vue.component("decision-board", {
                                     this.reminder = this.AIselectMarchDestination(
                                         focus, this.cities, this.getCitiesInfo(), this.state, this.player
                                     );
-                                    this.target = this.AIselectMarchForce(
-                                        this.focus, this.reminder, this.getCitiesInfo(), this.cities
-                                    );
-                                    if (this.target.length === 0) {
+                                    if (this.reminder === null || this.reminder === undefined) {
                                         this.skipAttack();
                                     } else {
-                                        this.confirmAttack();
+                                        this.target = this.AIselectMarchForce(
+                                            this.focus, this.reminder, this.getCitiesInfo(), this.cities
+                                        );
+                                        if (this.target.length === 0) {
+                                            this.skipAttack();
+                                        } else {
+                                            this.confirmAttack();
+                                        }
                                     }
                                 }.bind(this), this.settings.delay);
                             }.bind(this));

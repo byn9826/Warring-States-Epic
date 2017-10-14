@@ -58,21 +58,36 @@ Vue.mixin({
                 //非蔺相如防守
                     var retreat = this.AISelectRetreatTarget(dCity, app.$data.cities, dHero.state);
                     if (retreat !== null && retreat !== undefined && defendArmy.length !== 0) {
-                        if (app.$data.cities[retreat].army.length + defendArmy.length > 4) {
-                            for (var j = 0; j < app.$data.cities[retreat].army.length + defendArmy.length - 4; j++) {
-                                if (defendArmy.length === 0) {
-                                    break;
-                                }
-                                if (defendArmy.indexOf(0) !== -1) {
-                                    defendArmy.splice(defendArmy.indexOf(0), 1);
-                                } else if (defendArmy.indexOf(8) !== -1) {
-                                    defendArmy.splice(defendArmy.indexOf(8), 1);
-                                } else {
-                                    defendArmy.pop();
-                                }
+                        console.log(defendArmy);
+                        while(app.$data.cities[retreat].army.length + defendArmy.length > 4) {
+                            if (defendArmy.indexOf(0) !== -1) {
+                                defendArmy.splice(defendArmy.indexOf(0), 1);
+                            } else if (defendArmy.indexOf(8) !== -1) {
+                                defendArmy.splice(defendArmy.indexOf(8), 1);
+                            } else {
+                                defendArmy.pop();
                             }
                         }
+                        console.log(defendArmy);
+                        // if (app.$data.cities[retreat].army.length + defendArmy.length > 4) {
+                        //     for (var j = 0; j < app.$data.cities[retreat].army.length + defendArmy.length - 4; j++) {
+                        //         console.log(defendArmy);
+                        //         if (defendArmy.length === 0) {
+                        //             break;
+                        //         }
+                        //         console.log(app.$data.cities[retreat].army);
+                        //         if (defendArmy.indexOf(0) !== -1) {
+                        //             defendArmy.splice(defendArmy.indexOf(0), 1);
+                        //         } else if (defendArmy.indexOf(8) !== -1) {
+                        //             defendArmy.splice(defendArmy.indexOf(8), 1);
+                        //         } else {
+                        //             defendArmy.pop();
+                        //         }
+                        //         console.log(defendArmy);
+                        //     }
+                        // }
                         app.$data.cities[retreat].army = app.$data.cities[retreat].army.concat(defendArmy);
+                        console.log(app.$data.cities[retreat].army);
                         app.$data.cities[retreat].status = app.$data.cities[retreat].status.concat(
                             new Array(defendArmy.length).fill(0)
                         );

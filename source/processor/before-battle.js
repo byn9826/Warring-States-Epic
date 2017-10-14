@@ -58,7 +58,7 @@ Vue.mixin({
             //申不害防守
             else if (dHero.skill === 10) {
                 if (
-                    app.$data.cities[dcity].army.length < 4 && 
+                    app.$data.cities[dcity].army.length < 4 &&
                     app.statesInfo[dHero.state].army.length < this.getStatesSupply()[app.statesInfo[dHero.state].supply]
                 ) {
                     app.$data.cities[dcity].army.push(dHero.state);
