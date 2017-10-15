@@ -21,6 +21,31 @@ var app = new Vue({
             if (this.stage < 6) {
                 this.stage += 1;
             } else {
+                var fames = [];
+                this.statesInfo.forEach(function(state, index) {
+                    if (this.player[index] !== 0) {
+                        fames.push({
+                            cities: state.occupy.length,
+                            code: state.code
+                        });
+                    }
+                }.bind(this));
+                fames.sort(function(a, b) {
+                    if (b.cities - a.cities > 0) {
+                        return true;
+                    } else if ((b.cities - a.cities) === 0) {
+                        if ((this.fame.indexOf(a.code) - this.fame.indexOf(b.code)) > 0) {
+                            return true;
+                        }
+                        return false;
+                    } else {
+                        return false;
+                    }
+                }.bind(this));
+                fames = fames.map(function(f) {
+                    return f.code;
+                });
+                this.fame = fames;
                 this.round += 1;
                 this.stage = 0;
             }
