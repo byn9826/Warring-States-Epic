@@ -1061,6 +1061,25 @@ Vue.component("decision-board", {
                         var available = this.state[this.activeState.code].occupy.filter(function(f) {
                             return this.cities[f].army.length !== 0;
                         }.bind(this));
+                        var enemies = available.map(function(a) {
+                            return [
+                                this.getCitiesInfo()[a].nearby.map(function(n) {
+                                    if (
+                                        this.cities[n].occupy !== this.orders[newVal] && 
+                                        this.state[this.orders[newVal]].ally.indexOf(n) === -1
+                                    ) {
+                                        return this.cities[n].army.length; 
+                                    } else {
+                                        return 0;
+                                    }
+                                }.bind(this)).reduce(function(i, f) {return i + f;}, 0),
+                                a
+                            ];
+                        }.bind(this));
+                        enemies = enemies.sort(function(a, b) {return b[0] - a[0];});
+                        available = enemies.map(function(e) {
+                            return e[1];
+                        });
                         this.target = this.AIplanResult(
                             this.activeState.code, this.state[this.activeState.code].ally, 
                             this.state, this.cities, this.relations, available,

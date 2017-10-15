@@ -3,19 +3,40 @@ Vue.mixin({
         AIdecideRecruitResult: function(state, powers, citiesInfo, citiesData) {
             var current = powers[state.code];
             var plan = Math.ceil(Math.random() * current);
+            if (current > 60) {
+                plan = 48;
+            } else if (current > 50) {
+                if (plan < 38) {
+                    plan = 38
+                }
+            } else if (current > 40) {
+                if (plan < 28) {
+                    plan = 28
+                }
+            } else if (current > 30) {
+                if (plan < 18) {
+                    plan = 18
+                }
+            } else if (current > 20) {
+                if (plan < 8) {
+                    plan = 8
+                }
+            }
             var spend = plan;
             var options = state.capital.concat(state.city);
             var nearbys = options.map(function(o) {return citiesInfo[o].nearby});
-            var potentials = new Array(nearbys.length).fill([]);
+            var potentials = new Array(nearbys.length).fill(0);
             nearbys.forEach(function(n, i) {
                 n.forEach(function(f) {
-                    potentials[i] = potentials[i].concat(citiesData[f].army);
+                    if (citiesData[f].occupy !== state.code) {
+                        potentials[i] += citiesData[f].army.length;
+                    }
                 }); 
             });
-            potentials = potentials.map(function(p) {
-                return p.map(function(a) {
-                    return this.getArmyInfo()[a].level + 1;
-                }.bind(this)).reduce(function(m, n) {return m + n;}, 0)
+            options.forEach(function(o, i) {
+                if (this.getCitySpecialArmy(state.code, o)) {
+                    potentials[i] *= 2;
+                }
             }.bind(this));
             var max, index, random;
             var info = [];
@@ -48,11 +69,11 @@ Vue.mixin({
                     }
                 }.bind(this));
                 while (
-                    this.getStatesSupply()[state.supply] > (state.army.length - citiesData[reminder].army.length + army.length)
+                    this.getStatesSupply()[state.supply] > (app.statesInfo[state.code].army.length - citiesData[reminder].army.length + army.length)
                     && army.length !== 4 && spend !== 0
                 ) {
+                    random = Math.random();
                     if (this.getCitySpecialArmy(state.code, reminder)) {
-                        random = Math.random();
                         if (random > 0.25 && spend >= 2) {
                             spend -= 2;
                             army.push(state.code);
@@ -61,11 +82,10 @@ Vue.mixin({
                             army.push(0);
                         }
                     } else {
-                        random = Math.random();
                         if (random > 0.4 && spend >= 2) {
                             spend -= 2;
                             army.push(8);
-                        } else if (random > 0.25 && spend >= 1) {
+                        } else if (random > 0.2 && spend >= 1) {
                             spend -= 1;
                             army.push(0);
                         }
@@ -78,11 +98,13 @@ Vue.mixin({
                 for (var i = 0; i < army.length; i++) {
                     if (
                         app.$data.cities[reminder].army[i] === null || 
-                        army[i] !== app.$data.cities[reminder].army[i]
+                        app.$data.cities[reminder].army[i] === undefined ||
+                        app.$data.cities[reminder].army[i] !== army[i]
                     ) {
                         app.$data.cities[reminder].army = army;
                         app.$data.cities[reminder].status = new Array(army.length).fill(1);
                         info.push(reminder);
+                        break;
                     }
                 }
                 potentials.splice(index, 1);

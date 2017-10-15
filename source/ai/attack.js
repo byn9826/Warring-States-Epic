@@ -55,18 +55,53 @@ Vue.mixin({
             var options = nearby.map(function(c) {
                 basic = 0;
                 if (player[cityData[c].occupy] === 0) {
-                    basic = 3;
+                    basic = 5;
                 } else if (cityData[c].occupy !== cityData[from].occupy) {
-                    basic = 2;
+                    basic = 3;
                 } else {
                     basic = 1;
+                }
+                if (cityData[c].occupy !== cityData[from].occupy) {
+                    if (this.getStatesBaseLevel()[cityData[from].occupy][3].indexOf(c) !== -1) {
+                        basic *= 15;
+                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][2].indexOf(c) !== -1) {
+                        basic *= 12;
+                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][1].indexOf(c) !== -1) {
+                        basic *= 3;
+                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][0].indexOf(c) !== -1) {
+                        basic *= 2;
+                    }
+                } else {
+                    if (this.getStatesBaseLevel()[cityData[from].occupy][3].indexOf(c) !== -1) {
+                        basic /= 6;
+                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][2].indexOf(c) !== -1) {
+                        basic /= 6;
+                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][1].indexOf(c) !== -1) {
+                        basic /= 4;
+                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][0].indexOf(c) !== -1) {
+                        basic /= 2;
+                    }
+                }
+                //辽西
+                if (from === 8 && c === 9) {
+                    if (cityData[c].occupy === cityData[from].occupy) {
+                        basic /= 6;
+                    } else {
+                        basic *= 6;
+                    }
+                } 
+                //蓟
+                if (from === 7 && c === 8) {
+                    if (cityData[c].occupy === cityData[from].occupy && cityData[from].occupy === cityData[9].occupy) {
+                        basic /= 6;
+                    }
                 }
                 return (
                     cityInfo[c].resource.length + 2 - cityInfo[c].type + 4 
                     - cityData[c].status.filter(function(d) {return d === 1;}).length
-                    + 4 - cityData[c].army.length
-                ) * basic;
-            });
+                    + cityData[c].status.filter(function(d) {return d === 0;}).length * 2
+                ) * basic * cityInfo[c].nearby.length;
+            }.bind(this));
             var sum = options.reduce(function(a, b) {return a + b;}, 0);
             var chance = Math.random();
             var target, i = 0;
@@ -89,15 +124,50 @@ Vue.mixin({
             var target = [];
             var random;
             if (cityData[from].occupy !== cityData[to].occupy) {
-                if (
-                    cityData[from].status.filter(function(c) {return c === 1;}).length >
-                    cityData[to].status.filter(function(c) {return c === 1;}).length + 1
-                ) {
+                if (cityData[from].status.filter(function(c) {return c === 1;}).length === 4) {
                     cityData[from].status.forEach(function(s, i) {
                         if (s === 1) {
                             random = Math.random();
                             if (this.getArmyInfo()[cityData[from].army[i]].level === 0) {
-                                if (random < 0.86) {
+                                if (random < 0.65) {
+                                    target.push(i);
+                                }
+                            } else if (this.getArmyInfo()[cityData[from].army[i]].level === 1) {
+                                if (random < 0.75) {
+                                    target.push(i);
+                                }
+                            } else {
+                                if (random < 0.85) {
+                                    target.push(i);
+                                }
+                            }
+                        }
+                    }.bind(this));
+                } else if (cityData[from].status.filter(function(c) {return c === 1;}).length === 3) {
+                    cityData[from].status.forEach(function(s, i) {
+                        if (s === 1) {
+                            random = Math.random();
+                            if (this.getArmyInfo()[cityData[from].army[i]].level === 0) {
+                                if (random < 0.7) {
+                                    target.push(i);
+                                }
+                            } else if (this.getArmyInfo()[cityData[from].army[i]].level === 1) {
+                                if (random < 0.8) {
+                                    target.push(i);
+                                }
+                            } else {
+                                if (random < 0.9) {
+                                    target.push(i);
+                                }
+                            }
+                        }
+                    }.bind(this));
+                } else if (cityData[from].status.filter(function(c) {return c === 1;}).length === 2) {
+                    cityData[from].status.forEach(function(s, i) {
+                        if (s === 1) {
+                            random = Math.random();
+                            if (this.getArmyInfo()[cityData[from].army[i]].level === 0) {
+                                if (random < 0.85) {
                                     target.push(i);
                                 }
                             } else if (this.getArmyInfo()[cityData[from].army[i]].level === 1) {
@@ -105,7 +175,7 @@ Vue.mixin({
                                     target.push(i);
                                 }
                             } else {
-                                if (random < 0.94) {
+                                if (random < 0.95) {
                                     target.push(i);
                                 }
                             }
@@ -115,18 +185,8 @@ Vue.mixin({
                     cityData[from].status.forEach(function(s, i) {
                         if (s === 1) {
                             random = Math.random();
-                            if (this.getArmyInfo()[cityData[from].army[i]].level === 0) {
-                                if (random < 0.9) {
-                                    target.push(i);
-                                }
-                            } else if (this.getArmyInfo()[cityData[from].army[i]].level === 1) {
-                                if (random < 0.94) {
-                                    target.push(i);
-                                }
-                            } else {
-                                if (random < 0.98) {
-                                    target.push(i);
-                                }
+                            if (random < 0.95) {
+                                target.push(i);
                             }
                         }
                     }.bind(this));
@@ -136,7 +196,13 @@ Vue.mixin({
                     if (s === 1) {
                         random = Math.random();
                         if (cityData[to].army.length + target.length < 4) {
-                            if (random < 0.9) {
+                            if (cityData[from].army.length === 4 && random < 0.8) {
+                                target.push(i);
+                            } else if (cityData[from].army.length === 3 && random < 0.85) {
+                                target.push(i);
+                            } else if (cityData[from].army.length === 2 && random < 0.85) {
+                                target.push(i);
+                            } else if (cityData[from].army.length === 1 && random < 0.8) {
                                 target.push(i);
                             }
                         }

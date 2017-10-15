@@ -1,6 +1,12 @@
 Vue.mixin({
     methods: {
         AIbreachAllyOrNot: function(own, allies, state, relation) {
+            var deactive = 0;
+            state.forEach(function(s) {
+                if (!s.live) {
+                    deactive += 1;
+                }
+            });
             if (allies.length === 0) {
                 return "";
             }
@@ -21,6 +27,15 @@ Vue.mixin({
                         hate[i] += (relation.length / 3);
                     }
                 });
+                if ([4, 5, 6].indexOf(own) !== -1 && [4, 5, 6].indexOf(ally) !== -1) {
+                    if (deactive === 0) {
+                        hate[i] *= 0.1;
+                    } else if (deactive === 1) {
+                        hate[i] *= 0.2;
+                    } else if (deactive === 2) {
+                        hate[i] *= 0.3;
+                    }
+                }
             });
             var dice = Math.random();
             if (lapCount === (state[own].nearby.length - 1)) {

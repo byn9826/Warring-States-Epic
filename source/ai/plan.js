@@ -8,7 +8,6 @@ Vue.mixin({
                 nearbys.push(cityInfo[c].nearby);
             });
             var enemies = new Array(available.length).fill(0);
-            var defender = new Array(available.length).fill(0);
             var friends = new Array(available.length).fill(0);
             nearbys.forEach(function(n, i) {
                 n.forEach(function(s) {
