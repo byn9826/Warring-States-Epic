@@ -3,23 +3,9 @@ Vue.mixin({
         AIdecideRecruitResult: function(state, powers, citiesInfo, citiesData) {
             var current = powers[state.code];
             var plan = Math.ceil(Math.random() * current);
-            if (current > 60) {
-                plan = 48;
-            } else if (current > 50) {
-                if (plan < 38) {
-                    plan = 38
-                }
-            } else if (current > 40) {
-                if (plan < 28) {
-                    plan = 28
-                }
-            } else if (current > 30) {
-                if (plan < 18) {
-                    plan = 18
-                }
-            } else if (current > 20) {
-                if (plan < 8) {
-                    plan = 8
+            if (current > app.$data.wild) {
+                if (plan < current - app.$data.wild - 5) {
+                    plan = current - app.$data.wild - 5;
                 }
             }
             var spend = plan;
@@ -50,7 +36,7 @@ Vue.mixin({
                         return state.code;
                     } else if (a === 0 && this.getCitySpecialArmy(state.code, reminder)) {
                         random = Math.random();
-                        if (random > 0.1 && spend >= 1) {
+                        if (random > 0.25 && spend >= 1) {
                             spend -= 1;
                             return state.code;
                         } else {
@@ -74,10 +60,10 @@ Vue.mixin({
                 ) {
                     random = Math.random();
                     if (this.getCitySpecialArmy(state.code, reminder)) {
-                        if (random > 0.25 && spend >= 2) {
+                        if (random > 0.35 && spend >= 2) {
                             spend -= 2;
                             army.push(state.code);
-                        } else if (random > 0.1 && spend >= 1) {
+                        } else if (random > 0.15 && spend >= 1) {
                             spend -= 1;
                             army.push(0);
                         }
@@ -91,7 +77,7 @@ Vue.mixin({
                         }
                     }
                     random = Math.random();
-                    if (random > 0.3) {
+                    if (random > 0.4) {
                         break;
                     }
                 }

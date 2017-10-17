@@ -20,7 +20,7 @@ var app = new Vue({
     },
     methods: {
         toNextStage: function() {
-            if (this.stage < 6) {
+            if (this.stage < 7) {
                 this.stage += 1;
             } else {
                 var fames = [];
@@ -127,6 +127,40 @@ var app = new Vue({
             if (this.power[loser] > 0) {
                 this.power[loser] -= 1;
             }
+        },
+        handleEvent: function(result) {
+            if (result[0] === 0) {
+                var aim, gap;
+                this.cities.forEach(function(city) {
+                    if (this.getCitySpecialArmy(city.occupy, city.code)) {
+                        aim = 4 - city.army.length;
+                        gap = this.getStatesSupply()[this.statesInfo[city.occupy].supply] - this.statesInfo[city.occupy].army.length;
+                        if (gap < aim) {
+                            aim = gap;
+                        }
+                        aim += city.army.length;
+                        this.cities[city.code].army = new Array(aim).fill(city.occupy);
+                        this.cities[city.code].status = new Array(aim).fill(1);
+                    } 
+                }.bind(this));
+                this.addNewHistory("各国在国都募得义勇兵");
+            } else if (result[0] === 1) {
+                this.statesInfo.forEach(function(state, i) {
+                    if (this.player[i] !== 0) {
+                        this.power.splice(i, 1, this.power[i] + state.tax);
+                    }
+                }.bind(this));
+                this.addNewHistory("各国完成变法国力增强");
+            } else if (result[0] === 2) {
+                console.log(this.hero);
+                this.hero = this.hero.map(function(h) {
+                    return h.map(function(i) {
+                        return 1;
+                    });
+                })
+                this.addNewHistory("各国众将领请兵出征");
+            } 
+            
         }
     },
     created: function() {

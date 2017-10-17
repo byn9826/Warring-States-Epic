@@ -17,7 +17,7 @@
 					mode: 0
 				},
 				round: 0,
-				stage: 0,
+				stage: 7,
 				history: [],
 				player: [0, 1, 1, 1, 1, 1, 1, 1, 0],
 				allies: [
@@ -113,6 +113,7 @@
 				@updateOrderOfCities="updateOrderOfCities"
 				@disturbPowerPoint="disturbPowerPoint"
 				@replaceCitisOccupy="replaceCitisOccupy"
+				@handleEvent="handleEvent"
 			></decision-board>
 		    <main id="main">
 		    	<template v-for="(c, index) in getCitiesInfo()">

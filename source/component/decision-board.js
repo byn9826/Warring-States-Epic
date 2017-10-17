@@ -1,9 +1,10 @@
 Vue.component("decision-board", {
     props: [
         "stage", "player", "state", "cities", "relations", "rank", "orders", "settings", "focus",
-        "addnewally", "addnewhistory", "tonextstage", "removeally", "increaserelation", "decreaserelation",
-        "saveitemorder", "updateorderofcities", "disturbpowerpoint", "replacecitisoccupy",
-        "hero", "force", "power"
+        "hero", "force", "power",
+        "addnewally", "addnewhistory", "tonextstage", "removeally", "increaserelation", 
+        "decreaserelation", "saveitemorder", "updateorderofcities", "disturbpowerpoint", 
+        "replacecitisoccupy", "handleevent"
     ],
     template: `
         <div v-bind:style="cardStyle">
@@ -592,6 +593,12 @@ Vue.component("decision-board", {
                             v-bind:style="submitStyle" value="取消" 
                         />
                     </div>
+                </div>
+            </section>
+            <section v-else-if="stage === 7">
+                <div v-for="code in target" v-bind:style="eventStyle">
+                    <div style="font-size:11pt">{{getEventsInfo()[code].name}}</div>
+                    <div style="font-size:9pt;color:darkgrey">{{getEventsInfo()[code].desc}}</div>
                 </div>
             </section>
             <section v-else>
@@ -1191,6 +1198,17 @@ Vue.component("decision-board", {
                         this.reminder = "";
                         this.heroSelector = 0;
                     }
+                } else if (this.stage === 7) {
+                //华夏阶段
+                    var first = this.getEventsInfo()[Math.floor(Math.random() * 6)].code;
+                    var second = this.getEventsInfo()[Math.floor(Math.random() * 6 + 6)].code;
+                    var third = this.getEventsInfo()[Math.floor(Math.random() * 6 + 12)].code;
+                    this.target = [
+                        first,
+                        second,
+                        third
+                    ];
+                    this.$emit("handleevent", this.target);
                 }
             }.bind(this));
         }  
@@ -1327,6 +1345,12 @@ Vue.component("decision-board", {
             borderStyle: {
                 border: "1pt solid lightgrey",
                 borderRadius: "3pt",
+            },
+            eventStyle: {
+                display: "block",
+                backgroundColor: "darkslategrey",
+                margin: "5pt 0",
+                padding: "3pt"
             }
         };
     },

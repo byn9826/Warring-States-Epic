@@ -73,13 +73,13 @@ Vue.mixin({
                     }
                 } else {
                     if (this.getStatesBaseLevel()[cityData[from].occupy][3].indexOf(c) !== -1) {
-                        basic /= 6;
+                        basic /= 12;
                     } else if (this.getStatesBaseLevel()[cityData[from].occupy][2].indexOf(c) !== -1) {
-                        basic /= 6;
+                        basic /= 12;
                     } else if (this.getStatesBaseLevel()[cityData[from].occupy][1].indexOf(c) !== -1) {
-                        basic /= 4;
+                        basic /= 8;
                     } else if (this.getStatesBaseLevel()[cityData[from].occupy][0].indexOf(c) !== -1) {
-                        basic /= 2;
+                        basic /= 4;
                     }
                 }
                 //辽西
