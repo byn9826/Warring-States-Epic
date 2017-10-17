@@ -65,12 +65,12 @@ h5{
     position: absolute;
     width: 190pt;
     background-color: brown;
-    min-height: 688pt;
+    height: 697pt;
     left: 1144pt;
     top: 0;
 }
 
-#aside>:first-child{
+#aside>:nth-child(3){
     border-bottom: 1pt solid lightgrey;
 }
 
@@ -86,7 +86,7 @@ h5{
     display: block;
     background-color: beige;
     width: 100%;
-    height: 211pt;
+    height: 159.5pt;
     border-bottom: 4pt solid darkslategrey;
     overflow-y: scroll;
 }

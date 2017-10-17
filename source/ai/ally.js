@@ -23,13 +23,16 @@ Vue.mixin({
             chance = (Math.random() * 0.3 + 0.7) * chance;
             if ([4, 5, 6].indexOf(request) !== -1 && [4, 5, 6].indexOf(receive) !== -1) {
                 if (deactive === 0) {
-                    chance += 0.6;
+                    chance += 0.3;
                 } else if (deactive === 1) {
-                    chance += 0.5;
+                    chance += 0.2;
                 } else if (deactive === 2) {
-                    chance += 0.4;
+                    chance += 0.1;
                 }
             } 
+            if (app.$data.player[request] === 2) {
+                chance -= 0.55;
+            }
             var dice = Math.random();
             if (chance >= dice) {
                 return true;
@@ -61,17 +64,20 @@ Vue.mixin({
                 );
             });
             rank.forEach(function(r, i) {
-                if (targetAllies.indexOf(r.code) !== -1) {
-                    targetRatios[targetAllies.indexOf(r.code)] *= (i + 1) / rank.length;
+                if (targetAllies.indexOf(r) !== -1) {
+                    targetRatios[targetAllies.indexOf(r)] *= (i + 1) / rank.length;
                     if ([4, 5, 6].indexOf(r.code) !== -1 && [4, 5, 6].indexOf(active) !== -1) {
                         if (deactive === 0) {
-                            targetRatios[targetAllies.indexOf(r.code)] *= 6;
+                            targetRatios[targetAllies.indexOf(r)] *= 4;
                         } else if (deactive === 1) {
-                            targetRatios[targetAllies.indexOf(r.code)] *= 5;
+                            targetRatios[targetAllies.indexOf(r)] *= 3;
                         } else if (deactive === 2) {
-                            targetRatios[targetAllies.indexOf(r.code)] *= 4;
+                            targetRatios[targetAllies.indexOf(r)] *= 2;
                         }
                     } 
+                    if (app.$data.player[r.code] === 2) {
+                        targetRatios[targetAllies.indexOf(r)] /= 5.5;
+                    }
                 }
             });
             var sum = targetRatios.reduce(function(a, b) {return a + b;}, 0);

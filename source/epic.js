@@ -14,7 +14,9 @@ var app = new Vue({
         force: data.force,
         fame: data.fame,
         item: null,
-        focus: null
+        focus: null,
+        wild: 1,
+        situation: null
     },
     methods: {
         toNextStage: function() {

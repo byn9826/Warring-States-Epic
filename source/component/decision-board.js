@@ -993,6 +993,7 @@ Vue.component("decision-board", {
         },
         stage: function() {
             if (this.stage === 5) {
+                app.$data.focus = null;
                 this.active = null;
                 if (this.settings.mode === 0) {
                     setTimeout(function () {
@@ -1418,7 +1419,7 @@ Vue.component("decision-board", {
         },
         calAttackEnvPoint: function() {
             var attack = 0;
-            if (this.activeState.code === this.cities[this.focus].occupy) {
+            if (this.focus !== null && this.activeState.code === this.cities[this.focus].occupy) {
                 if (this.force[0] === this.activeState.code) {
                     attack += 1;
                 }

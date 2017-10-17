@@ -11,7 +11,7 @@ Vue.mixin({
                     resource: [1], type: 2, nearby: [0, 2, 3, 4]
                 },
                 {
-                    code: 2, name: "代郡", position: [598, 150], location: [585, 110],
+                    code: 2, name: "代郡", position: [598, 150], location: [590, 110],
                     resource: [0], type: 2, nearby: [1, 4, 5, 6]
                 },
                 {
@@ -23,7 +23,7 @@ Vue.mixin({
                     resource: [0, 1], type: 0, nearby: [1, 2, 3, 20, 22, 16, 17]
                 },
                 {
-                    code: 5, name: "上谷", position: [740, 75], location: [660, 65], 
+                    code: 5, name: "上谷", position: [740, 75], location: [660, 55], 
                     resource: [1], type: 2, nearby: [2, 6, 7]
                 },
                 {
@@ -63,7 +63,7 @@ Vue.mixin({
                     resource: [0, 1], type: 0, nearby: [11, 10, 12, 13, 15, 25, 26, 31]
                 },
                 {
-                    code: 15, name: "河东", position: [370, 255], location: [360, 215], 
+                    code: 15, name: "河东", position: [370, 250], location: [360, 215], 
                     resource: [1], type: 2, nearby: [11, 14, 3, 16, 25]
                 },
                 {
@@ -75,7 +75,7 @@ Vue.mixin({
                     resource: [0], type: 2, nearby: [16, 18, 30, 19, 22, 4]
                 },
                 {
-                    code: 18, name: "长平", position: [530, 320], location: [530, 285], 
+                    code: 18, name: "长平", position: [530, 325], location: [530, 290], 
                     resource: [1], type: 2, nearby: [25, 16, 17, 30, 27]
                 },
                 {
@@ -103,11 +103,11 @@ Vue.mixin({
                     resource: [0], type: 1, nearby: [21, 23]
                 },
                 {
-                    code: 25, name: "渑池", position: [368, 320], location: [368, 290], 
+                    code: 25, name: "渑池", position: [380, 325], location: [370, 285], 
                     resource: [0], type: 2, nearby: [15, 16, 18, 26, 27, 14]
                 },
                 {
-                    code: 26, name: "商", position: [385, 435], location: [350, 400], 
+                    code: 26, name: "商", position: [385, 435], location: [360, 400], 
                     resource: [1], type: 2, nearby: [25, 27, 28, 14, 31]
                 },
                 {
@@ -119,7 +119,7 @@ Vue.mixin({
                     resource: [0, 1], type: 0, nearby: [26, 27, 29, 31, 32]
                 },
                 {
-                    code: 29, name: "陈", position: [590, 455], location: [575, 420], 
+                    code: 29, name: "陈", position: [600, 455], location: [575, 420], 
                     resource: [1], type: 1, nearby: [27, 28, 30, 19, 33, 34]
                 },
                 {

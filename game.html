@@ -160,6 +160,8 @@
 		    </section>
 		    <aside id="aside">
 		    	<h4>回合: {{round + 1}}</h4>
+		    	<h4>{{getEventSituation(situation)}}</h4>
+		    	<h4>四夷战力: {{wild}}</h4>
 		    	<h5>战国七雄</h5>
 		    	<template v-for="(s, index) in getStatesInfo()" v-if="player[index]!==0">
 			    	<state-info

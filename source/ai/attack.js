@@ -55,21 +55,21 @@ Vue.mixin({
             var options = nearby.map(function(c) {
                 basic = 0;
                 if (player[cityData[c].occupy] === 0) {
-                    basic = 5;
+                    basic = 7;
                 } else if (cityData[c].occupy !== cityData[from].occupy) {
-                    basic = 3;
+                    basic = 5;
                 } else {
                     basic = 1;
                 }
                 if (cityData[c].occupy !== cityData[from].occupy) {
                     if (this.getStatesBaseLevel()[cityData[from].occupy][3].indexOf(c) !== -1) {
-                        basic *= 15;
+                        basic *= 30;
                     } else if (this.getStatesBaseLevel()[cityData[from].occupy][2].indexOf(c) !== -1) {
-                        basic *= 12;
+                        basic *= 24;
                     } else if (this.getStatesBaseLevel()[cityData[from].occupy][1].indexOf(c) !== -1) {
-                        basic *= 3;
+                        basic *= 12;
                     } else if (this.getStatesBaseLevel()[cityData[from].occupy][0].indexOf(c) !== -1) {
-                        basic *= 2;
+                        basic *= 6;
                     }
                 } else {
                     if (this.getStatesBaseLevel()[cityData[from].occupy][3].indexOf(c) !== -1) {
@@ -85,7 +85,7 @@ Vue.mixin({
                 //辽西
                 if (from === 8 && c === 9) {
                     if (cityData[c].occupy === cityData[from].occupy) {
-                        basic /= 6;
+                        basic /= 12;
                     } else {
                         basic *= 6;
                     }
@@ -93,13 +93,13 @@ Vue.mixin({
                 //蓟
                 if (from === 7 && c === 8) {
                     if (cityData[c].occupy === cityData[from].occupy && cityData[from].occupy === cityData[9].occupy) {
-                        basic /= 6;
+                        basic /= 12;
                     }
                 }
                 return (
                     cityInfo[c].resource.length + 2 - cityInfo[c].type + 4 
                     - cityData[c].status.filter(function(d) {return d === 1;}).length
-                    + cityData[c].status.filter(function(d) {return d === 0;}).length * 2
+                    + cityData[c].status.filter(function(d) {return d === 0;}).length * 3
                 ) * basic * cityInfo[c].nearby.length;
             }.bind(this));
             var sum = options.reduce(function(a, b) {return a + b;}, 0);
