@@ -7,7 +7,7 @@ Vue.component("state-info", {
                     {{definition.name}}
                 </span>
                 <span v-bind:style="occupyStyle">
-                    都会 {{data.capital.length}} 城市 {{data.city.length}} 国库 {{power[definition.code]}}
+                    都会{{data.capital.length}} 城市{{data.city.length}} 国库 {{power[definition.code]}}
                 </span>
             </div>
             <div v-bind:style="strengthStyle">

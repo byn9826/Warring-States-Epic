@@ -73,27 +73,29 @@ Vue.mixin({
                     }
                 } else {
                     if (this.getStatesBaseLevel()[cityData[from].occupy][3].indexOf(c) !== -1) {
-                        basic /= 12;
+                        basic /= 24;
                     } else if (this.getStatesBaseLevel()[cityData[from].occupy][2].indexOf(c) !== -1) {
-                        basic /= 12;
+                        basic /= 24;
                     } else if (this.getStatesBaseLevel()[cityData[from].occupy][1].indexOf(c) !== -1) {
-                        basic /= 8;
+                        basic /= 12;
                     } else if (this.getStatesBaseLevel()[cityData[from].occupy][0].indexOf(c) !== -1) {
-                        basic /= 4;
+                        basic /= 6;
                     }
                 }
                 //辽西
                 if (from === 8 && c === 9) {
                     if (cityData[c].occupy === cityData[from].occupy) {
-                        basic /= 12;
+                        basic /= 24;
                     } else {
-                        basic *= 6;
+                        basic *= 12;
                     }
                 } 
                 //蓟
                 if (from === 7 && c === 8) {
                     if (cityData[c].occupy === cityData[from].occupy && cityData[from].occupy === cityData[9].occupy) {
-                        basic /= 12;
+                        basic /= 24;
+                    } else {
+                        basic *= 12;
                     }
                 }
                 return (

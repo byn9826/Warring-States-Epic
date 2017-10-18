@@ -600,6 +600,9 @@ Vue.component("decision-board", {
                     <div style="font-size:11pt">{{getEventsInfo()[code].name}}</div>
                     <div style="font-size:9pt;color:darkgrey">{{getEventsInfo()[code].desc}}</div>
                 </div>
+                <input type="button" v-bind:style="confirmStyle" value="继续" 
+                    v-on:click="$emit('tonextstage')"
+                />
             </section>
             <section v-else>
                 <div v-bind:style="descStyle">
@@ -1013,7 +1016,17 @@ Vue.component("decision-board", {
                 this.target = "";
                 this.reminder = "";
                 this.active = 0;
-            } else {
+            } else if (this.stage === 7) {
+                this.active = null;
+                if (this.settings.mode === 0) {
+                    setTimeout(function () {
+                        if (this.stage === 7) {
+                            this.$emit('tonextstage')
+                        }
+                    }.bind(this), this.settings.delay);
+                }
+            }
+            else {
                 this.active = 0;
             }
         },

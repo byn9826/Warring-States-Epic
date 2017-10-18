@@ -9,11 +9,11 @@ Vue.mixin({
             });
             var playerTotal = rank.length - deactive;
             var alliesTotal = states[receive].ally.length;
-            var alliesRatio = (playerTotal - 1 - alliesTotal) / (playerTotal - 1);
-            var relationRatio = (playerTotal - 1 - relations[receive].indexOf(request)) / (playerTotal - 1);
+            var alliesRatio = (playerTotal - 1 - alliesTotal) / playerTotal;
+            var relationRatio = (rank.length - 2 - relations[receive].indexOf(request)) / rank.length;
             var requestRank, i = 0;
             for (i; i < rank.length; i++) {
-                if (rank[i].code == request) {
+                if (rank[i].code === request) {
                     requestRank = i;
                     break;
                 }
@@ -23,15 +23,15 @@ Vue.mixin({
             chance = (Math.random() * 0.3 + 0.7) * chance;
             if ([4, 5, 6].indexOf(request) !== -1 && [4, 5, 6].indexOf(receive) !== -1) {
                 if (deactive === 0) {
-                    chance += 0.3;
+                    chance += 0.15;
                 } else if (deactive === 1) {
-                    chance += 0.2;
-                } else if (deactive === 2) {
                     chance += 0.1;
+                } else if (deactive === 2) {
+                    chance += 0.05;
                 }
             } 
             if (app.$data.player[request] === 2) {
-                chance -= 0.55;
+                chance -= 0.1;
             }
             var dice = Math.random();
             if (chance >= dice) {
@@ -47,8 +47,11 @@ Vue.mixin({
                 }
             });
             var playerTotal = rank.length - deactive;
+            if (playerTotal === 2) {
+                return "";
+            }
             var alliesTotal = states[active].ally.length;
-            var alliesRatio = (Math.random() * 0.1 + 0.9) * (playerTotal - 1 - alliesTotal) / (playerTotal - 1);
+            var alliesRatio = (playerTotal - 2 - alliesTotal) / playerTotal;
             var dice = Math.random();
             if (dice > alliesRatio) {
                 return "";
@@ -60,7 +63,7 @@ Vue.mixin({
             var targetRatios = [];
             targetAllies.forEach(function(target) {
                 targetRatios.push(
-                    (rank.length - 1 - relations[active].indexOf(target.code)) / (rank.length - 1)
+                    (rank.length - 1 - relations[active].indexOf(target.code)) / rank.length
                 );
             });
             rank.forEach(function(r, i) {
@@ -68,15 +71,15 @@ Vue.mixin({
                     targetRatios[targetAllies.indexOf(r)] *= (i + 1) / rank.length;
                     if ([4, 5, 6].indexOf(r.code) !== -1 && [4, 5, 6].indexOf(active) !== -1) {
                         if (deactive === 0) {
-                            targetRatios[targetAllies.indexOf(r)] *= 4;
+                            targetRatios[targetAllies.indexOf(r)] *= 2.5;
                         } else if (deactive === 1) {
-                            targetRatios[targetAllies.indexOf(r)] *= 3;
-                        } else if (deactive === 2) {
                             targetRatios[targetAllies.indexOf(r)] *= 2;
+                        } else if (deactive === 2) {
+                            targetRatios[targetAllies.indexOf(r)] *= 1.5;
                         }
                     } 
                     if (app.$data.player[r.code] === 2) {
-                        targetRatios[targetAllies.indexOf(r)] /= 5.5;
+                        targetRatios[targetAllies.indexOf(r)] /= 1.5;
                     }
                 }
             });

@@ -10,6 +10,10 @@ Vue.mixin({
             if (allies.length === 0) {
                 return "";
             }
+            var totalPlayers = relation.length + 1;
+            if (deactive + 2 === totalPlayers) {
+                return allies[0];
+            }
             var hate = new Array(allies.length).fill(0);
             var overlap = new Array(allies.length).fill(0);
             var most = [0, 0];
@@ -33,9 +37,9 @@ Vue.mixin({
                 hate[i] *= state[ally].occupy.length;
                 if ([4, 5, 6].indexOf(own) !== -1 && [4, 5, 6].indexOf(ally) !== -1) {
                     if (deactive === 0) {
-                        hate[i] *= 0.1;
+                        hate[i] *= 0.5;
                     } else if (deactive === 1) {
-                        hate[i] *= 0.3;
+                        hate[i] *= 0.7;
                     }
                 }
             });

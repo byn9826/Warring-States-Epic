@@ -97,7 +97,7 @@ Vue.mixin({
                     }
                 }
             });
-            var options = attack.concat(rest);
+            var options = attack.concat(rest, support, disturb);
             var holder;
             orders = orders.map(function(o) {
                 if (o === null || o === undefined) {

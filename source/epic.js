@@ -16,7 +16,7 @@ var app = new Vue({
         item: null,
         focus: null,
         wild: 1,
-        situation: null
+        situation: 0
     },
     methods: {
         toNextStage: function() {
@@ -152,7 +152,6 @@ var app = new Vue({
                 }.bind(this));
                 this.addNewHistory("各国完成变法国力增强");
             } else if (result[0] === 2) {
-                console.log(this.hero);
                 this.hero = this.hero.map(function(h) {
                     return h.map(function(i) {
                         return 1;
@@ -160,10 +159,30 @@ var app = new Vue({
                 })
                 this.addNewHistory("各国众将领请兵出征");
             } 
-            
+            if ([6, 7, 8].indexOf(result[1]) !== -1) {
+                this.wild += 1;
+                this.addNewHistory("四夷势力增长");
+            } else if (result[1] === 9) {
+                this.statesInfo.forEach(function(state, i) {
+                    if (this.player[i] !== 0) {
+                        this.power.splice(i, 1, this.power[i] - this.wild);
+                    }
+                }.bind(this));
+                this.wild = 1;
+                this.addNewHistory("各国抵御四夷入侵");
+            }
+            this.situation = null;
+            if (result[2] === 12) {
+                this.situation = 1;
+            } else if (result[2] === 13) {
+                this.situation = 2;
+            } else if (result[2] === 14) {
+                this.situation = 3;
+            } else {
+                this.situation = 0;
+            }
+            this.addNewHistory(this.getEventSituation(this.situation));
         }
-    },
-    created: function() {
     },
     computed: {
         statesInfo: function() {
