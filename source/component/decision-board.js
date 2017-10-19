@@ -1,7 +1,7 @@
 Vue.component("decision-board", {
     props: [
         "stage", "player", "state", "cities", "relations", "rank", "orders", "settings", "focus",
-        "hero", "force", "power",
+        "hero", "force", "power", "situation",
         "addnewally", "addnewhistory", "tonextstage", "removeally", "increaserelation", 
         "decreaserelation", "saveitemorder", "updateorderofcities", "disturbpowerpoint", 
         "replacecitisoccupy", "handleevent"
@@ -311,13 +311,13 @@ Vue.component("decision-board", {
                     <tr>
                         <td>
                             <span>
-                                军令{{force[0] === activeState.code ? "+干将" : ""}}  
+                                军令+天气{{force[0] === activeState.code ? "+干将" : ""}}  
                                 : {{calAttackEnvPoint}}
                             </span>
                         </td>
                         <td>
                             <span>
-                                军令+城防{{orders[0] === cities[reminder].occupy ? "+九鼎" : ""}} 
+                                军令+天气+城防{{orders[0] === cities[reminder].occupy ? "+九鼎" : ""}} 
                                 : {{calDefendEnvPoint}}
                             </span>
                         </td>
@@ -1404,6 +1404,9 @@ Vue.component("decision-board", {
             ) {
                 ability += this.getOrdersInfo()[this.cities[this.reminder].order].bonus;
             }
+            if (this.situation === 2) {
+                ability -= 1;
+            }
             return ability;
         },
         calDefendArmyPoint: function() {
@@ -1461,6 +1464,9 @@ Vue.component("decision-board", {
                     attack += 1;
                 }
                 attack += this.getOrdersInfo()[this.cities[this.focus].order].bonus;
+            }
+            if (this.situation === 1) {
+                attack -= 1;
             }
             return attack;
         },

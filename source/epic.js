@@ -163,9 +163,11 @@ var app = new Vue({
                 this.wild += 1;
                 this.addNewHistory("四夷势力增长");
             } else if (result[1] === 9) {
+                var damage;
                 this.statesInfo.forEach(function(state, i) {
-                    if (this.player[i] !== 0) {
-                        this.power.splice(i, 1, this.power[i] - this.wild);
+                    if (this.player[i] !== 0 && state.live) {
+                        this.power[i] - this.wild >= 0 ? damage = this.power[i] - this.wild : damage = (this.power[i] - this.wild) * 2;
+                        this.power.splice(i, 1, damage);
                     }
                 }.bind(this));
                 this.wild = 1;

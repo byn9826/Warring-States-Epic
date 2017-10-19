@@ -21,6 +21,9 @@ Vue.mixin({
                 kill += this.getHeroKillNum(aHero.code);
                 //有守护武将防守失败
                 kill -= this.getHeroSafeNum(dHero.code);
+                if (app.$data.situation === 3) {
+                    kill += 1;
+                }
                 //孟尝君防守失败
                 if (dHero.skill === 2) {
                     kill = 0;
@@ -131,6 +134,9 @@ Vue.mixin({
                 kill += this.getHeroKillNum(dHero.code);
                 //有守护武将进攻失败
                 kill -= this.getHeroSafeNum(aHero.code);
+                if (app.$data.situation === 3) {
+                    kill += 1;
+                }
                 //張平进攻失败
                 if (aHero.skill === 12) {
                     app.$data.power.splice(aHero.state, 1, app.$data.power[aHero.state] + 2);

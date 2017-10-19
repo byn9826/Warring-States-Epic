@@ -63,46 +63,63 @@ Vue.mixin({
                 }
                 if (cityData[c].occupy !== cityData[from].occupy) {
                     if (this.getStatesBaseLevel()[cityData[from].occupy][3].indexOf(c) !== -1) {
-                        basic *= 30;
-                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][2].indexOf(c) !== -1) {
                         basic *= 24;
-                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][1].indexOf(c) !== -1) {
+                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][2].indexOf(c) !== -1) {
                         basic *= 12;
-                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][0].indexOf(c) !== -1) {
+                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][1].indexOf(c) !== -1) {
                         basic *= 6;
+                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][0].indexOf(c) !== -1) {
+                        basic *= 3;
                     }
                 } else {
                     if (this.getStatesBaseLevel()[cityData[from].occupy][3].indexOf(c) !== -1) {
-                        basic /= 24;
-                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][2].indexOf(c) !== -1) {
-                        basic /= 24;
-                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][1].indexOf(c) !== -1) {
                         basic /= 12;
-                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][0].indexOf(c) !== -1) {
+                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][2].indexOf(c) !== -1) {
+                        basic /= 12;
+                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][1].indexOf(c) !== -1) {
                         basic /= 6;
+                    } else if (this.getStatesBaseLevel()[cityData[from].occupy][0].indexOf(c) !== -1) {
+                        basic /= 3;
                     }
                 }
                 //辽西
                 if (from === 8 && c === 9) {
                     if (cityData[c].occupy === cityData[from].occupy) {
-                        basic /= 24;
+                        basic /= 12;
                     } else {
-                        basic *= 12;
+                        basic *= 6;
                     }
                 } 
                 //蓟
                 if (from === 7 && c === 8) {
                     if (cityData[c].occupy === cityData[from].occupy && cityData[from].occupy === cityData[9].occupy) {
-                        basic /= 24;
+                        basic /= 12;
                     } else {
-                        basic *= 12;
+                        basic *= 6;
+                    }
+                }
+                //临沂
+                if (from === 21 && c === 24) {
+                    if (cityData[c].occupy === cityData[from].occupy && cityData[from].occupy === cityData[23].occupy) {
+                        basic /= 12;
+                    } else {
+                        basic *= 6;
+                    }
+                }
+                //莒
+                if (from === 23 && c === 24) {
+                    if (cityData[c].occupy === cityData[from].occupy && cityData[from].occupy === cityData[21].occupy) {
+                        basic /= 12;
+                    } else {
+                        basic *= 6;
                     }
                 }
                 return (
                     cityInfo[c].resource.length + 2 - cityInfo[c].type + 4 
                     - cityData[c].status.filter(function(d) {return d === 1;}).length
                     + cityData[c].status.filter(function(d) {return d === 0;}).length * 3
-                ) * basic * cityInfo[c].nearby.length;
+                    + cityInfo[c].nearby.length
+                ) * basic;
             }.bind(this));
             var sum = options.reduce(function(a, b) {return a + b;}, 0);
             var chance = Math.random();
