@@ -184,6 +184,23 @@ var app = new Vue({
                 this.situation = 0;
             }
             this.addNewHistory(this.getEventSituation(this.situation));
+        },
+        selectState: function(i) {
+            if (this.player[i] === 2) {
+                this.player.splice(i, 1, 1);
+            } else if (this.player[i] === 1) {
+                this.player = this.player.map(function(p) {
+                    if (p !== 0) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                })
+                this.player.splice(i, 1, 2);
+            }
+        },
+        startGame: function() {
+            this.stage = 0;
         }
     },
     computed: {

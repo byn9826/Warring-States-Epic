@@ -9,6 +9,20 @@ body{
     margin: 0;
 }
 
+h2{
+    font-size: 18pt;
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}
+
+h3{
+    font-size: 14pt;
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+}
+
 h4{
     font-size: 12pt;
     margin: 0;
@@ -98,3 +112,64 @@ h5{
     border-bottom-style: ridge;
 }
 
+.start{
+    padding-left: 15pt
+}
+
+.start h2{
+    display: block;
+    letter-spacing: 10pt;
+    color: white;
+    margin: 20pt 0pt 5pt 0pt;
+    border-bottom-style: ridge;
+    width: 800pt;
+    padding-bottom: 8pt;
+}
+
+.start-theme{
+    display: inline-block;
+    vertical-align: top;
+    background-color: darkgrey;
+    margin: 5pt 5pt 5pt 0;
+    width: 80pt;
+    line-height: 100pt;
+    padding: 5pt 2pt;
+    text-align: center;
+    border-radius: 5pt;
+    border: 2pt solid black;
+}
+
+.start-state{
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 20pt;
+    margin-top: 20pt;
+    padding: 5pt;
+    border-radius: 3pt;
+    width: 150pt;
+    text-align: center;
+    cursor: pointer;
+}
+
+.start-state-name{
+    display: inline-block;
+    width: 20pt;
+    line-height: 20pt;
+    text-align: center;
+    border-radius: 50%;
+    color: white;
+}
+
+.start-state-army{
+    display:block;
+    margin-top:5pt;
+    background-color:darkslategrey;
+}
+.start-state-army p{
+    display: block;
+    margin: 5pt 0;
+    padding: 2pt 0;
+    color: lightgrey;
+    font-size: 10pt;
+    border-radius: 5pt;
+}

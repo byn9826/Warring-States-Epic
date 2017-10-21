@@ -9,7 +9,12 @@ Vue.component("decision-board", {
     template: `
         <div v-bind:style="cardStyle">
             <header v-bind:style="roundStyle">
-                {{getStageName(stage)}}阶段
+                <div style="display:inline-block;vertical-align:middle">
+                    {{getStatesInfo()[player.indexOf(2)].name}}国
+                </div>
+                <div style="display:inline-block;vertical-align:middle;margin-left:50pt">
+                    {{getStageName(stage)}}阶段
+                </div>
             </header>
             <section v-if="stage === 0 && player[orders[active]] === 2">
                 <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
@@ -1032,7 +1037,9 @@ Vue.component("decision-board", {
         },
         active: function (newVal) {
             this.$nextTick(function () {
-                if (this.stage === 0) {
+                if (this.stage === null) {
+                    console.log(123);
+                } else if (this.stage === 0) {
                 //缔盟阶段
                     if (!this.state[this.orders[newVal]].live) {
                         this.nextActive();
@@ -1251,7 +1258,6 @@ Vue.component("decision-board", {
             },
             roundStyle: {
                 display: "block",
-                textAlign: "center",
                 fontSize: "11pt",
                 fontWeight: "bold",
                 padding: "3pt 0",

@@ -17,7 +17,7 @@
 					mode: 0
 				},
 				round: 0,
-				stage: 0,
+				stage: null,
 				history: [],
 				player: [0, 1, 1, 1, 1, 1, 1, 1, 0],
 				allies: [
@@ -89,101 +89,144 @@
 			};
 		</script>
 		<div v-cloak id="app" onselectstart="return false;">
-			<decision-board
-				v-bind:key="round"
-				v-bind:stage="stage" 
-				v-bind:player="player"
-				v-bind:state="statesInfo"
-				v-bind:cities="cities"
-				v-bind:relations="relations"
-				v-bind:rank="rank"
-				v-bind:orders="fame"
-				v-bind:settings="settings"
-				v-bind:focus="focus"
-				v-bind:hero="hero"
-				v-bind:force="force"
-				v-bind:power="power"
-				v-bind:situation="situation"
-				@addNewAlly="addNewAlly"
-				@removeAlly="removeAlly"
-				@addNewHistory="addNewHistory"
-				@toNextStage="toNextStage"
-				@increaseRelation="increaseRelation"
-				@decreaseRelation="decreaseRelation"
-				@saveItemOrder="saveItemOrder"
-				@updateOrderOfCities="updateOrderOfCities"
-				@disturbPowerPoint="disturbPowerPoint"
-				@replaceCitisOccupy="replaceCitisOccupy"
-				@handleEvent="handleEvent"
-			></decision-board>
-		    <main id="main">
-		    	<template v-for="(c, index) in getCitiesInfo()">
-		    		<city-info 
-		    			v-bind:definition="c" 
-		    		></city-info>
-		    		<occupy-info 
-		    			v-bind:player="player.indexOf(2)"
-		    			v-bind:definition="c" 
-		    			v-bind:data="cities[index]"
-		    			v-bind:stage="stage"
-		    			v-bind:states="statesInfo"
-		    			v-bind:state="getStatesInfo()[cities[index].occupy]"
-		    			@saveItemOrder="saveItemOrder"
-		    			@updateFocusVariable="updateFocusVariable"
-		    		></occupy-info>
-		    	</template>
-		    </main>
-		    <div id="map"></div>
-		    <section id="rank">
-		    	<div id="rank-fame">
-					<fame-info
-						v-bind:data="fame"
-						v-bind:player="player.indexOf(2)"
-						v-bind:type="0"
-					></fame-info>
-					<fame-info
-						v-bind:data="force"
-						v-bind:player="player.indexOf(2)"
-						v-bind:type="1"
-					></fame-info>
-					<div id="rank-treasure">
-						<treasure-info 
-							v-bind:occupy="getStatesInfo()[fame[0]].name" v-bind:type="0">
-						</treasure-info>
-						<treasure-info 
-							v-bind:occupy="getStatesInfo()[force[0]].name" v-bind:type="1">
-						</treasure-info>
+			<template v-if="stage !== null">
+				<decision-board
+					v-bind:key="round"
+					v-bind:stage="stage" 
+					v-bind:player="player"
+					v-bind:state="statesInfo"
+					v-bind:cities="cities"
+					v-bind:relations="relations"
+					v-bind:rank="rank"
+					v-bind:orders="fame"
+					v-bind:settings="settings"
+					v-bind:focus="focus"
+					v-bind:hero="hero"
+					v-bind:force="force"
+					v-bind:power="power"
+					v-bind:situation="situation"
+					@addNewAlly="addNewAlly"
+					@removeAlly="removeAlly"
+					@addNewHistory="addNewHistory"
+					@toNextStage="toNextStage"
+					@increaseRelation="increaseRelation"
+					@decreaseRelation="decreaseRelation"
+					@saveItemOrder="saveItemOrder"
+					@updateOrderOfCities="updateOrderOfCities"
+					@disturbPowerPoint="disturbPowerPoint"
+					@replaceCitisOccupy="replaceCitisOccupy"
+					@handleEvent="handleEvent"
+				></decision-board>
+			    <main id="main">
+			    	<template v-for="(c, index) in getCitiesInfo()">
+			    		<city-info 
+			    			v-bind:definition="c" 
+			    		></city-info>
+			    		<occupy-info 
+			    			v-bind:player="player.indexOf(2)"
+			    			v-bind:definition="c" 
+			    			v-bind:data="cities[index]"
+			    			v-bind:stage="stage"
+			    			v-bind:states="statesInfo"
+			    			v-bind:state="getStatesInfo()[cities[index].occupy]"
+			    			@saveItemOrder="saveItemOrder"
+			    			@updateFocusVariable="updateFocusVariable"
+			    		></occupy-info>
+			    	</template>
+			    </main>
+			    <div id="map"></div>
+			    <section id="rank">
+			    	<div id="rank-fame">
+						<fame-info
+							v-bind:data="fame"
+							v-bind:player="player.indexOf(2)"
+							v-bind:type="0"
+						></fame-info>
+						<fame-info
+							v-bind:data="force"
+							v-bind:player="player.indexOf(2)"
+							v-bind:type="1"
+						></fame-info>
+						<div id="rank-treasure">
+							<treasure-info 
+								v-bind:occupy="getStatesInfo()[fame[0]].name" v-bind:type="0">
+							</treasure-info>
+							<treasure-info 
+								v-bind:occupy="getStatesInfo()[force[0]].name" v-bind:type="1">
+							</treasure-info>
+						</div>
+			    	</div>
+			    	<supply-info 
+			    		v-bind:data="statesInfo"
+			    		v-bind:player="player"
+			    	></supply-info>
+			    </section>
+			    <aside id="aside">
+			    	<h4>回合: {{round + 1}}</h4>
+			    	<h4>{{getEventSituation(situation)}}</h4>
+			    	<h4>四夷战力: {{wild}}</h4>
+			    	<h5>战国七雄</h5>
+			    	<template v-for="(s, index) in getStatesInfo()" v-if="player[index]!==0">
+				    	<state-info
+				    		v-bind:definition="s"
+				    		v-bind:player="player[index]===2"
+				    		v-bind:data="statesInfo[index]"
+				    		v-bind:power="power"
+				    		v-bind:hero="hero[index]"
+				    		v-bind:rank="rank"
+				    	>
+				    	</state-info>
+			    	</template>
+			    	<h5>战国策</h5>
+			    	<div id="aside-history">
+			    		<section class="history-round" v-for="(h, i) in history">
+			    			<header>回合: {{i + 1}}</header>
+			    			<div v-for="r in h">{{r}}</div>
+			    		</section>
+			    	</div>
+			    </aside>
+			</template>
+			<template v-else>
+				<section id="main" class="start" style="background-color:darkslategrey">
+					<h2><i class="fa fa-shield" aria-hidden="true"></i>战国史话</h2>
+					<h3 style="color:lightgrey">剧本</h3>
+					<div class="start-theme">
+						<h4><b>问鼎中原</b></h4>
 					</div>
-		    	</div>
-		    	<supply-info 
-		    		v-bind:data="statesInfo"
-		    		v-bind:player="player"
-		    	></supply-info>
-		    </section>
-		    <aside id="aside">
-		    	<h4>回合: {{round + 1}}</h4>
-		    	<h4>{{getEventSituation(situation)}}</h4>
-		    	<h4>四夷战力: {{wild}}</h4>
-		    	<h5>战国七雄</h5>
-		    	<template v-for="(s, index) in getStatesInfo()" v-if="player[index]!==0">
-			    	<state-info
-			    		v-bind:definition="s"
-			    		v-bind:player="player[index]===2"
-			    		v-bind:data="statesInfo[index]"
-			    		v-bind:power="power"
-			    		v-bind:hero="hero[index]"
-			    		v-bind:rank="rank"
-			    	>
-			    	</state-info>
-		    	</template>
-		    	<h5>战国策</h5>
-		    	<div id="aside-history">
-		    		<section class="history-round" v-for="(h, i) in history">
-		    			<header>回合: {{i + 1}}</header>
-		    			<div v-for="r in h">{{r}}</div>
-		    		</section>
-		    	</div>
-		    </aside>
+					<div style="display:block;margin-top:5pt">
+						<h3 style="display:inline-block;vertical-align:middle;color:lightgrey">
+							选择国家
+						</h3>
+						<input 
+							style="display:inline-block;vertical-align:middle;margin-left:5pt;width:100pt" 
+							type="button" value="开始游戏" v-on:click="startGame"
+							v-show="player.indexOf(2) !== -1"
+						/>
+					</div>
+					<div style="display:block;width:800pt">
+						<div class="start-state" v-for="(state, i) in getStatesInfo()" 
+							v-if="player[i] !== 0" v-on:click="selectState(i)"
+							v-bind:style="{backgroundColor:player[i]===2?'white':'darkgrey'}"
+						>
+							<div class="start-state-name"
+								v-bind:style="{backgroundColor: state.color}"
+							>
+								<h4>{{state.name}}</h4>
+							</div>
+							<span>{{getHerosInfo()[i][getHeroLeaderIndex()[i]].name}}</span>
+							<h4 style="display:block;margin-top:5pt">都城 {{getCitiesInfo()[getStatesBaseLevel()[i][3]].name}}</h4>
+							<div class="start-state-army">
+								<p>
+									{{getArmyInfo()[i].name}} - 攻击{{getArmyInfo()[i].attack}} 防御{{getArmyInfo()[i].defend}}
+								</p>
+							</div>
+							<p style="display:block;font-size:9pt">
+								{{getStatesInfo()[i].motto}}
+							</p>
+						</div>
+					</div>
+				</section>
+			</template>
 		</div>
 		<script type="text/javascript" src="vendor/vue.js"></script>
 		<script type="text/javascript" src="source/definition/state.js"></script>
