@@ -55,9 +55,11 @@ Vue.mixin({
             var options = nearby.map(function(c) {
                 basic = 0;
                 if (player[cityData[c].occupy] === 0) {
-                    basic = 7;
+                    basic = 12;
+                } else if (player[cityData[c].occupy] === 2) {
+                    basic = 9;
                 } else if (cityData[c].occupy !== cityData[from].occupy) {
-                    basic = 5;
+                    basic = 6;
                 } else {
                     basic = 1;
                 }
@@ -115,7 +117,7 @@ Vue.mixin({
                     }
                 }
                 return (
-                    cityInfo[c].resource.length + 2 - cityInfo[c].type + 4 
+                    cityInfo[c].resource.length + (2 - cityInfo[c].type) * 5 + 4 
                     - cityData[c].status.filter(function(d) {return d === 1;}).length
                     + cityData[c].status.filter(function(d) {return d === 0;}).length * 3
                     + cityInfo[c].nearby.length

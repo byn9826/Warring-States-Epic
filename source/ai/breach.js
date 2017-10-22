@@ -37,9 +37,9 @@ Vue.mixin({
                 hate[i] *= state[ally].occupy.length;
                 if ([4, 5, 6].indexOf(own) !== -1 && [4, 5, 6].indexOf(ally) !== -1) {
                     if (deactive === 0) {
-                        hate[i] *= 0.5;
-                    } else if (deactive === 1) {
                         hate[i] *= 0.7;
+                    } else if (deactive === 1) {
+                        hate[i] *= 0.9;
                     }
                 }
             });

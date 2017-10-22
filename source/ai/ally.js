@@ -23,11 +23,9 @@ Vue.mixin({
             chance = (Math.random() * 0.3 + 0.7) * chance;
             if ([4, 5, 6].indexOf(request) !== -1 && [4, 5, 6].indexOf(receive) !== -1) {
                 if (deactive === 0) {
-                    chance += 0.15;
-                } else if (deactive === 1) {
                     chance += 0.1;
-                } else if (deactive === 2) {
-                    chance += 0.05;
+                } else if (deactive === 1) {
+                    chance += 0.5;
                 }
             } 
             if (app.$data.player[request] === 2) {
@@ -71,15 +69,13 @@ Vue.mixin({
                     targetRatios[targetAllies.indexOf(r)] *= (i + 1) / rank.length;
                     if ([4, 5, 6].indexOf(r.code) !== -1 && [4, 5, 6].indexOf(active) !== -1) {
                         if (deactive === 0) {
-                            targetRatios[targetAllies.indexOf(r)] *= 2.5;
-                        } else if (deactive === 1) {
                             targetRatios[targetAllies.indexOf(r)] *= 2;
-                        } else if (deactive === 2) {
+                        } else if (deactive === 1) {
                             targetRatios[targetAllies.indexOf(r)] *= 1.5;
                         }
                     } 
                     if (app.$data.player[r.code] === 2) {
-                        targetRatios[targetAllies.indexOf(r)] /= 1.5;
+                        targetRatios[targetAllies.indexOf(r)] /= 2;
                     }
                 }
             });

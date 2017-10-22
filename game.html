@@ -5,7 +5,7 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="author" content="Baozier">
-		<title></title>
+		<title>战国史话</title>
 		<link rel="stylesheet" type="text/css" href="public/general.css" >
 		<link rel="stylesheet" type="text/css" href="vendor/font-awesome/css/font-awesome.min.css" >
     </head>
@@ -13,8 +13,8 @@
 		<script>
 			var data = {
 				settings: {
-					delay: 500,
-					mode: 0
+					delay: 3000,
+					mode: 1
 				},
 				round: 0,
 				stage: null,
@@ -91,6 +91,7 @@
 		<div v-cloak id="app" onselectstart="return false;">
 			<template v-if="stage !== null">
 				<decision-board
+					ref="board"
 					v-bind:key="round"
 					v-bind:stage="stage" 
 					v-bind:player="player"
@@ -117,7 +118,7 @@
 					@replaceCitisOccupy="replaceCitisOccupy"
 					@handleEvent="handleEvent"
 				></decision-board>
-			    <main id="main">
+			    <main id="main" class="full">
 			    	<template v-for="(c, index) in getCitiesInfo()">
 			    		<city-info 
 			    			v-bind:definition="c" 
@@ -134,7 +135,7 @@
 			    		></occupy-info>
 			    	</template>
 			    </main>
-			    <div id="map"></div>
+			    <div id="map" class="full"></div>
 			    <section id="rank">
 			    	<div id="rank-fame">
 						<fame-info
@@ -187,11 +188,29 @@
 			    </aside>
 			</template>
 			<template v-else>
-				<section id="main" class="start" style="background-color:darkslategrey">
+				<section class="start full" style="background-color:darkslategrey">
 					<h2><i class="fa fa-shield" aria-hidden="true"></i>战国史话</h2>
 					<h3 style="color:lightgrey">剧本</h3>
 					<div class="start-theme">
 						<h4><b>问鼎中原</b></h4>
+					</div>
+					<div style="display:inline-block;vertical-align:top;margin-left:30pt">
+						<h4>游戏速度</h4>
+						<select v-model.number="settings.delay" style="margin-top:5pt;width:100pt;padding:2pt 0">
+							<option style="padding:2pt 0" value="1000"> 快 </option>
+							<option style="padding:2pt 0" value="2000"> 较快 </option>
+							<option style="padding:2pt 0" value="3000"> 正常 </option>
+							<option style="padding:2pt 0" value="4000"> 较慢 </option>
+							<option style="padding:2pt 0" value="5000"> 慢 </option>
+						</select>
+						<h4 style="margin-top:15pt">游戏模式</h4>
+						<select v-model.number="settings.mode" style="margin-top:5pt;width:100pt;padding:2pt 0"
+							v-on:change="removeSelect"
+						>
+							<option style="padding:2pt 0" value="0"> 置身事外 </option>
+							<option style="padding:2pt 0" value="1"> 十回称霸 </option>
+							<!--<option style="padding:2pt 0" value="2"> 灭国统一 </option>-->
+						</select>
 					</div>
 					<div style="display:block;margin-top:5pt">
 						<h3 style="display:inline-block;vertical-align:middle;color:lightgrey">
@@ -200,7 +219,7 @@
 						<input 
 							style="display:inline-block;vertical-align:middle;margin-left:5pt;width:100pt" 
 							type="button" value="开始游戏" v-on:click="startGame"
-							v-show="player.indexOf(2) !== -1"
+							v-show="player.indexOf(2) !== -1 || settings.mode === 0"
 						/>
 					</div>
 					<div style="display:block;width:800pt">

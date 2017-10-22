@@ -39,6 +39,7 @@ Vue.component("occupy-info", {
             if (
                 this.data.order !== null && this.getOrdersInfo()[this.data.order].type === 0
                 && this.data.occupy === this.player && this.stage === 4
+                && app.$refs.board.activeState.code === this.player
             ) {
                 this.$emit("updatefocusvariable", this.data.code);
             }

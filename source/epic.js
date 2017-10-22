@@ -48,7 +48,19 @@ var app = new Vue({
                     return f.code;
                 });
                 this.fame = fames;
-                this.round += 1;
+                if (this.round === 9 && this.settings.mode === 1) {
+                    alert(
+                        this.getHerosInfo()[this.rank[0].code][this.getHeroLeaderIndex()[this.rank[0].code]].name + "力敌群雄,成为战国霸主"
+                    );
+                    return false;
+                    // if (states.filter(function(f) { return f.live;}).length === 1) {
+                    //     alert(
+                    //         this.getHerosInfo()[this.rank[0]][this.getHeroLeaderIndex()[this.rank[0]]] + "一统华夏,史称始皇帝"
+                    //     )
+                    // }
+                } else {
+                    this.round += 1;
+                }
                 this.stage = 0;
             }
         },
@@ -159,10 +171,10 @@ var app = new Vue({
                 })
                 this.addNewHistory("各国众将领请兵出征");
             } 
-            if ([6, 7, 8].indexOf(result[1]) !== -1) {
+            if ([6, 7, 8, 9].indexOf(result[1]) !== -1) {
                 this.wild += 1;
                 this.addNewHistory("四夷势力增长");
-            } else if (result[1] === 9) {
+            } else if (result[1] === 10) {
                 var damage;
                 this.statesInfo.forEach(function(state, i) {
                     if (this.player[i] !== 0 && state.live) {
@@ -188,7 +200,7 @@ var app = new Vue({
         selectState: function(i) {
             if (this.player[i] === 2) {
                 this.player.splice(i, 1, 1);
-            } else if (this.player[i] === 1) {
+            } else if (this.player[i] === 1 && this.settings.mode !== 0) {
                 this.player = this.player.map(function(p) {
                     if (p !== 0) {
                         return 1;
@@ -199,8 +211,37 @@ var app = new Vue({
                 this.player.splice(i, 1, 2);
             }
         },
+        removeSelect: function(e) {
+            if (e.target.value === 0 || e.target.value === '0') {
+                this.player = this.player.map(function(p) {
+                    if (p !== 0) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                })
+            }
+        },
         startGame: function() {
             this.stage = 0;
+            this.$nextTick(function () {
+                var mouseX = null, mouseY = null, drag = false;
+                document.getElementById("main").addEventListener('mousemove', function(e) { 
+                    if(drag === true){
+                        window.scrollTo(window.scrollX + mouseX - e.pageX, window.scrollY + mouseY - e.pageY);
+                    }
+                });
+                document.getElementById("main").addEventListener('mousedown', function(e){ 
+                    drag = true; 
+                    mouseX = e.pageX; 
+                    mouseY = e.pageY;
+                });
+                document.getElementById("main").addEventListener('mouseup', function(e){ 
+                    drag = false; 
+                    mouseX = null; 
+                    mouseY = null; 
+                }); 
+            });
         }
     },
     computed: {
@@ -288,20 +329,3 @@ var app = new Vue({
         }
     }
 });
-
-var mouseX = null, mouseY = null, drag = false;
-document.getElementById("main").addEventListener('mousemove', function(e) { 
-    if(drag === true){
-        window.scrollTo(window.scrollX + mouseX - e.pageX, window.scrollY + mouseY - e.pageY);
-    }
-});
-document.getElementById("main").addEventListener('mousedown', function(e){ 
-    drag = true; 
-    mouseX = e.pageX; 
-    mouseY = e.pageY;
-});
-document.getElementById("main").addEventListener('mouseup', function(e){ 
-    drag = false; 
-    mouseX = null; 
-    mouseY = null; 
-}); 

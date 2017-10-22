@@ -37,7 +37,7 @@ h5{
     font-weight: normal;
 }
 
-#main, #map{
+.full{
     width: 1136pt;
     height: 680pt;
     position: absolute;

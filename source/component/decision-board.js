@@ -9,10 +9,12 @@ Vue.component("decision-board", {
     template: `
         <div v-bind:style="cardStyle">
             <header v-bind:style="roundStyle">
-                <div style="display:inline-block;vertical-align:middle">
+                <div style="display:inline-block;vertical-align:middle"
+                    v-if="player.indexOf(2) !== -1" 
+                >
                     {{getStatesInfo()[player.indexOf(2)].name}}国
                 </div>
-                <div style="display:inline-block;vertical-align:middle;margin-left:50pt">
+                <div v-bind:style="{display:'inline-block',verticalAlign:'middle',marginLeft:player.indexOf(2)===-1?'75pt':'50pt'}">
                     {{getStageName(stage)}}阶段
                 </div>
             </header>
@@ -1037,9 +1039,7 @@ Vue.component("decision-board", {
         },
         active: function (newVal) {
             this.$nextTick(function () {
-                if (this.stage === null) {
-                    console.log(123);
-                } else if (this.stage === 0) {
+                if (this.stage === 0) {
                 //缔盟阶段
                     if (!this.state[this.orders[newVal]].live) {
                         this.nextActive();
@@ -1061,7 +1061,7 @@ Vue.component("decision-board", {
                             } else {
                                 this.skipAlly();
                             }
-                        }.bind(this), this.settings.delay);
+                        }.bind(this), 1000);
                     } else {
                         this.target = "";
                     }
@@ -1076,7 +1076,7 @@ Vue.component("decision-board", {
                         );
                         setTimeout(function () {
                             this.target !== "" ? this.submitBreach() : this.skipBreach();
-                        }.bind(this), this.settings.delay);
+                        }.bind(this), 1000);
                     } else {
                         this.target = "";
                     }
