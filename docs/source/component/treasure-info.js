@@ -5,7 +5,17 @@ Vue.component("treasure-info", {
             <div v-bind:style="typeStyle">
                 <i v-bind:style="iconStyle" class="fa" v-bind:class="getTreasureIcon" aria-hidden="true"></i>
                 <div v-bind:style="titleStyle">{{getTreasureName}}</div>
-                <div style="font-size:10pt;border-top:1pt solid darkslategrey;margin-top:5pt">
+                <div 
+                    style="
+                        font-size: 10pt; border-top: 1pt solid darkslategrey; margin-top: 5pt;
+                        background-color: transparent
+                    "
+                    v-bind:title="
+                        this.type === 0 ?
+                            '防守时,+1战力' :
+                            '进攻时,+1战力'
+                    "
+                >
                     +1 {{getTreasureBonus}}
                 </div>
             </div>

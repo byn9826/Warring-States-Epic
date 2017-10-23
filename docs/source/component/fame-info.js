@@ -7,7 +7,15 @@ Vue.component("fame-info", {
                     v-bind:style="iconStyle" aria-hidden="true"
                     v-bind:class="['fa', type===1?'fa-flag':'fa-certificate']" 
                 ></i>
-                <div v-bind:style="titleStyle">{{type===1?"军威":"霸业"}}</div>
+                <div v-bind:style="titleStyle"
+                    v-bind:title="
+                        type === 1 ? 
+                            '战斗胜利后,若胜利方军威排名低于失败方，则胜利方军威排名移至失败方军威之前,军威排名第一国家获得干将' : 
+                            '每回合结束后,根据国家领地数量对霸业进行重新排序,霸业排名第一国家获得九鼎'
+                    "
+                >
+                    {{type === 1 ? "军威" : "霸业"}}
+                </div>
             </div>
             <div v-for="d in data" v-bind:style="stateStyle">
                 <div v-bind:style="player!==d?nameStyle:activeStyle">{{getStatesInfo()[d].name}}</div>
@@ -37,7 +45,8 @@ Vue.component("fame-info", {
             titleStyle: {
                 display: "block",
                 textAlign: "center",
-                fontSize: "11pt"
+                fontSize: "11pt",
+                backgroundColor: "transparent"
             },
             stateStyle: {
                 display: "inline-block",

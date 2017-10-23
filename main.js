@@ -13,7 +13,7 @@ app.on('ready', () => {
     //mainWindow.setMenu( null );
     mainWindow.maximize();
     mainWindow.loadURL( url.format({
-        pathname: path.join( __dirname, './game.html' ),
+        pathname: path.join( __dirname, './docs/index.html' ),
         protocol: 'file:',
         slashes: true
     }));

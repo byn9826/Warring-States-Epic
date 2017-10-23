@@ -175,8 +175,10 @@
 			    </section>
 			    <aside id="aside">
 			    	<h4>回合: {{round + 1}}</h4>
-			    	<h4>{{getEventSituation(situation)}}</h4>
-			    	<h4>四夷战力: {{wild}}</h4>
+			    	<h4 v-bind:title="getEventDesc(situation)">{{getEventSituation(situation)}}</h4>
+			    	<h4 v-bind:title="'四夷入侵时,各国损失与四夷战力相等的国力.国库亏空时,损失加倍'">
+			    		四夷战力: {{wild}}
+			    	</h4>
 			    	<h5>战国七雄</h5>
 			    	<template v-for="(s, index) in getStatesInfo()" v-if="player[index]!==0">
 				    	<state-info
@@ -218,8 +220,16 @@
 						<select v-model.number="settings.mode" style="margin-top:5pt;width:100pt;padding:2pt 0"
 							v-on:change="removeSelect"
 						>
-							<option style="padding:2pt 0" value="0"> 置身事外 </option>
-							<option style="padding:2pt 0" value="1"> 十回称霸 </option>
+							<option style="padding:2pt 0; background-color: transparent" value="0" 
+								title="您将观看电脑战斗直至您退出游戏"
+							>
+								 置身事外 
+							</option>
+							<option style="padding:2pt 0; background-color: transparent" value="1" 
+								title="您将控制一个国家并与电脑在十回合的较量中分出胜负"
+							>
+								 十回称霸 
+							</option>
 							<!--<option style="padding:2pt 0" value="2"> 灭国统一 </option>-->
 						</select>
 					</div>

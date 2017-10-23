@@ -3,7 +3,9 @@ Vue.component("state-info", {
     template: `
         <div v-bind:style="cardStyle" v-on:mouseleave="leaveBoard">
             <div v-bind:style="headerStyle">
-                <span v-bind:style="player?activeStyle:nameStyle">
+                <span v-bind:style="player?activeStyle:nameStyle"
+                    v-bind:title="'国都'+getCitiesInfo()[getStatesBaseLevel()[definition.code][3]].name+',产出精兵:'+getArmyInfo()[definition.code].name+'(攻击'+getArmyInfo()[definition.code].attack+' 防御'+getArmyInfo()[definition.code].defend+')'"
+                >
                     {{definition.name}}
                 </span>
                 <span v-bind:style="occupyStyle">
@@ -24,7 +26,7 @@ Vue.component("state-info", {
                     <span style="cursor:pointer" v-on:click="showBoard">[查看]</span>
                 </span>
                 <div 
-                    v-for="(h, i) in getHerosInfo()[this.definition.code]" 
+                    v-for="(h, i) in getHerosInfo()[definition.code]" 
                     style="font-size:8pt;marginBottom:3pt;color:lightgrey"
                     v-show="showHero"
                 >
@@ -36,16 +38,14 @@ Vue.component("state-info", {
                 </div>
             </div>
             <div v-bind:style="strengthStyle">
-                <span v-bind:style="armyStyle">
+                <span v-bind:style="armyStyle"
+                    title = "占有城市数多的国家排名靠前,城市数相同时,占有领地数多的国家排名靠前"
+                >
                     排名 {{getCurrentRank}} {{getStatesAllies(data)}}
                 </span>
             </div>
         </div>
     `,
-    created: function() {
-        //console.log(this.hero);
-        //console.log(this.definition.code);
-    },
     methods: {
         showBoard: function() {
             this.showHero = true;    
@@ -148,6 +148,7 @@ Vue.component("state-info", {
                 verticalAlign: "middel",
                 color: "whitesmoke",
                 fontSize: "11pt",
+                backgroundColor: "transparent"
             },
         }  
     },

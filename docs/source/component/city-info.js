@@ -3,9 +3,16 @@ Vue.component("city-info", {
     template: `
         <div v-bind:style="cardStyle">
             <span v-bind:style="nameStyle">{{definition.name}}</span>
-            <span v-bind:style="resourceStyle" v-html="getCityResourceIcon(r)" v-for="r in definition.resource">
+            <span 
+                v-bind:style="resourceStyle" 
+                v-for="r in definition.resource"
+                v-html="getCityResourceIcon(r)" 
+                v-bind:title="getCityResourceDesc(r)"
+            >
             </span>
-            <div v-bind:style="cityStyle" v-html="getCityTypeName(definition.type)">
+            <div v-bind:style="cityStyle" v-html="getCityTypeName(definition.type)"
+                v-bind:title="getCityTypeDesc(definition.type)"
+            >
             </div>
         </div>
     `,
@@ -28,12 +35,14 @@ Vue.component("city-info", {
             resourceStyle: {
                 display: "inline-block",
                 verticalAlign: "middle",
-                fontSize: "12pt"
+                fontSize: "12pt",
+                backgroundColor: "transparent"
             },
             cityStyle: {
                 display: "inline-block",
                 verticalAlign: "middle",
-                fontSize: "14pt"
+                fontSize: "14pt",
+                backgroundColor: "transparent"
             }
         }  
     },

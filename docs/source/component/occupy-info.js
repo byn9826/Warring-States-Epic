@@ -18,13 +18,20 @@ Vue.component("occupy-info", {
                 <span 
                     v-if="player!==-1&&data.army.length!==0&&data.occupy!==player&&states[player].ally.indexOf(data.occupy)===-1" 
                     class="fa fa-shield" aria-hidden="true"
+                    style="background-color: transparent"
+                    title="可战斗军团数 / 总军团数"
                 >
                     {{data.status.filter(function(a) {return a === 1}).length + "/" +  data.army.length}}
                 </span>
                 <template 
-                    v-else-if="data.army.length!==0" v-for="(a, i) in data.army" v-bind:style="iconStyle"
+                    v-else-if="data.army.length!==0" v-for="(a, i) in data.army"
                 >
-                    <span v-bind:style="data.status[i]===1?'color:white':'color:darkgrey'" v-html="getArmyIcon(a)"></span>
+                    <span 
+                        v-bind:style="data.status[i]===1?'color:white;background-color:transparent':'color:darkgrey;background-color:transparent'" 
+                        v-html="getArmyIcon(a)"
+                        v-bind:title="data.status[i] === 1 ? getArmyInfo()[a].name + '军团,可战斗' : getArmyInfo()[a].name + '军团,休整中'"
+                    >
+                    </span>
                 </template>
             </div>
         </div>

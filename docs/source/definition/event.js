@@ -33,6 +33,18 @@ Vue.mixin({
                 case 3:
                     return "寒冬凌冽";
             }
+        },
+        getEventDesc: function(n) {
+            switch (n) {
+                case 0:
+                    return "无事发生";
+                case 1:
+                    return "进攻方战力-1";
+                case 2:
+                    return "防守方战力-1";
+                case 3:
+                    return "战斗失败伤亡+1";
+            }
         }
     }
 });

@@ -75,7 +75,7 @@ Vue.mixin({
                         }
                     } 
                     if (app.$data.player[r.code] === 2) {
-                        targetRatios[targetAllies.indexOf(r)] /= 2;
+                        targetRatios[targetAllies.indexOf(r)] /= 4;
                     }
                 }
             });

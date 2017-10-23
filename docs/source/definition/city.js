@@ -158,6 +158,16 @@ Vue.mixin({
                     return "&#127838;";
             }
         },
+        getCityResourceDesc: function(code) {
+            switch (code) {
+                case 0:
+                    //权力
+                    return "国力资源,可用于提升国力";
+                case 1:
+                    //粮草
+                    return "粮草资源,可提升兵力上限";
+            }
+        },
         getCityTypeName: function(type) {
             switch (type) {
                 case 0:
@@ -167,6 +177,16 @@ Vue.mixin({
                     //城市
                     return "&#127960;";
             }
-        }
+        },
+        getCityTypeDesc: function(type) {
+            switch (type) {
+                case 0:
+                    //都会
+                    return "都会: 防守方战力+2";
+                case 1:
+                    //城市
+                    return "城市: 防守方战力+1";
+            }
+        },
     }
 });

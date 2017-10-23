@@ -20,7 +20,7 @@ Vue.component("decision-board", {
             </header>
             <section v-if="stage === 0 && player[orders[active]] === 2">
                 <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
-                <div v-bind:style="descStyle">请选择想要缔盟的国家</div>
+                <div v-bind:style="descStyle">请选择想要与其缔盟的国家</div>
                 <div v-bind:style="lineStyle">
                     <select v-model="target" v-bind:style="selectStyle">
                         <option disabled selected value="">-国家-</option>
@@ -33,7 +33,7 @@ Vue.component("decision-board", {
                     </select>
                     <input 
                         v-show="target!==''" v-bind:style="buttonStyle" 
-                        type="button" value="递交盟书" v-on:click="submitAlly()" 
+                        type="button" value="递交盟书" v-on:click="submitAlly()"
                     />
                     <input 
                         v-bind:style="buttonStyle" 
@@ -43,7 +43,7 @@ Vue.component("decision-board", {
             </section>
             <section v-else-if="stage === 1 && player[orders[active]] === 2">
                 <div v-bind:style="descStyle">{{getStatesAllies(state[activeState.code]) || "无盟友"}}</div>
-                <div v-bind:style="descStyle">请选择想要毁约的国家</div>
+                <div v-bind:style="descStyle">请选择想要对其毁约的国家</div>
                 <div v-bind:style="lineStyle">
                     <select v-model="target" v-bind:style="selectStyle">
                         <option disabled selected value="">-国家-</option>
@@ -67,12 +67,13 @@ Vue.component("decision-board", {
                 <div v-bind:style="descStyle">
                     {{getStatesAllies(state[activeState.code]) || "无盟友"}}
                 </div>
-                <div v-bind:style="descStyle">请将指令拖拽至目标领地</div>
+                <div v-bind:style="descStyle">请将指令拖拽至己方目标领地</div>
                 <div v-bind:style="lineStyle">
                     <span 
                         v-for="order in getOrdersInfo()" 
                         draggable="true" @dragstart="recordSelectedOrder(order.code)"
                         v-bind:style="state[activeState.code].order.indexOf(order.code)===-1?orderStyle:setStyle"
+                        v-bind:title="getOrderDesc(order.type)"
                     >
                         {{order.name}}
                     </span>
