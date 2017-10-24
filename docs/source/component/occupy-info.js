@@ -1,6 +1,6 @@
 Vue.component("occupy-info", {
     props: [
-        "definition", "data", "state", "player", "stage", "states",
+        "definition", "data", "state", "player", "stage", "states", "mist",
         "saveitemorder", "updatefocusvariable"
     ],
     template: `
@@ -16,7 +16,10 @@ Vue.component("occupy-info", {
             </div>
             <div v-bind:style="armyStyle">
                 <span 
-                    v-if="player!==-1&&data.army.length!==0&&data.occupy!==player&&states[player].ally.indexOf(data.occupy)===-1" 
+                    v-if="
+                        player !== -1 && data.army.length !== 0 && data.occupy !== player 
+                        && states[player].ally.indexOf(data.occupy) === -1 && mist === 1
+                    " 
                     class="fa fa-shield" aria-hidden="true"
                     style="background-color: transparent"
                     title="可战斗军团数 / 总军团数"
@@ -24,7 +27,7 @@ Vue.component("occupy-info", {
                     {{data.status.filter(function(a) {return a === 1}).length + "/" +  data.army.length}}
                 </span>
                 <template 
-                    v-else-if="data.army.length!==0" v-for="(a, i) in data.army"
+                    v-else-if="data.army.length !== 0" v-for="(a, i) in data.army"
                 >
                     <span 
                         v-bind:style="data.status[i]===1?'color:white;background-color:transparent':'color:darkgrey;background-color:transparent'" 

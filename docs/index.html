@@ -24,7 +24,9 @@
 				data = {
 					"settings": {
 						"delay": 3000,
-						"mode": 1
+						"mode": 1,
+						"basic": 0,
+						"mist": 1
 					},
 					"round": 0,
 					"stage": null,
@@ -44,7 +46,7 @@
 						[1, 5, 3, 6, 4, 2],
 						[]
 					],
-					"power": [0, 8, 5, 5, 5, 10, 5, 5, 0],
+					"power": [0, 8, 5, 3, 5, 10, 5, 5, 0],
 					"hero": [
 						[],
 						[1, 1, 1, 1, 1, 1], 
@@ -61,19 +63,19 @@
 					"cities": [
 						{"code": 0, "occupy": 0, "army": [], "status": [], "order": null},
 						{"code": 1, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 2, "occupy": 4, "army": [4, 8], "status": [1, 1], "order": null},
+						{"code": 2, "occupy": 4, "army": [8, 8], "status": [1, 1], "order": null},
 						{"code": 3, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 4, "occupy": 4, "army": [4, 8], "status": [1, 1], "order": null},
+						{"code": 4, "occupy": 4, "army": [8, 8], "status": [1, 1], "order": null},
 						{"code": 5, "occupy": 0, "army": [], "status": [], "order": null},
 						{"code": 6, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 7, "occupy": 3, "army": [1], "status": [1], "order": null},
+						{"code": 7, "occupy": 3, "army": [3], "status": [1], "order": null},
 						{"code": 8, "occupy": 3, "army": [0], "status": [1], "order": null},
 						{"code": 9, "occupy": 0, "army": [], "status": [], "order": null},
 						{"code": 10, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 11, "occupy": 7, "army": [0], "status": [1], "order": null},
+						{"code": 11, "occupy": 0, "army": [], "status": [], "order": null},
 						{"code": 12, "occupy": 0, "army": [], "status": [], "order": null},
 						{"code": 13, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 14, "occupy": 7, "army": [0], "status": [1], "order": null},
+						{"code": 14, "occupy": 7, "army": [0, 0], "status": [1, 1], "order": null},
 						{"code": 15, "occupy": 0, "army": [], "status": [], "order": null},
 						{"code": 16, "occupy": 0, "army": [], "status": [], "order": null},
 						{"code": 17, "occupy": 0, "army": [], "status": [], "order": null},
@@ -87,7 +89,7 @@
 						{"code": 25, "occupy": 0, "army": [], "status": [], "order": null},
 						{"code": 26, "occupy": 0, "army": [], "status": [], "order": null},
 						{"code": 27, "occupy": 6, "army": [6, 6], "status": [1, 1], "order": null},
-						{"code": 28, "occupy": 5, "army": [5, 5, 5], "status": [1, 1, 1], "order": null},
+						{"code": 28, "occupy": 5, "army": [5, 5], "status": [1, 1], "order": null},
 						{"code": 29, "occupy": 0, "army": [], "status": [], "order": null},
 						{"code": 30, "occupy": 8, "army": [0], "status": [1], "order": null},
 						{"code": 31, "occupy": 0, "army": [], "status": [], "order": null},
@@ -141,6 +143,7 @@
 			    			v-bind:stage="stage"
 			    			v-bind:states="statesInfo"
 			    			v-bind:state="getStatesInfo()[cities[index].occupy]"
+			    			v-bind:mist="settings.mist"
 			    			@saveItemOrder="saveItemOrder"
 			    			@updateFocusVariable="updateFocusVariable"
 			    		></occupy-info>
@@ -188,6 +191,7 @@
 				    		v-bind:power="power"
 				    		v-bind:hero="hero[index]"
 				    		v-bind:rank="rank"
+				    		v-bind:mist="settings.mist"
 				    	>
 				    	</state-info>
 			    	</template>
@@ -209,15 +213,15 @@
 					</div>
 					<div style="display:inline-block;vertical-align:top;margin-left:30pt">
 						<h4>游戏速度</h4>
-						<select v-model.number="settings.delay" style="margin-top:5pt;width:100pt;padding:2pt 0">
+						<select v-model.number="settings.delay" style="margin-top:2pt;width:100pt;padding:2pt 0">
 							<option style="padding:2pt 0" value="1000"> 快 </option>
 							<option style="padding:2pt 0" value="2000"> 较快 </option>
 							<option style="padding:2pt 0" value="3000"> 正常 </option>
 							<option style="padding:2pt 0" value="4000"> 较慢 </option>
 							<option style="padding:2pt 0" value="5000"> 慢 </option>
 						</select>
-						<h4 style="margin-top:15pt">游戏模式</h4>
-						<select v-model.number="settings.mode" style="margin-top:5pt;width:100pt;padding:2pt 0"
+						<h4 style="margin-top:5pt">游戏模式</h4>
+						<select v-model.number="settings.mode" style="margin-top:2pt;width:100pt;padding:2pt 0"
 							v-on:change="removeSelect"
 						>
 							<option style="padding:2pt 0; background-color: transparent" value="0" 
@@ -232,6 +236,18 @@
 							</option>
 							<!--<option style="padding:2pt 0" value="2"> 灭国统一 </option>-->
 						</select>
+						<template v-if="settings.mode!==0">
+							<h4 style="margin-top:5pt">游戏难度</h4>
+							<select v-model.number="settings.basic" style="margin-top:2pt;width:100pt;padding:2pt 0">
+								<option style="padding:2pt 0" value="0"> 容易 </option>
+								<option style="padding:2pt 0" value="1"> 困难 </option>
+							</select>
+							<h4 style="margin-top:5pt">战争迷雾</h4>
+							<select v-model.number="settings.mist" style="margin-top:2pt;width:100pt;padding:2pt 0">
+								<option style="padding:2pt 0" value="0"> 关 </option>
+								<option style="padding:2pt 0" value="1"> 开 </option>
+							</select>
+						</template>
 					</div>
 					<div style="display:block;margin-top:5pt">
 						<h3 style="display:inline-block;vertical-align:middle;color:lightgrey">

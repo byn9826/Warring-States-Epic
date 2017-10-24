@@ -57,21 +57,21 @@ Vue.mixin({
                 if (player[cityData[c].occupy] === 0) {
                     basic = 12;
                 } else if (player[cityData[c].occupy] === 2) {
-                    basic = 9;
+                    basic = 2 * (app.rank.length + 5 - app.rank.indexOf(cityData[c].occupy));
                 } else if (cityData[c].occupy !== cityData[from].occupy) {
-                    basic = 6;
+                    basic = app.rank.length + 5 - app.rank.indexOf(cityData[c].occupy);
                 } else {
                     basic = 1;
                 }
                 if (cityData[c].occupy !== cityData[from].occupy) {
                     if (this.getStatesBaseLevel()[cityData[from].occupy][3].indexOf(c) !== -1) {
-                        basic *= 24;
+                        basic *= 384;
                     } else if (this.getStatesBaseLevel()[cityData[from].occupy][2].indexOf(c) !== -1) {
-                        basic *= 12;
+                        basic *= 96;
                     } else if (this.getStatesBaseLevel()[cityData[from].occupy][1].indexOf(c) !== -1) {
-                        basic *= 6;
+                        basic *= 24;
                     } else if (this.getStatesBaseLevel()[cityData[from].occupy][0].indexOf(c) !== -1) {
-                        basic *= 3;
+                        basic *= 6;
                     }
                 } else {
                     if (this.getStatesBaseLevel()[cityData[from].occupy][3].indexOf(c) !== -1) {

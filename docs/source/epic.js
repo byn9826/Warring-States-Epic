@@ -171,10 +171,10 @@ var app = new Vue({
                 })
                 this.addNewHistory("各国众将领请兵出征");
             } 
-            if ([6, 7, 8, 9].indexOf(result[1]) !== -1) {
+            if ([6, 7, 8].indexOf(result[1]) !== -1) {
                 this.wild += 1;
                 this.addNewHistory("四夷势力增长");
-            } else if (result[1] === 10) {
+            } else if ([9].indexOf(result[1]) !== -1) {
                 var damage;
                 this.statesInfo.forEach(function(state, i) {
                     if (this.player[i] !== 0 && state.live) {
@@ -223,6 +223,11 @@ var app = new Vue({
             }
         },
         startGame: function() {
+            if (this.settings.basic === 1) {
+                this.power.splice(
+                    this.player.indexOf(2), 1, this.power[this.player.indexOf(2)] - 8
+                );
+            }
             this.stage = 0;
             this.$nextTick(function () {
                 var mouseX = null, mouseY = null, drag = false;

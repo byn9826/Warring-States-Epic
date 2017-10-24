@@ -1,5 +1,5 @@
 Vue.component("state-info", {
-    props: ["definition", "player", "data", "power", "hero", "relations", "rank"],
+    props: ["definition", "player", "data", "power", "hero", "relations", "rank", "mist"],
     template: `
         <div v-bind:style="cardStyle" v-on:mouseleave="leaveBoard">
             <div v-bind:style="headerStyle">
@@ -15,7 +15,7 @@ Vue.component("state-info", {
             <div v-bind:style="strengthStyle">
                 <span v-bind:style="armyStyle">
                     兵力{{data.army.length}}
-                    <span v-if="player">
+                    <span v-if="mist === 0 || player">
                         {{"- " + getArmyDetail}}
                     </span>
                 </span>

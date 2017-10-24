@@ -55,9 +55,9 @@ Vue.mixin({
                 }
             });
             var orders = [], dice, i;
-            var attack = [0, 1, 2, 3, 4, 5];
-            var support = [6, 7, 8];
-            var disturb = [9, 10, 11];
+            var attack = [0, 1, 2, 3];
+            var support = [4, 5, 6, 7];
+            var disturb = [8, 9, 10, 11];
             var rest = [12, 13, 14, 15, 16, 17];
             odds.forEach(function(o, index) {
                 dice = Math.random();

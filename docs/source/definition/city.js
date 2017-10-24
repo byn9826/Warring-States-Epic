@@ -83,7 +83,7 @@ Vue.mixin({
                     resource: [0,1], type: 0, nearby: [17, 30, 22, 34, 29]
                 },
                 {
-                    code: 20, name: "饶安", position: [725, 200], location: [715, 170], 
+                    code: 20, name: "饶安", position: [725, 200], location: [715, 160], 
                     resource: [1], type: 2, nearby: [6, 4, 21, 22]
                 },
                 {

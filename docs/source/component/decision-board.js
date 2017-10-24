@@ -198,7 +198,7 @@ Vue.component("decision-board", {
                     <tr>
                         <td>
                             进攻部队:<br />
-                            <span v-if="player[cities[reminder].occupy] === 2 && defendHero === null" 
+                            <span v-if="player[cities[reminder].occupy] === 2 && defendHero === null && settings.mist === 1" 
                                 class="fa fa-shield" aria-hidden="true"
                             >
                                 {{target.length}}
@@ -213,7 +213,7 @@ Vue.component("decision-board", {
                         </td>
                         <td>
                             驻防部队:<br />
-                            <span v-if="player[activeState.code] === 2 && attackHero === null" 
+                            <span v-if="player[activeState.code] === 2 && attackHero === null && settings.mist === 1" 
                                 class="fa fa-shield" aria-hidden="true"
                             >
                                 {{cities[reminder].status.filter(function(s){return s===1;}).length}}
@@ -232,7 +232,7 @@ Vue.component("decision-board", {
                     <tr>
                         <td>
                             援军:<br />
-                            <span v-if="player[cities[reminder].occupy] === 2 && defendHero === null" 
+                            <span v-if="player[cities[reminder].occupy] === 2 && defendHero === null && settings.mist === 1" 
                                 class="fa fa-shield" aria-hidden="true"
                             >
                                 {{
@@ -285,7 +285,7 @@ Vue.component("decision-board", {
                         </td>
                         <td>
                             援军:<br />
-                            <span v-if="player[activeState.code] === 2 && attackHero === null" 
+                            <span v-if="player[activeState.code] === 2 && attackHero === null && settings.mist === 1" 
                                 class="fa fa-shield" aria-hidden="true"
                             >
                                 {{calDefendNum - cities[reminder].status.filter(function(s){return s===1;}).length}}
@@ -1068,7 +1068,7 @@ Vue.component("decision-board", {
                     }
                 } else if (this.stage === 1) {
                 //毁约阶段
-                    if (!this.state[this.orders[newVal]].live) {
+                    if (!this.state[this.orders[newVal]].live || this.state[this.orders[newVal]].ally.length === 0) {
                         this.nextActive();
                     } else if (this.player[this.orders[newVal]] !== 2) {
                         this.target = this.AIbreachAllyOrNot(

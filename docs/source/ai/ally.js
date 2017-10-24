@@ -24,8 +24,6 @@ Vue.mixin({
             if ([4, 5, 6].indexOf(request) !== -1 && [4, 5, 6].indexOf(receive) !== -1) {
                 if (deactive === 0) {
                     chance += 0.1;
-                } else if (deactive === 1) {
-                    chance += 0.5;
                 }
             } 
             if (app.$data.player[request] === 2) {
@@ -61,7 +59,7 @@ Vue.mixin({
             var targetRatios = [];
             targetAllies.forEach(function(target) {
                 targetRatios.push(
-                    (rank.length - 1 - relations[active].indexOf(target.code)) / rank.length
+                    ((rank.length - 1 - relations[active].indexOf(target.code)) / rank.length) + 7
                 );
             });
             rank.forEach(function(r, i) {
@@ -69,13 +67,11 @@ Vue.mixin({
                     targetRatios[targetAllies.indexOf(r)] *= (i + 1) / rank.length;
                     if ([4, 5, 6].indexOf(r.code) !== -1 && [4, 5, 6].indexOf(active) !== -1) {
                         if (deactive === 0) {
-                            targetRatios[targetAllies.indexOf(r)] *= 2;
-                        } else if (deactive === 1) {
                             targetRatios[targetAllies.indexOf(r)] *= 1.5;
                         }
                     } 
                     if (app.$data.player[r.code] === 2) {
-                        targetRatios[targetAllies.indexOf(r)] /= 4;
+                        targetRatios[targetAllies.indexOf(r)] /= 2;
                     }
                 }
             });

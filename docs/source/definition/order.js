@@ -6,13 +6,13 @@ Vue.mixin({
                 {code: 1, name: "战备", type: 0, bonus: 1},
                 {code: 2, name: "战备", type: 0, bonus: 1},
                 {code: 3, name: "战备", type: 0, bonus: 1},
-                {code: 4, name: "战备", type: 0, bonus: 1},
-                {code: 5, name: "战备", type: 0, bonus: 1},
                 
+                {code: 4, name: "支援", type: 1, bonus: 0},
+                {code: 5, name: "支援", type: 1, bonus: 0},
                 {code: 6, name: "支援", type: 1, bonus: 0},
                 {code: 7, name: "支援", type: 1, bonus: 0},
-                {code: 8, name: "支援", type: 1, bonus: 0},
                 
+                {code: 8, name: "劫掠", type: 2, bonus: 0},
                 {code: 9, name: "劫掠", type: 2, bonus: 0},
                 {code: 10, name: "劫掠", type: 2, bonus: 0},
                 {code: 11, name: "劫掠", type: 2, bonus: 0},
