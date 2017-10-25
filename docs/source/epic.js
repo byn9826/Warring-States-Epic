@@ -247,6 +247,18 @@ var app = new Vue({
                     mouseY = null; 
                 }); 
             });
+        },
+        setMusic: function() {
+            if (this.settings.music === 1) {
+                this.$refs.music.play();
+                this.$refs.music.volume = this.settings.volume / 10;
+            } else {
+                this.$refs.music.pause();
+                this.$refs.music.currentTime = 0;
+            }
+        },
+        setVolume: function() {
+            this.$refs.music.volume = this.settings.volume / 10;
         }
     },
     computed: {
