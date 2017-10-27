@@ -18,7 +18,8 @@ var app = new Vue({
         wild: 1,
         situation: 0,
         //no need to save
-        save: save
+        save: save,
+        scenerio: scenerio
     },
     methods: {
         toNextStage: function() {
@@ -61,7 +62,7 @@ var app = new Vue({
                     this.round += 1;
                 }
                 this.stage = 0;
-                if (this.mode !== 0) {
+                if (this.settings.mode !== 0) {
                     try {
                         const fs = require('fs');
                         const path = require('path');
@@ -247,18 +248,6 @@ var app = new Vue({
                 this.attachScroll();
             });
         },
-        setMusic: function() {
-            if (this.settings.music === 1) {
-                this.$refs.music.play();
-                this.$refs.music.volume = this.settings.volume / 10;
-            } else {
-                this.$refs.music.pause();
-                this.$refs.music.currentTime = 0;
-            }
-        },
-        setVolume: function() {
-            this.$refs.music.volume = this.settings.volume / 10;
-        },
         loadSave: function(i) {
             try {
 				const fs = require('fs');
@@ -290,6 +279,27 @@ var app = new Vue({
                 mouseX = null; 
                 mouseY = null; 
             }); 
+        },
+        setMusic: function() {
+            if (this.settings.music === 1) {
+                this.$refs.music.play();
+                this.$refs.music.volume = this.settings.volume / 10;
+            } else {
+                this.$refs.music.pause();
+                this.$refs.music.currentTime = 0;
+            }
+        },
+        setVolume: function() {
+            this.$refs.music.volume = this.settings.volume / 10;
+        },
+        selectScenerio: function(i) {
+            this.scenerio.push(data)
+            for (var key in this.scenerio[i]) {
+                if (!this.scenerio[i].hasOwnProperty(key)) continue;
+                app.$data[key] = this.scenerio[i][key];
+            }
+            data = this.scenerio[i];
+            this.scenerio.splice(i, 1);
         }
     },
     computed: {

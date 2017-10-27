@@ -12,3 +12,7 @@ Build the game by Electron for Windows
 1. git clone https://github.com/byn9826/Warring-States-Epic.git  
 2. npm install  
 3. electron .  
+
+Customize
+--
+Scenerio: /docs/scenario  

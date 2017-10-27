@@ -26,7 +26,12 @@
 				save.sort(function(a, b) {
 					return a.time < b.time;
 				});
-
+				var scenerios = path.join(__dirname, './scenario/');
+				var scenerio = [], content;
+				fs.readdirSync(scenerios).forEach(function(file) {
+					content = JSON.parse(fs.readFileSync(scenerios + file, {encoding:'utf-8'}));
+					scenerio.push(content);
+				});
 				// var loc = path.join(__dirname, './scenario/default.json');
 				// var file = fs.readFileSync(loc, {encoding:'utf-8'});
 				// data = JSON.parse(file);
@@ -34,7 +39,7 @@
 			data = {
 				"settings": {
 					"name": "问鼎中原",
-					"desc": "齐楚燕赵韩魏七雄并起,开启了争夺战国霸权的时代",
+					"desc": "齐楚燕赵韩魏七雄并起",
 					"delay": 3000,
 					"mode": 1,
 					"basic": 0,
@@ -299,6 +304,22 @@
 							v-on:click="loadSave(i)"
 						>
 							{{s.name.slice(0, -5)}}
+						</div>
+					</div>
+					<div v-if="scenerio !== null && scenerio !== undefined">
+						<h3 style="display: block; color: lightgrey; margin-bottom: 5pt">
+							更换剧本
+						</h3>
+						<div v-for="(s, i) in scenerio" 
+							style="
+								background-color: darkgrey; display: inline-block; 
+								vertical-align: middle; margin-right: 10pt; padding: 10pt 5pt; 
+								border-radius: 3pt; cursor: pointer
+							"
+							v-bind:title="s.settings.desc"
+							v-on:click="selectScenerio(i)"
+						>
+							{{s.settings.name}}
 						</div>
 					</div>
 					<div style="display:block;margin-top:15pt">

@@ -1,9 +1,9 @@
-const electron = require( 'electron' );
+const electron = require('electron');
 const app = electron.app;
 const Menu = electron.Menu;
 const BrowserWindow = electron.BrowserWindow;
-const path = require( 'path' );
-const url = require( 'url' );
+const path = require('path');
+const url = require('url');
 let mainWindow;
 const template = [
   {
@@ -26,11 +26,11 @@ app.on('ready', () => {
         height: 600,
         width: 800
     });
-    // const menu = Menu.buildFromTemplate(template);
-    // Menu.setApplicationMenu(menu);
+    const menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
     mainWindow.maximize();
-    mainWindow.loadURL( url.format({
-        pathname: path.join( __dirname, './docs/index.html' ),
+    mainWindow.loadURL(url.format({
+        pathname: path.join(__dirname, './docs/index.html'),
         protocol: 'file:',
         slashes: true
     }));
@@ -39,14 +39,13 @@ app.on('ready', () => {
     });
 });
 
-
-app.on('window-all-closed', function () {
+app.on('window-all-closed', function() {
   if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
-app.on('activate', function () {
+app.on('activate', function() {
   if (mainWindow === null) {
     createWindow();
   }
