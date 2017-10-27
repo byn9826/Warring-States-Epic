@@ -13,96 +13,105 @@
 		<script>
 			var data;
 			try {
-				const fs = require( 'fs' );
-				const path = require( 'path' );
-				const {remote} = require('electron');
-				const loc = path.join( __dirname, './scenario/default.json');
-				let file;
-				file = fs.readFileSync(loc, {encoding:'utf-8'});
-				data = JSON.parse(file);
-			} catch(e) {
-				data = {
-					"settings": {
-						"name": "问鼎中原",
-						"desc": "齐楚燕赵韩魏七雄并起,开启了争夺战国霸权的时代",
-						"delay": 3000,
-						"mode": 1,
-						"basic": 0,
-						"mist": 1,
-						"music": 0,
-						"volume": 6
-					},
-					"round": 0,
-					"stage": null,
-					"history": [],
-					"player": [0, 1, 1, 1, 1, 1, 1, 1, 0],
-					"allies": [
-						
-					],
-					"relations": [
-						[],
-						[7, 5, 2, 4, 6, 3],
-						[3, 5, 4, 6, 1, 7],
-						[2, 5, 6, 4, 1, 7],
-						[5, 6, 2, 1, 3, 7],
-						[6, 4, 3, 2, 1, 7],
-						[5, 4, 3, 2, 7, 1],
-						[1, 5, 3, 6, 4, 2],
-						[]
-					],
-					"power": [0, 8, 5, 3, 5, 10, 5, 5, 0],
-					"hero": [
-						[],
-						[1, 1, 1, 1, 1, 1], 
-						[1, 1, 1, 1, 1, 1], 
-						[1, 1, 1, 1, 1, 1],
-						[1, 1, 1, 1, 1, 1], 
-						[1, 1, 1, 1, 1, 1], 
-						[1, 1, 1, 1, 1, 1],
-						[1, 1, 1, 1, 1, 1],
-						[]
-					],
-					"fame": [1, 2, 6, 4, 7, 3, 5],
-					"force": [2, 7, 6, 4, 5, 1, 3],
-					"cities": [
-						{"code": 0, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 1, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 2, "occupy": 4, "army": [8, 8], "status": [1, 1], "order": null},
-						{"code": 3, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 4, "occupy": 4, "army": [8, 8], "status": [1, 1], "order": null},
-						{"code": 5, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 6, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 7, "occupy": 3, "army": [3], "status": [1], "order": null},
-						{"code": 8, "occupy": 3, "army": [0], "status": [1], "order": null},
-						{"code": 9, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 10, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 11, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 12, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 13, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 14, "occupy": 7, "army": [0, 0], "status": [1, 1], "order": null},
-						{"code": 15, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 16, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 17, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 18, "occupy": 5, "army": [0], "status": [1], "order": null},
-						{"code": 19, "occupy": 6, "army": [6, 6], "status": [1, 1], "order": null},
-						{"code": 20, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 21, "occupy": 1, "army": [1, 8], "status": [1, 1], "order": null},
-						{"code": 22, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 23, "occupy": 1, "army": [0], "status": [1], "order": null},
-						{"code": 24, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 25, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 26, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 27, "occupy": 6, "army": [6, 6], "status": [1, 1], "order": null},
-						{"code": 28, "occupy": 5, "army": [5, 5], "status": [1, 1], "order": null},
-						{"code": 29, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 30, "occupy": 8, "army": [0], "status": [1], "order": null},
-						{"code": 31, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 32, "occupy": 2, "army": [0], "status": [1], "order": null},
-						{"code": 33, "occupy": 2, "army": [2, 8], "status": [1, 1], "order": null},
-						{"code": 34, "occupy": 0, "army": [], "status": [], "order": null},
-						{"code": 35, "occupy": 2, "army": [0], "status": [1], "order": null}
-					]
-				}
+				const fs = require('fs');
+				const path = require('path');
+				var dir = path.join(__dirname, './save/');
+				var save = [];
+				fs.readdirSync(dir).forEach(function(file) {
+					save.push({
+						name: file,
+						time: new Date(fs.statSync(dir + file).mtime).getTime()
+					})
+				});
+				save.sort(function(a, b) {
+					return a.time < b.time;
+				});
+
+				// var loc = path.join(__dirname, './scenario/default.json');
+				// var file = fs.readFileSync(loc, {encoding:'utf-8'});
+				// data = JSON.parse(file);
+			} catch(e) {}
+			data = {
+				"settings": {
+					"name": "问鼎中原",
+					"desc": "齐楚燕赵韩魏七雄并起,开启了争夺战国霸权的时代",
+					"delay": 3000,
+					"mode": 1,
+					"basic": 0,
+					"mist": 1,
+					"music": 0,
+					"volume": 6
+				},
+				"round": 0,
+				"stage": null,
+				"history": [],
+				"player": [0, 1, 1, 1, 1, 1, 1, 1, 0],
+				"allies": [
+					
+				],
+				"relations": [
+					[],
+					[7, 5, 2, 4, 6, 3],
+					[3, 5, 4, 6, 1, 7],
+					[2, 5, 6, 4, 1, 7],
+					[5, 6, 2, 1, 3, 7],
+					[6, 4, 3, 2, 1, 7],
+					[5, 4, 3, 2, 7, 1],
+					[1, 5, 3, 6, 4, 2],
+					[]
+				],
+				"power": [0, 8, 5, 3, 5, 10, 5, 5, 0],
+				"hero": [
+					[],
+					[1, 1, 1, 1, 1, 1], 
+					[1, 1, 1, 1, 1, 1], 
+					[1, 1, 1, 1, 1, 1],
+					[1, 1, 1, 1, 1, 1], 
+					[1, 1, 1, 1, 1, 1], 
+					[1, 1, 1, 1, 1, 1],
+					[1, 1, 1, 1, 1, 1],
+					[]
+				],
+				"fame": [1, 2, 6, 4, 7, 3, 5],
+				"force": [2, 7, 6, 4, 5, 1, 3],
+				"cities": [
+					{"code": 0, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 1, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 2, "occupy": 4, "army": [8, 8], "status": [1, 1], "order": null},
+					{"code": 3, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 4, "occupy": 4, "army": [8, 8], "status": [1, 1], "order": null},
+					{"code": 5, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 6, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 7, "occupy": 3, "army": [3], "status": [1], "order": null},
+					{"code": 8, "occupy": 3, "army": [0], "status": [1], "order": null},
+					{"code": 9, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 10, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 11, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 12, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 13, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 14, "occupy": 7, "army": [0, 0], "status": [1, 1], "order": null},
+					{"code": 15, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 16, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 17, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 18, "occupy": 5, "army": [0], "status": [1], "order": null},
+					{"code": 19, "occupy": 6, "army": [6, 6], "status": [1, 1], "order": null},
+					{"code": 20, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 21, "occupy": 1, "army": [1, 8], "status": [1, 1], "order": null},
+					{"code": 22, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 23, "occupy": 1, "army": [0], "status": [1], "order": null},
+					{"code": 24, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 25, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 26, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 27, "occupy": 6, "army": [6, 6], "status": [1, 1], "order": null},
+					{"code": 28, "occupy": 5, "army": [5, 5], "status": [1, 1], "order": null},
+					{"code": 29, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 30, "occupy": 8, "army": [0], "status": [1], "order": null},
+					{"code": 31, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 32, "occupy": 2, "army": [0], "status": [1], "order": null},
+					{"code": 33, "occupy": 2, "army": [2, 8], "status": [1, 1], "order": null},
+					{"code": 34, "occupy": 0, "army": [], "status": [], "order": null},
+					{"code": 35, "occupy": 2, "army": [0], "status": [1], "order": null}
+				]
 			}
 		</script>
 		<div v-cloak id="app" onselectstart="return false;">
@@ -265,7 +274,7 @@
 							<option style="padding:2pt 0" value="0"> 关 </option>
 							<option style="padding:2pt 0" value="1"> 开 </option>
 						</select>
-						<h4>音量大小</h4>
+						<h4 style="margin-top:5pt">音量大小</h4>
 						<select v-model.number="settings.volume" v-on:change="setVolume"
 							style="margin-top:2pt;width:100pt;padding:2pt 0"
 						>
@@ -280,6 +289,17 @@
 							<option style="padding:2pt 0" value="9"> 9 </option>
 							<option style="padding:2pt 0" value="10"> 10 </option>
 						</select>
+					</div>
+					<div v-if="save !== null && save !== undefined" class="start-setting" 
+						style="margin-left: 80pt; border-left: 2pt solid darkgrey; padding: 0 25pt; height:180pt; overflow-y: scroll"
+					>
+						<h4 style="margin-bottom: 5pt">读取存档</h4>
+						<div v-for="(s, i) in save" 
+							style="margin-bottom: 5pt; font-size: 11pt; cursor: pointer; color: darkgrey"
+							v-on:click="loadSave(i)"
+						>
+							{{s.name.slice(0, -5)}}
+						</div>
 					</div>
 					<div style="display:block;margin-top:15pt">
 						<h3 style="display:inline-block;vertical-align:middle;color:lightgrey"

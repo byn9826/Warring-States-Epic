@@ -1,16 +1,33 @@
 const electron = require( 'electron' );
 const app = electron.app;
+const Menu = electron.Menu;
 const BrowserWindow = electron.BrowserWindow;
 const path = require( 'path' );
 const url = require( 'url' );
 let mainWindow;
+const template = [
+  {
+    label: 'View',
+    submenu: [
+      {role: 'reload'},
+      {role: 'forcereload'},
+      {type: 'separator'},
+      {role: 'resetzoom'},
+      {role: 'zoomin'},
+      {role: 'zoomout'},
+      {type: 'separator'},
+      {role: 'togglefullscreen'}
+    ]
+  }
+];
 
 app.on('ready', () => {
     mainWindow = new BrowserWindow({
         height: 600,
         width: 800
     });
-    //mainWindow.setMenu( null );
+    // const menu = Menu.buildFromTemplate(template);
+    // Menu.setApplicationMenu(menu);
     mainWindow.maximize();
     mainWindow.loadURL( url.format({
         pathname: path.join( __dirname, './docs/index.html' ),

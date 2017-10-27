@@ -16,7 +16,9 @@ var app = new Vue({
         item: null,
         focus: null,
         wild: 1,
-        situation: 0
+        situation: 0,
+        //no need to save
+        save: save
     },
     methods: {
         toNextStage: function() {
@@ -50,18 +52,23 @@ var app = new Vue({
                 this.fame = fames;
                 if (this.round === 9 && this.settings.mode === 1) {
                     alert(
-                        this.getHerosInfo()[this.rank[0].code][this.getHeroLeaderIndex()[this.rank[0].code]].name + "力敌群雄,成为战国霸主"
+                        this.getHerosInfo()[this.rank[0].code][
+                            this.getHeroLeaderIndex()[this.rank[0].code]
+                        ].name + "力敌群雄,成为战国霸主"
                     );
                     return false;
-                    // if (states.filter(function(f) { return f.live;}).length === 1) {
-                    //     alert(
-                    //         this.getHerosInfo()[this.rank[0]][this.getHeroLeaderIndex()[this.rank[0]]] + "一统华夏,史称始皇帝"
-                    //     )
-                    // }
                 } else {
                     this.round += 1;
                 }
                 this.stage = 0;
+                if (this.mode !== 0) {
+                    try {
+                        const fs = require('fs');
+                        const path = require('path');
+                        const location = path.join( __dirname, './save/', window.fileName + ".json");
+                        fs.writeFileSync(location, JSON.stringify(app.$data), 'utf-8'); 
+                    } catch(e) {}
+                }
             }
         },
         replaceCitisOccupy: function(from, to, move) {
@@ -229,23 +236,15 @@ var app = new Vue({
                 );
             }
             this.stage = 0;
+            try {
+				const fs = require('fs');
+                const path = require('path');
+                window.fileName = this.settings.name + "-" + this.getStatesInfo()[
+                    this.player.indexOf(2)
+                ].name + "-" + (fs.readdirSync(path.join(__dirname, './save/')).length + 1);
+			} catch(e) {}
             this.$nextTick(function () {
-                var mouseX = null, mouseY = null, drag = false;
-                document.getElementById("main").addEventListener('mousemove', function(e) { 
-                    if(drag === true){
-                        window.scrollTo(window.scrollX + mouseX - e.pageX, window.scrollY + mouseY - e.pageY);
-                    }
-                });
-                document.getElementById("main").addEventListener('mousedown', function(e){ 
-                    drag = true; 
-                    mouseX = e.pageX; 
-                    mouseY = e.pageY;
-                });
-                document.getElementById("main").addEventListener('mouseup', function(e){ 
-                    drag = false; 
-                    mouseX = null; 
-                    mouseY = null; 
-                }); 
+                this.attachScroll();
             });
         },
         setMusic: function() {
@@ -259,6 +258,38 @@ var app = new Vue({
         },
         setVolume: function() {
             this.$refs.music.volume = this.settings.volume / 10;
+        },
+        loadSave: function(i) {
+            try {
+				const fs = require('fs');
+                const path = require('path');
+                window.fileName = this.save[i].name.slice(0, -5);
+                var loc = path.join(__dirname, './save/' + this.save[i].name);
+				var file = fs.readFileSync(loc, {encoding:'utf-8'});
+                var data = JSON.parse(file);
+                Object.assign(app.$data, data);
+			} catch(e) {}
+            this.$nextTick(function () {
+                this.attachScroll();
+            });
+        },
+        attachScroll: function() {
+            var mouseX = null, mouseY = null, drag = false;
+            document.getElementById("main").addEventListener('mousemove', function(e) { 
+                if(drag === true){
+                    window.scrollTo(window.scrollX + mouseX - e.pageX, window.scrollY + mouseY - e.pageY);
+                }
+            });
+            document.getElementById("main").addEventListener('mousedown', function(e){ 
+                drag = true; 
+                mouseX = e.pageX; 
+                mouseY = e.pageY;
+            });
+            document.getElementById("main").addEventListener('mouseup', function(e){ 
+                drag = false; 
+                mouseX = null; 
+                mouseY = null; 
+            }); 
         }
     },
     computed: {
