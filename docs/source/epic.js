@@ -154,13 +154,12 @@ var app = new Vue({
                 this.cities.forEach(function(city) {
                     if (this.getCitySpecialArmy(city.occupy, city.code)) {
                         aim = 4 - city.army.length;
-                        gap = this.getStatesSupply()[this.statesInfo[city.occupy].supply] - this.statesInfo[city.occupy].army.length;
-                        if (gap < aim) {
-                            aim = gap;
-                        }
-                        aim += city.army.length;
-                        this.cities[city.code].army = new Array(aim).fill(city.occupy);
-                        this.cities[city.code].status = new Array(aim).fill(1);
+                        this.cities[city.code].army = this.cities[city.code].army.concat(
+                            new Array(aim).fill(0)
+                        );
+                        this.cities[city.code].status = this.cities[city.code].status.concat(
+                            new Array(aim).fill(1)
+                        );
                     } 
                 }.bind(this));
                 this.addNewHistory("各国在国都募得义勇兵");

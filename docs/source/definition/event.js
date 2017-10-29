@@ -2,7 +2,7 @@ Vue.mixin({
     methods: {
         getEventsInfo: function() {
             return [
-                {code: 0, name: "义勇兵", desc: "各国在国都免费募得满编精兵"},
+                {code: 0, name: "义勇兵", desc: "各国在国都免费募得满编步兵"},
                 {code: 1, name: "大变法", desc: "各国获得与领土国力点数相等的国力"},
                 {code: 2, name: "将请缨", desc: "各国所有将领均调整为待命状态"},
                 {code: 3, name: "无为而治", desc: "无事发生"},

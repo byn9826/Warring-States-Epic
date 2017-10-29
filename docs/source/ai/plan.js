@@ -1,96 +1,193 @@
 Vue.mixin({
     methods: {
         AIplanResult: function(own, ally, state, cities, relations, available, cityInfo) {
-            var protecters = [];
-            var nearbys = [];
+            var ownArmyStrength = [];
+            var ownArmyLength = [];
+            var ownNearbyCities = [];
+            var ownNearbyCitiesLength = [];
             available.forEach(function(c) {
-                protecters.push(cities[c].army.length);
-                nearbys.push(cityInfo[c].nearby);
-            });
-            var enemies = new Array(available.length).fill(0);
-            var friends = new Array(available.length).fill(0);
-            nearbys.forEach(function(n, i) {
-                n.forEach(function(s) {
-                    if (cities[s].occupy !== own && ally.indexOf(cities[s].occupy) === -1) {
-                        enemies[i] += cities[s].army.length;
-                    } else if (cities[s].occupy === own) {
-                        friends[i] += cities[s].army.length;
+                ownArmyLength.push(cities[c].army.length);
+                ownArmyStrength.push(
+                    cities[c].army.reduce(function(a, b) {
+                        return a + (this.getArmyInfo()[b].attack + this.getArmyInfo()[b].defend) / 2;
+                    }.bind(this), 0)
+                );
+                ownNearbyCitiesLength.push(cityInfo[c].nearby.length);
+                ownNearbyCities.push(cityInfo[c].nearby);
+            }.bind(this));
+            var nearbyFriendsArmyLength = new Array(available.length).fill(0);
+            var nearbyFriendsArmyStrength = new Array(available.length).fill(0);
+            var nearbyFriendsCitiesLength = new Array(available.length).fill(0);
+            var nearbyEnemyArmyLength = new Array(available.length).fill(0);
+            var nearbyEnemyArmyStrength = new Array(available.length).fill(0);
+            var nearbyEnemyCitiesLength = new Array(available.length).fill(0);
+            var nearbyFriendsnearbyEnemyLength = new Array(available.length).fill(0);
+            ownNearbyCities.forEach(function(cs, index) {
+                cs.forEach(function(c) {
+                    if (cities[c].occupy === own && c !== available[index]) {
+                        nearbyFriendsArmyLength[index] += cities[c].army.length;
+                        nearbyFriendsArmyStrength[index] += cities[c].army.reduce(function(a, b) {
+                            return a + (this.getArmyInfo()[b].attack + this.getArmyInfo()[b].defend) / 2;
+                        }.bind(this), 0);
+                        nearbyFriendsCitiesLength[index] += 1;
+                        cityInfo[c].nearby.forEach(function(ct) {
+                            if (cities[ct].occupy !== own && ally.indexOf(cities[ct].occupy) === -1) {
+                                nearbyFriendsnearbyEnemyLength[index] += cities[ct].army.length;
+                            }
+                        });
+                    } else if (cities[c].occupy !== own && ally.indexOf(cities[c].occupy) === -1) {
+                        nearbyEnemyCitiesLength[index] += cities[c].army.length;
+                        nearbyEnemyArmyStrength[index] += cities[c].army.reduce(function(a, b) {
+                            return a + (this.getArmyInfo()[b].attack + this.getArmyInfo()[b].defend) / 2;
+                        }.bind(this), 0);
+                        nearbyEnemyCitiesLength[index] += 1;
                     }
-                });
-            });
+                }.bind(this));
+            }.bind(this));
+            // console.log(available);
+            // console.log(ownArmyLength);
+            // console.log(ownArmyStrength);
+            // console.log(nearbyFriendsCitiesLength);
+            // console.log(nearbyEnemyCitiesLength);
+            // console.log(nearbyFriendsArmyLength);
+            // console.log(nearbyFriendsArmyStrength);
+            // console.log(nearbyEnemyArmyLength);
+            // console.log(nearbyEnemyArmyStrength);
+            // console.log(nearbyFriendsnearbyEnemyLength);
             var odds = [];
             available.forEach(function(a, i) {
-                if (protecters[i] === 1 && enemies[i] === 0 && friends[i] === 0) {
-                    odds.push([0.2, 0.2, 0.2, 1]);
-                } else if (protecters[i] === 1 && enemies[i] === 0 && friends[i] !== 0) {
-                    odds.push([0.3, 0.35, 0.35, 1]);
-                } else if (protecters[i] === 1 && enemies[i] !== 0 && friends[i] !== 0) {
-                    odds.push([0.4, 0.6, 0.8, 1]);
-                } else if (protecters[i] === 1 && enemies[i] !== 0 && friends[i] == 0) {
-                    odds.push([0.55, 0.55, 0.8, 1]);
-                } else if (protecters[i] === 2 && enemies[i] === 0 && friends[i] === 0) {
-                    odds.push([0.4, 0.4, 0.4, 1]);
-                } else if (protecters[i] === 2 && enemies[i] === 0 && friends[i] !== 0) {
-                    odds.push([0.5, 0.55, 0.55, 1]);
-                } else if (protecters[i] === 2 && enemies[i] !== 0 && friends[i] !== 0) {
-                    odds.push([0.5, 0.7, 0.9, 1]);
-                } else if (protecters[i] === 2 && enemies[i] !== 0 && friends[i] == 0) {
-                    odds.push([0.65, 0.65, 0.8, 1]);
-                } else if (protecters[i] === 3 && enemies[i] === 0 && friends[i] === 0) {
-                    odds.push([0.7, 0.7, 0.7, 1]);
-                } else if (protecters[i] === 3 && enemies[i] === 0 && friends[i] !== 0) {
-                    odds.push([0.7, 0.9, 0.9, 1]);
-                } else if (protecters[i] === 3 && enemies[i] !== 0 && friends[i] !== 0) {
-                    odds.push([0.75, 0.85, 0.95, 1]);
-                } else if (protecters[i] === 3 && enemies[i] !== 0 && friends[i] == 0) {
-                    odds.push([0.85, 0.85, 0.95, 1]);
-                } else if (protecters[i] === 4 && enemies[i] === 0 && friends[i] === 0) {
-                    odds.push([0.95, 0.95, 0.95, 1]);
-                } else if (protecters[i] === 4 && enemies[i] === 0 && friends[i] !== 0) {
-                    odds.push([0.9, 0.95, 0.95, 1]);
-                } else if (protecters[i] === 4 && enemies[i] !== 0 && friends[i] !== 0) {
-                    odds.push([0.9, 0.95, 1, 1]);
-                } else if (protecters[i] === 4 && enemies[i] !== 0 && friends[i] == 0) {
-                    odds.push([0.95, 0.95, 1, 1]);
+                odds[i] = [0, 0, 0, 0];
+                odds[i][0] = ownArmyLength[i];
+                if (ownArmyLength[i] === 1) {
+                    odds[i][1] = 2;
+                    odds[i][2] = 2;
+                    odds[i][3] = 4;
+                } else if (ownArmyLength[i] === 2) {
+                    odds[i][1] = 2.5;
+                    odds[i][2] = 1;
+                    odds[i][3] = 1;
+                } else if (ownArmyLength[i] === 3) {
+                    odds[i][1] = 1.5;
+                    odds[i][2] = 0.5;
+                } else {
+                    odds[i][1] = 1;
+                }
+                if (ownArmyStrength[i] < 4) {
+                    odds[i][0] += 1;
+                    odds[i][1] += 2;
+                    odds[i][2] += 2;
+                    odds[i][3] += 4;
+                } else if (ownArmyStrength[i] < 7) {
+                    odds[i][0] += 2;
+                    odds[i][1] += 2.5;
+                    odds[i][2] += 1;
+                    odds[i][3] += 1;
+                } else if (ownArmyStrength[i] < 10) {
+                    odds[i][0] += 3;
+                    odds[i][1] += 1.5;
+                    odds[i][2] += 0.5;
+                } else {
+                    odds[i][0] += 4;
+                    odds[i][1] += 1;
+                } 
+                if (nearbyFriendsCitiesLength[i] > nearbyEnemyCitiesLength[i] * 2) {
+                    odds[i][1] *= 1.5;
+                    odds[i][3] *= 1.5;
+                } else if (nearbyFriendsCitiesLength[i] > nearbyEnemyCitiesLength[i] * 1.5) {
+                    odds[i][1] *= 1.25;
+                    odds[i][3] *= 1.25;
+                } else if (nearbyEnemyCitiesLength[i] > nearbyFriendsCitiesLength[i] * 2) {
+                    odds[i][0] *= 1.5;
+                    odds[i][2] *= 1.5;
+                } else if (nearbyEnemyCitiesLength[i] > nearbyFriendsCitiesLength[i] * 1.5) {
+                    odds[i][0] *= 1.25;
+                    odds[i][2] *= 1.25;
+                }
+                if (nearbyEnemyCitiesLength[i] === 0) {
+                    odds[i][0] *= 1.3;
+                    odds[i][1] *= 1.1;
+                    odds[i][2] = 0;
+                    odds[i][3] *= 1.2;
+                }
+                if (nearbyFriendsCitiesLength[i] === 0) {
+                    odds[i][0] *= 1.2;
+                    odds[i][1] = 0;
+                    odds[i][2] *= 1.1;
+                }
+                if (nearbyFriendsArmyStrength[i] > nearbyEnemyArmyStrength[i] * 2) {
+                    odds[i][1] *= 1.5;
+                    odds[i][3] *= 1.5;
+                } else if (nearbyFriendsArmyStrength[i] > nearbyEnemyArmyStrength[i] * 1.5) {
+                    odds[i][1] *= 1.25;
+                    odds[i][3] *= 1.25;
+                } else if (nearbyEnemyArmyStrength[i] > nearbyFriendsArmyStrength[i] * 2) {
+                    odds[i][0] *= 1.5;
+                    odds[i][2] *= 1.5;
+                } else if (nearbyEnemyArmyStrength[i] > nearbyFriendsArmyStrength[i] * 1.5) {
+                    odds[i][0] *= 1.25;
+                    odds[i][2] *= 1.25;
+                } 
+                if (nearbyEnemyArmyStrength[i] === 0) {
+                    odds[i][0] *= 1.3;
+                    odds[i][1] *= 1.1;
+                    odds[i][2] = 0;
+                    odds[i][3] *= 1.2;
+                }
+                if (nearbyFriendsArmyStrength[i] === 0) {
+                    odds[i][0] *= 1.2;
+                    odds[i][1] = 0;
+                    odds[i][2] *= 1.1;
+                }
+                if (nearbyFriendsnearbyEnemyLength[i] === 0) {
+                    odds[i][0] *= 3;
+                    odds[i][1] = 0;
+                    odds[i][2] /= 3;
                 }
             });
-            var orders = [], dice, i;
-            var attack = [0, 1, 2, 3];
-            var support = [4, 5, 6, 7];
-            var disturb = [8, 9, 10, 11];
-            var rest = [12, 13, 14, 15, 16, 17];
-            odds.forEach(function(o, index) {
+            //console.log(odds);
+            var attack = [0, 1, 2];
+            var support = [3, 4, 5];
+            var disturb = [6, 7, 8];
+            var rest = [9, 10, 11];
+            var dice, sum, i;
+            var orders = new Array(available.length).fill(null);
+            odds.forEach(function(odd, index) {
+                if (attack.length === 0) {
+                    odd[0] = 0;
+                }
+                if (support.length === 0) {
+                    odd[1] = 0;
+                }
+                if (disturb.length === 0) {
+                    odd[2] = 0;
+                }
+                if (rest.length === 0) {
+                    odd[3] = 0;
+                }
                 dice = Math.random();
-                for (i = 0; i < o.length; i++) {
-                    if (o[i] >= dice) {
+                sum = odd.reduce(function(a, b) {return a + b;}, 0);
+                i = 0;
+                for (i; i < 4; i++) {
+                    if (i === 0) {
+                        odd[i] = odd[i] / sum;
+                    } else if (i === 3) {
+                        odd[i] = 1;
+                    } else {
+                        odd[i] = odd[i] / sum + odd[i - 1];
+                    }
+                    if (odd[i] >= dice) {
                         switch (i) {
                             case 0:
-                                if (attack.length !== 0) {
-                                    orders.push(attack.shift());
-                                } else {
-                                    orders.push(null);
-                                }
+                                orders[index] = attack.shift();
                                 break;
                             case 1:
-                                if (support.length !== 0) {
-                                    orders.push(support.shift());
-                                } else {
-                                    orders.push(null);
-                                }
+                                orders[index] = support.shift();
                                 break;
                             case 2:
-                                if (disturb.length !== 0) {
-                                    orders.push(disturb.shift());
-                                } else {
-                                    orders.push(null);
-                                }
+                                orders[index] = disturb.shift();
                                 break;
                             case 3:
-                                if (rest.length !== 0) {
-                                    orders.push(rest.shift());
-                                } else {
-                                    orders.push(null);
-                                }
+                                orders[index] = rest.shift();
                                 break;
                         }
                         break;

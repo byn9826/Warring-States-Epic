@@ -26,8 +26,8 @@ app.on('ready', () => {
         height: 600,
         width: 800
     });
-    const menu = Menu.buildFromTemplate(template);
-    Menu.setApplicationMenu(menu);
+    // const menu = Menu.buildFromTemplate(template);
+    // Menu.setApplicationMenu(menu);
     mainWindow.maximize();
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, './docs/index.html'),

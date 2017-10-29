@@ -26,7 +26,7 @@ Vue.component("occupy-info", {
                 >
                     {{data.status.filter(function(a) {return a === 1}).length + "/" +  data.army.length}}
                 </span>
-                <template 
+                <span 
                     v-else-if="data.army.length !== 0" v-for="(a, i) in data.army"
                 >
                     <span 
@@ -35,7 +35,7 @@ Vue.component("occupy-info", {
                         v-bind:title="data.status[i] === 1 ? getArmyInfo()[a].name + '军团,可战斗' : getArmyInfo()[a].name + '军团,休整中'"
                     >
                     </span>
-                </template>
+                </span>
             </div>
         </div>
     `,

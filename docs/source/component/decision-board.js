@@ -796,7 +796,7 @@ Vue.component("decision-board", {
                 app.$data.cities[this.focus].order = null;
                 this.$emit("addnewhistory", this.info);
                 this.nextActive();
-            } else if (this.cities[this.reminder].army.length === 0) {
+            } else if (this.cities[this.reminder].army.length === 0 && this.calDefendSupportPoint === 0) {
                 this.$emit(
                     "decreaserelation", this.cities[this.reminder].occupy, this.activeState.code, 2
                 );
@@ -1322,9 +1322,10 @@ Vue.component("decision-board", {
                 marginBottom: "5pt",
                 border: "1pt solid gold",
                 color: "gold",
-                padding: "1pt",
+                padding: "2pt",
                 borderRadius: "2pt",
-                cursor: "pointer"
+                cursor: "pointer",
+                textAlign: "center"
             },
             setStyle: {
                 display: "inline-block",
@@ -1334,9 +1335,10 @@ Vue.component("decision-board", {
                 marginBottom: "5pt",
                 border: "1pt solid darkslategrey",
                 color: "darkslategrey",
-                padding: "1pt",
+                padding: "2pt",
                 borderRadius: "2pt",
-                cursor: "pointer"
+                cursor: "pointer",
+                textAlign: "center"
             },
             boxStyle: {
                 display: "inline-block",

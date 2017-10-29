@@ -2,7 +2,7 @@
 	"settings": {
 		"name": "长平之战",
 		"desc": "秦赵争夺霸权之战",
-		"delay": 3000,
+		"delay": 1000,
 		"mode": 1,
 		"basic": 0,
 		"mist": 1,
