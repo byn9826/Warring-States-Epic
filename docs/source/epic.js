@@ -23,10 +23,43 @@ var app = new Vue({
     },
     methods: {
         toNextStage: function() {
+            var fames = [];
             if (this.stage < 7) {
-                this.stage += 1;
+                if (this.round === 9 && this.settings.mode === 1 && this.stage === 5) {
+                    this.statesInfo.forEach(function(state, index) {
+                        if (this.player[index] !== 0) {
+                            fames.push({
+                                cities: state.occupy.length,
+                                code: state.code
+                            });
+                        }
+                    }.bind(this));
+                    fames.sort(function(a, b) {
+                        if (b.cities - a.cities > 0) {
+                            return true;
+                        } else if ((b.cities - a.cities) === 0) {
+                            if ((this.fame.indexOf(a.code) - this.fame.indexOf(b.code)) > 0) {
+                                return true;
+                            }
+                            return false;
+                        } else {
+                            return false;
+                        }
+                    }.bind(this));
+                    fames = fames.map(function(f) {
+                        return f.code;
+                    });
+                    this.fame = fames;
+                    alert(
+                        this.getHerosInfo()[this.rank[0].code][
+                            this.getHeroLeaderIndex()[this.rank[0].code]
+                        ].name + "力敌群雄,成为战国霸主"
+                    );
+                    return false;
+                } else {
+                    this.stage += 1;
+                }
             } else {
-                var fames = [];
                 this.statesInfo.forEach(function(state, index) {
                     if (this.player[index] !== 0) {
                         fames.push({
@@ -51,16 +84,7 @@ var app = new Vue({
                     return f.code;
                 });
                 this.fame = fames;
-                if (this.round === 9 && this.settings.mode === 1) {
-                    alert(
-                        this.getHerosInfo()[this.rank[0].code][
-                            this.getHeroLeaderIndex()[this.rank[0].code]
-                        ].name + "力敌群雄,成为战国霸主"
-                    );
-                    return false;
-                } else {
-                    this.round += 1;
-                }
+                this.round += 1;
                 this.stage = 0;
                 if (this.settings.mode !== 0) {
                     try {
