@@ -8,7 +8,7 @@ Vue.mixin({
                     {code: 1, name: "田单", state: 1, strength: 3, kill: 0, safe: 4, skill: 0},
                     {code: 2, name: "齐威王", state: 1, strength: 2, kill: 0, safe: 0, skill: 1},
                     {code: 3, name: "田忌", state: 1, strength: 2, kill: 2, safe: 2, skill: 0},
-                    {code: 4, name: "邹忌", state: 1, strength: 2, kill: 2, safe: 2, skill: 0},
+                    {code: 4, name: "邹忌", state: 1, strength: 2, kill: 1, safe: 2, skill: 0},
                     {code: 5, name: "孟尝君", state: 1, strength: 1, kill: 0, safe: 0, skill: 2},
                 ],
                 [

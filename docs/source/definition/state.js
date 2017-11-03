@@ -7,7 +7,7 @@ Vue.mixin({
                 {code: 2, name: "楚", color: "darkgreen", motto: "驾龙辀兮乘雷,载云旗兮委蛇"},
                 {code: 3, name: "燕", color: "purple", motto: "风萧萧兮易水寒,壮士一去兮不复还"},
                 {code: 4, name: "赵", color: "darkred", motto: "望断云中无鹄起,飞来天外有鹰扬"},
-                {code: 5, name: "韩", color: "goldenrod", motto: "陆断牛马,水截鹄雁"},
+                {code: 5, name: "韩", color: "Chocolate", motto: "陆断牛马,水截鹄雁"},
                 {code: 6, name: "魏", color: "darkblue", motto: "衣三属之甲,操十二石之弩"},
                 {code: 7, name: "秦", color: "black", motto: "执敲扑而鞭笞天下,威振四海"},
                 {code: 8, name: "周", color: "RosyBrown", motto: ""}

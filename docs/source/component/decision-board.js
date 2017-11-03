@@ -1154,28 +1154,26 @@ Vue.component("decision-board", {
                         if (this.player[this.orders[newVal]] !== 2) {
                             var focus = this.AIselectAttackOrder(
                                 this.state[this.activeState.code], this.cities, 
-                                this.getCitiesInfo()
+                                this.getCitiesInfo(), this.state
                             );
                             app.$data.focus = focus;
-                            Vue.nextTick(function () {
-                                setTimeout(function () {
-                                    this.reminder = this.AIselectMarchDestination(
-                                        focus, this.cities, this.getCitiesInfo(), this.state, this.player
+                            setTimeout(function () {
+                                this.reminder = this.AIselectMarchDestination(
+                                    focus, this.cities, this.getCitiesInfo(), this.state, this.player
+                                );
+                                if (this.reminder === null || this.reminder === undefined) {
+                                    this.skipAttack();
+                                } else {
+                                    this.target = this.AIselectMarchForce(
+                                        this.focus, this.reminder, this.getCitiesInfo(), this.cities, this.state
                                     );
-                                    if (this.reminder === null || this.reminder === undefined) {
+                                    if (this.target.length === 0) {
                                         this.skipAttack();
                                     } else {
-                                        this.target = this.AIselectMarchForce(
-                                            this.focus, this.reminder, this.getCitiesInfo(), this.cities
-                                        );
-                                        if (this.target.length === 0) {
-                                            this.skipAttack();
-                                        } else {
-                                            this.confirmAttack();
-                                        }
+                                        this.confirmAttack();
                                     }
-                                }.bind(this), this.settings.delay);
-                            }.bind(this));
+                                }
+                            }.bind(this), this.settings.delay);
                         } else {
                             app.$data.focus = null;
                         }

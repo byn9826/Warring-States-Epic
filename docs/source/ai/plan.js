@@ -143,6 +143,12 @@ Vue.mixin({
                     odds[i][1] = 0;
                     odds[i][2] /= 3;
                 }
+                if (nearbyEnemyArmyStrength > ownArmyStrength) {
+                    odds[i][3] /= 2;
+                }
+                if (app.$data.mode === 1) {
+                    odds[i][3] *= (9 - app.$data.round) / 9;
+                }
             });
             //console.log(odds);
             var attack = [0, 1, 2];

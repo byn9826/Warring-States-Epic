@@ -181,7 +181,7 @@ var app = new Vue({
             if ([6, 7, 8].indexOf(result[1]) !== -1) {
                 this.wild += 1;
                 this.addNewHistory("四夷势力增长");
-            } else if ([9].indexOf(result[1]) !== -1) {
+            } else if ([9, 10].indexOf(result[1]) !== -1) {
                 var damage;
                 this.statesInfo.forEach(function(state, i) {
                     if (this.player[i] !== 0 && state.live) {
