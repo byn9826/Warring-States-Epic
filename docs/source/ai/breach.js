@@ -33,6 +33,9 @@ Vue.mixin({
                 if (state[ally].ally.length >=3 && state[ally].ally.length > most[1]) {
                     most[0] = ally;
                     most[1] = state[ally].occupy.length;
+                } else if (state[ally].ally.length >=2 && state[ally].ally.length > most[1] && app.$data.player[ally] === 2) {
+                    most[0] = ally;
+                    most[1] = state[ally].occupy.length;
                 }
                 hate[i] *= state[ally].occupy.length;
                 if ([4, 5, 6].indexOf(own) !== -1 && [4, 5, 6].indexOf(ally) !== -1) {
