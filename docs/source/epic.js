@@ -149,8 +149,8 @@ var app = new Vue({
             }
         },
         handleEvent: function(result) {
+            var aim;
             if (result[0] === 0) {
-                var aim, gap;
                 this.cities.forEach(function(city) {
                     if (this.getCitySpecialArmy(city.occupy, city.code)) {
                         aim = 4 - city.army.length;
@@ -203,6 +203,20 @@ var app = new Vue({
                 this.situation = 0;
             }
             this.addNewHistory(this.getEventSituation(this.situation));
+            if (this.settings.basic === 1) {
+                this.cities.forEach(function(city) {
+                    if (this.getCitySpecialArmy(city.occupy, city.code) && this.player[city.occupy] !== 2) {
+                        aim = 4 - city.army.length;
+                        this.cities[city.code].army = this.cities[city.code].army.concat(
+                            new Array(aim).fill(0)
+                        );
+                        this.cities[city.code].status = this.cities[city.code].status.concat(
+                            new Array(aim).fill(1)
+                        );
+                    } 
+                }.bind(this));
+                this.addNewHistory("各国抗" + this.getStatesInfo()[this.player.indexOf(2)].name + "义士主动投军");
+            }
         },
         selectState: function(i) {
             if (this.player[i] === 2) {
@@ -228,13 +242,11 @@ var app = new Vue({
                     }
                 })
             }
+            if (e.target.value === 2 || e.target.value === '2') {
+                this.settings.basic = 1;
+            }
         },
         startGame: function() {
-            if (this.settings.basic === 1) {
-                this.power.splice(
-                    this.player.indexOf(2), 1, this.power[this.player.indexOf(2)] - 8
-                );
-            }
             this.stage = 0;
             try {
 				const fs = require('fs');

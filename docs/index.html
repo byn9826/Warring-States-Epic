@@ -66,7 +66,7 @@
 					[1, 5, 3, 6, 4, 2],
 					[]
 				],
-				"power": [0, 6, 2, 3, 5, 8, 5, 5, 0],
+				"power": [0, 6, 2, 3, 5, 8, 5, 4, 0],
 				"hero": [
 					[],
 					[1, 1, 1, 1, 1, 1], 
@@ -114,7 +114,7 @@
 					{"code": 30, "occupy": 8, "army": [0], "status": [1], "order": null},
 					{"code": 31, "occupy": 0, "army": [], "status": [], "order": null},
 					{"code": 32, "occupy": 2, "army": [0], "status": [1], "order": null},
-					{"code": 33, "occupy": 2, "army": [2, 8], "status": [1, 1], "order": null},
+					{"code": 33, "occupy": 2, "army": [2, 0], "status": [1, 1], "order": null},
 					{"code": 34, "occupy": 0, "army": [], "status": [], "order": null},
 					{"code": 35, "occupy": 2, "army": [0], "status": [1], "order": null}
 				]
@@ -257,14 +257,29 @@
 							>
 								 十回称霸 
 							</option>
-							<!--<option style="padding:2pt 0" value="2"> 灭国统一 </option>-->
+							<option 
+								title="您将一直参照直至您退出游戏, 仅支持困难模式"
+								style="padding:2pt 0; background-color: transparent" value="2"
+							>
+								 灭国统一 
+							</option>
 						</select>
 						<template v-if="settings.mode!==0">
-							<!-- <h4 style="margin-top:5pt">游戏难度</h4>
-							<select v-model.number="settings.basic" style="margin-top:2pt;width:100pt;padding:2pt 0">
+							<h4 v-if="settings.mode !== 2" style="margin-top:5pt">游戏难度</h4>
+							<h4 v-else style="margin-top:5pt">困难模式</h4>
+							<select 
+								v-show="settings.mode !== 2"
+								v-model.number="settings.basic" 
+								style="margin-top:2pt;width:100pt;padding:2pt 0"
+							>
 								<option style="padding:2pt 0" value="0"> 简单 </option>
-								<option style="padding:2pt 0" value="1"> 困难 </option>
-							</select> -->
+								<option 
+									style="padding:2pt 0;background-color:transparent" value="1"
+									title="电脑势力每回合获得一次额外义勇兵事件"
+								>
+									 困难 
+								</option>
+							</select>
 							<h4 style="margin-top:5pt">战争迷雾</h4>
 							<select v-model.number="settings.mist" style="margin-top:2pt;width:100pt;padding:2pt 0">
 								<option style="padding:2pt 0" value="1"> 开 </option>
