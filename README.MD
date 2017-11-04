@@ -9,7 +9,7 @@
 也可以直接下载项目将/docs/index.html文件拖入浏览器即可  
 不支持更换剧本，不支持存档与载入   
    
-2. PC安装包  
+2. [Win压缩包](https://github.com/byn9826/Warring-States-Epic/releases/download/v1.0.0/warring-states-epic.zip)  
 也可以自己Build项目，支持剧本读取，支持存档与载入   
 ```
 1. git clone https://github.com/byn9826/Warring-States-Epic.git   
@@ -44,11 +44,11 @@ Vue的主文件/docs/source/epic.js会监听设置并调整对应参数
 最快为1秒，最慢为5秒   
     
 2. 游戏模式  
-置身事外 - 观看AI互动，可以自动跑到天荒地老   
+置身事外 - 让AI自己尽情玩耍     
 十回争霸 - 选择一个国家与AI战斗十个回合，排名第一者获胜   
 灭国称帝 - 选择一个国家与AI战斗至退出游戏   
 
-3. 游戏难度
+3. 游戏难度  
 简单 - 玩家与AI均无加成   
 困难 - AI每回合结束获得一个义勇兵事件    
 
