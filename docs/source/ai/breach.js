@@ -30,10 +30,10 @@ Vue.mixin({
                         hate[i] += (relation.length / 3);
                     }
                 });
-                if (state[ally].ally.length >=3 && state[ally].ally.length > most[1]) {
+                if (state[ally].ally.length >= 3 && state[ally].ally.length > most[1]) {
                     most[0] = ally;
                     most[1] = state[ally].occupy.length;
-                } else if (state[ally].ally.length >=2 && state[ally].ally.length > most[1] && app.$data.player[ally] === 2) {
+                } else if (state[ally].ally.length >= 2 && state[ally].ally.length > most[1] && app.$data.player[ally] === 2) {
                     most[0] = ally;
                     most[1] = state[ally].occupy.length;
                 }

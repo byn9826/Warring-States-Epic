@@ -150,11 +150,12 @@ AI目前比较简单，基本为判断当前形势给出一个合理固定值外
 --
 每个回合结束后会自动存档，下次可直接读取存档进行游戏  
   
-视图
+打包
 --
-视图比较大，需要拖拽来移动。  
-Web版可以直接用浏览器缩放功能调整  
-PC版在Electron套壳文件/main.js中打开缩放功能，不过视图没有浏览器缩放自然  
+```
+npm install electron-packager -g  
+electron-packager . --overwrite  
+``` 
 
 资源
 --

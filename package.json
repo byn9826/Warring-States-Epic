@@ -1,16 +1,18 @@
 {
-  "name": "Warring-States-Epic",
+  "name": "warring-states-epic",
   "version": "1.0.0",
   "description": "Board game based on the history of Warring States Period by Vue",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "build": "electron-packager ."  
   },
   "repository": "https://github.com/byn9826/Warring-States-Epic",
   "keywords": [],
   "author": "Baozier",
   "license": "BSD-3",
   "devDependencies": {
-    "electron": "~1.7.8"
+    "electron": "~1.7.8",
+    "electron-packager": "^9.1.0"
   }
 }
