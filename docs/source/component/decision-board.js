@@ -1488,7 +1488,7 @@ Vue.component("decision-board", {
         },
         calAttackSupportPoint: function() {
             var attack = 0;
-            if (this.reminder !== "") {
+            if (this.reminder !== "" && this.reminder !== null) {
                 this.getCitiesInfo()[this.reminder].nearby.forEach(function(n) {
                     if (this.cities[n].order !== null && this.getOrdersInfo()[this.cities[n].order].type === 1) {
                         if (

@@ -18,10 +18,12 @@
 				var dir = path.join(__dirname, './save/');
 				var save = [];
 				fs.readdirSync(dir).forEach(function(file) {
-					save.push({
-						name: file,
-						time: new Date(fs.statSync(dir + file).mtime).getTime()
-					})
+					if (file.substr(-5) === ".json") {
+						save.push({
+							name: file,
+							time: new Date(fs.statSync(dir + file).mtime).getTime()
+						});
+					}
 				});
 				save.sort(function(a, b) {
 					return a.time < b.time;
@@ -32,9 +34,6 @@
 					content = JSON.parse(fs.readFileSync(scenerios + file, {encoding:'utf-8'}));
 					scenerio.push(content);
 				});
-				// var loc = path.join(__dirname, './scenario/default.json');
-				// var file = fs.readFileSync(loc, {encoding:'utf-8'});
-				// data = JSON.parse(file);
 			} catch(e) {}
 			data = {
 				"settings": {
@@ -204,7 +203,7 @@
 			    	<h4 v-bind:title="'四夷入侵时,各国损失与四夷战力相等的国力.国库亏空时,损失加倍'">
 			    		四夷战力: {{wild}}
 			    	</h4>
-			    	<h5>战国七雄</h5>
+			    	<h5>势力</h5>
 			    	<template v-for="(s, index) in getStatesInfo()" v-if="player[index]!==0">
 				    	<state-info
 				    		v-bind:definition="s"
@@ -255,13 +254,13 @@
 							<option style="padding:2pt 0; background-color: transparent" value="1" 
 								title="您将控制一个国家并与电脑在十回合的较量中分出胜负"
 							>
-								 十回称霸 
+								 十回争霸 
 							</option>
 							<option 
 								title="您将一直参照直至您退出游戏, 仅支持困难模式"
 								style="padding:2pt 0; background-color: transparent" value="2"
 							>
-								 灭国统一 
+								 灭国称帝 
 							</option>
 						</select>
 						<template v-if="settings.mode!==0">
@@ -349,7 +348,7 @@
 							type="button" value="开始游戏" v-on:click="startGame" v-else
 						/>
 					</div>
-					<div style="display:block;width:800pt">
+					<div style="display:block;width:850pt">
 						<div class="start-state" v-for="(state, i) in getStatesInfo()" 
 							v-if="player[i] !== 0" v-on:click="selectState(i)"
 							v-bind:style="{backgroundColor:player[i]===2?'white':'darkgrey'}"
@@ -366,7 +365,7 @@
 									{{getArmyInfo()[i].name}} - 攻击{{getArmyInfo()[i].attack}} 防御{{getArmyInfo()[i].defend}}
 								</p>
 							</div>
-							<p style="display:block;font-size:9pt">
+							<p style="display:block;font-size:10pt">
 								{{getStatesInfo()[i].motto}}
 							</p>
 						</div>

@@ -8,7 +8,7 @@ Vue.mixin({
             }
             var options = state.capital.concat(state.city);
             var nearbys = options.map(function(o) {return citiesInfo[o].nearby});
-            var potentials = new Array(nearbys.length).fill(0);
+            var potentials = new Array(nearbys.length).fill(0.1);
             nearbys.forEach(function(n, i) {
                 n.forEach(function(f) {
                     if (citiesData[f].occupy !== state.code && state.ally.indexOf(citiesData[f].occupy) === -1) {

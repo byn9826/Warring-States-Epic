@@ -1,13 +1,17 @@
 Vue.mixin({
     methods: {
         getCitiesInfo: function() {
+            var main = this._uid === 0 ? this : this.$parent;
+            if (main.rewrite !== null && main.rewrite.getCitiesInfo) {
+                return main.rewrite.getCitiesInfo;
+            }
             return [
                 {
                     code: 0, name: "云中", position: [300, 65], location: [430, 80],
                     resource: [1], type: 2, nearby: [1, 3, 11]
                 },
                 {
-                    code: 1, name: "雁门", position: [535, 160], location: [505, 120],
+                    code: 1, name: "雁门", position: [525, 170], location: [525, 120],
                     resource: [1], type: 2, nearby: [0, 2, 3, 4]
                 },
                 {

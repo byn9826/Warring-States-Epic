@@ -2,7 +2,7 @@
 	"settings": {
 		"name": "长平之战",
 		"desc": "秦赵争夺霸权之战",
-		"delay": 1000,
+		"delay": 2000,
 		"mode": 1,
 		"basic": 0,
 		"mist": 1,
@@ -76,7 +76,7 @@
 		{"code": 31, "occupy": 7, "army": [0, 7], "status": [1, 1], "order": null},
 		{"code": 32, "occupy": 2, "army": [0, 0], "status": [1, 1], "order": null},
 		{"code": 33, "occupy": 2, "army": [2, 2, 2], "status": [1, 1, 1], "order": null},
-		{"code": 34, "occupy": 2, "army": [0, 2], "status": [1, 2], "order": null},
+		{"code": 34, "occupy": 2, "army": [0, 2], "status": [1, 1], "order": null},
 		{"code": 35, "occupy": 2, "army": [0], "status": [1], "order": null}
 	]
 }

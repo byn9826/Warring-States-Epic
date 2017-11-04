@@ -31,6 +31,8 @@
    
 3. 自定义剧本  
 可以直接覆盖城市，国家，英雄，精兵的名称及部分数据来完全更改游戏的历史背景  
+参考/docs/scenario/三国鼎立.json文件，将想要覆盖的内容放到"rewrite"中    
+![Modified theme](https://raw.githubusercontent.com/byn9826/Warring-States-Epic/master/~legend/7.jpg)    
    
 主要选项
 --  
@@ -56,15 +58,15 @@ Vue的主文件/docs/source/epic.js会监听设置并调整对应参数
 
 游戏规则
 --
-基本上是根据权力的游戏版图桌游改编的，AI比较难写的地方都被改了...   
+基本上是根据权力的游戏版图桌游改编的，AI比较难写的地方都改编了...   
 ![map](https://raw.githubusercontent.com/byn9826/Warring-States-Epic/master/~legend/3.jpg)   
 
-整个流程靠round, stage, active的一个循环来控制, 主要通过  
+整个流程靠round, stage, active三个变量的大循环来控制, 主要在  
 /docs/source/epic.js   
 /docs/component/decision-board.js     
 /docs/processor/before-battle.js   
 /docs/processor/after-battle.js   
-相互触发    
+四个文件中相互触发    
 
 游戏每回合分为七个阶段  
   
@@ -133,7 +135,6 @@ AI
 --  
 各个阶段AI均会做出相应的行动，由/docs/source/ai下的文件决定   
 AI目前比较简单，基本为判断当前形势给出一个合理固定值外加一个随机数   
-以后可能会用来玩ML AI  
 ```
 /docs/source/ai/ally.js   //发起同盟请求，接受或拒绝同盟请求  
 /docs/source/ai/breach.js   //是否背弃同盟   

@@ -1,6 +1,10 @@
 Vue.mixin({
     methods: {
         getHerosInfo: function() {
+            var main = this._uid === 0 ? this : this.$parent;
+            if (main.rewrite !== null && main.rewrite.getHerosInfo) {
+                return main.rewrite.getHerosInfo;
+            }
             return [
                 [],
                 [
@@ -63,29 +67,53 @@ Vue.mixin({
             ];
         },
         getHeroLeaderIndex: function() {
+            var main = this._uid === 0 ? this : this.$parent;
+            if (main.rewrite !== null && main.rewrite.getHeroLeaderIndex) {
+                return main.rewrite.getHeroLeaderIndex;
+            }
             return [null, 2, 2, 2, 3, 0, 1, 3, null];
         },
         getHeroKillNum: function(code) {
-            if ([15, 19, 25, 26, 33, 34, 38].indexOf(code) !== -1) {
+            var define = [
+                [15, 19, 25, 26, 33, 34, 38],
+                [0, 3, 4, 7, 13, 18, 20, 32],
+                [6, 30, 37],
+                [12, 36]
+            ];
+            var main = this._uid === 0 ? this : this.$parent;
+            if (main.rewrite !== null && main.rewrite.getHeroKillNum) {
+                define = main.rewrite.getHeroKillNum;
+            }
+            if (define[0].indexOf(code) !== -1) {
                 return 1;
-            } else if ([0, 3, 4, 7, 13, 18, 20, 32].indexOf(code) !== -1) {
+            } else if (define[1].indexOf(code) !== -1) {
                 return 2;
-            } else if ([6, 30, 37].indexOf(code) !== -1) {
+            } else if (define[2].indexOf(code) !== -1) {
                 return 3;
-            } else if ([12, 36].indexOf(code) !== -1) {
+            } else if (define[3].indexOf(code) !== -1) {
                 return 4;
             } else {
                 return 0;
             }
         },
         getHeroSafeNum: function(code) {
-            if ([6, 12, 13, 15, 26, 30, 32, 34, 38].indexOf(code) !== -1) {
+            var define = [
+                [6, 12, 13, 15, 26, 30, 32, 34, 38],
+                [3, 4, 7, 18, 20, 25, 33, 37],
+                [0],
+                [1, 19]
+            ];
+            var main = this._uid === 0 ? this : this.$parent;
+            if (main.rewrite !== null && main.rewrite.getHeroSafeNum) {
+                define = main.rewrite.getHeroSafeNum;
+            }
+            if (define[0].indexOf(code) !== -1) {
                 return 1;
-            } else if ([3, 4, 7, 18, 20, 25, 33, 37].indexOf(code) !== -1) {
+            } else if (define[1].indexOf(code) !== -1) {
                 return 2;
-            } else if ([0].indexOf(code) !== -1) {
+            } else if (define[2].indexOf(code) !== -1) {
                 return 3;
-            } else if ([1, 19].indexOf(code) !== -1) {
+            } else if (define[3].indexOf(code) !== -1) {
                 return 4;
             } else {
                 return 0;

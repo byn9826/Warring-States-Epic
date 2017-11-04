@@ -1,6 +1,10 @@
 Vue.mixin({
     methods: {
         getArmyInfo: function() {
+            var main = this._uid === 0 ? this : this.$parent;
+            if (main.rewrite !== null && main.rewrite.getArmyInfo) {
+                return main.rewrite.getArmyInfo;
+            }
             return [
                 {code: 0, name: "步兵", attack: 1, defend: 1, cost: 1, level: 0},
                 
@@ -16,23 +20,7 @@ Vue.mixin({
             ];
         },
         getCitySpecialArmy: function(state, city) {
-            if (state === 1 && city === 21) {
-                return true;
-            } else if (state === 2 && city === 33) {
-                return true;
-            } else if (state === 3 && city === 7) {
-                return true;
-            } else if (state === 4 && city === 4) {
-                return true;
-            } else if (state === 5 && city === 28) {
-                return true;
-            } else if (state === 6 && city === 19) {
-                return true;
-            } else if (state === 7 && city === 14) {
-                return true;
-            } else {
-                return false;
-            }
+            return this.getStatesBaseLevel()[state][3].indexOf(city) !== -1;
         },
         getArmyIcon: function(t) {
             switch (t) {

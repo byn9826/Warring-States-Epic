@@ -22,12 +22,12 @@ Vue.component("state-info", {
             </div>
             <div v-bind:style="strengthStyle">
                 <span v-bind:style="armyStyle">
-                    主将 {{getActiveHeroCount}}/{{hero.length}} 
+                    主将 {{getActiveHeroCount}} / {{hero.length}} 
                     <span style="cursor:pointer" v-on:click="showBoard">[查看]</span>
                 </span>
                 <div 
                     v-for="(h, i) in getHerosInfo()[definition.code]" 
-                    style="font-size:8pt;marginBottom:3pt;color:lightgrey"
+                    style="font-size:9pt;marginBottom:3pt;color:lightgrey"
                     v-show="showHero"
                 >
                     <span style="backgroundColor:darkslategray;color:white;marginRight:3pt;text-align:center;border-radius:3pt">

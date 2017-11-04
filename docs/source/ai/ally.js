@@ -7,7 +7,7 @@ Vue.mixin({
                     deactive += 1;
                 }
             });
-            var playerTotal = rank.length - deactive;
+            var playerTotal = states.length - deactive;
             var alliesTotal = states[receive].ally.length;
             var alliesRatio = (playerTotal - 1 - alliesTotal) / playerTotal;
             var relationRatio = (rank.length - 2 - relations[receive].indexOf(request)) / rank.length;
@@ -42,11 +42,14 @@ Vue.mixin({
                     deactive += 1;
                 }
             });
-            var playerTotal = rank.length - deactive;
-            if (playerTotal === 2) {
+            var playerTotal = states.length - deactive;
+            if (playerTotal <= 2) {
                 return "";
             }
             var alliesTotal = states[active].ally.length;
+            if (playerTotal - alliesTotal <= 2) {
+                return "";
+            }
             var alliesRatio = (playerTotal - 2 - alliesTotal) / playerTotal;
             var dice = Math.random();
             if (dice > alliesRatio) {

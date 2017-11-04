@@ -17,6 +17,7 @@ var app = new Vue({
         focus: null,
         wild: 1,
         situation: 0,
+        rewrite: null,
         //no need to save
         save: save,
         scenerio: scenerio
@@ -176,7 +177,7 @@ var app = new Vue({
             var aim;
             if (result[0] === 0) {
                 this.cities.forEach(function(city) {
-                    if (this.getCitySpecialArmy(city.occupy, city.code)) {
+                    if (this.player[city.occupy] !== 0 && this.getCitySpecialArmy(city.occupy, city.code)) {
                         aim = 4 - city.army.length;
                         this.cities[city.code].army = this.cities[city.code].army.concat(
                             new Array(aim).fill(0)
@@ -229,7 +230,7 @@ var app = new Vue({
             this.addNewHistory(this.getEventSituation(this.situation));
             if (this.settings.basic === 1) {
                 this.cities.forEach(function(city) {
-                    if (this.getCitySpecialArmy(city.occupy, city.code) && this.player[city.occupy] !== 2) {
+                    if (this.player[city.occupy] === 1 && this.getCitySpecialArmy(city.occupy, city.code)) {
                         aim = 4 - city.army.length;
                         this.cities[city.code].army = this.cities[city.code].army.concat(
                             new Array(aim).fill(0)
@@ -328,6 +329,7 @@ var app = new Vue({
             this.$refs.music.volume = this.settings.volume / 10;
         },
         selectScenerio: function(i) {
+            app.$data.rewrite = null;
             this.scenerio.push(data)
             for (var key in this.scenerio[i]) {
                 if (!this.scenerio[i].hasOwnProperty(key)) continue;
