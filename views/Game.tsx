@@ -1,10 +1,12 @@
-import React from 'react';
-import { ScrollView, Image, Text } from 'react-native';
-import gameStyle from '../styles/game';
+import React, { useState } from 'react';
+import {
+  ScrollView, TouchableHighlight, Image, Text,
+} from 'react-native';
 import cities from '../definitions/cities';
 import states from '../definitions/states';
+import gameStyle from '../styles/game';
 
-export default function Game() {
+export default function Game({ stores, actions }) {
   return (
     <ScrollView horizontal>
       <Image
@@ -25,18 +27,20 @@ export default function Game() {
           >
             {city.name}
           </Text>,
-          <Text
+          <TouchableHighlight
             key={`loc${city.code}`}
+            onPress={() => actions.openModal('CITY', city)}
             style={{
               ...gameStyle.city,
-              ...gameStyle.cityLoc,
               left: city.location.left,
               top: city.location.top,
               backgroundColor: states[city.stateCode].color,
             }}
           >
-            {states[city.stateCode].name}
-          </Text>,
+            <Text style={gameStyle.cityLoc}>
+              {states[city.stateCode].name}
+            </Text>
+          </TouchableHighlight>,
         ])
       }
     </ScrollView>

@@ -4,7 +4,7 @@
     "start": "expo start --tunnel",
     "android": "expo start --android --tunnel",
     "ios": "expo start --ios --tunnel",
-    "lint": "eslint --ext .tsx,.ts,.js,.jsx --cache"
+    "lint": "eslint --ext .tsx,.ts,.js,.jsx --cache ./"
   },
   "pre-commit": [
     "lint"

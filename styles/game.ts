@@ -9,15 +9,17 @@ const gameStyle = StyleSheet.create({
   city: {
     zIndex: 2,
     position: 'absolute',
-    fontSize: 16,
-    fontWeight: 'bold',
   },
   cityPos: {
     color: 'darkslategrey',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   cityLoc: {
     color: 'white',
     padding: 5,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
