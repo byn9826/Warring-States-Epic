@@ -3,7 +3,10 @@ import { View } from 'react-native';
 import { ScreenOrientation } from 'expo';
 import Game from './views/Game';
 import CITY from './types/city';
+import STORES from './types/stores';
 import Modal from './components/modals/Modal';
+import rawCities from './definitions/cities';
+import rawStates from './definitions/states';
 
 export default function App() {
   const setScreenOrientation = () => {
@@ -12,8 +15,11 @@ export default function App() {
 
   useEffect(setScreenOrientation, []);
 
-  const [modalType, setModalType] = useState(null);
+  const [modalType, setModalType] = useState('');
   const [modalData, setModalData] = useState(null);
+
+  const [cities, setCities] = useState(rawCities);
+  const [states, setStates] = useState(rawStates);
 
   function openModal(type: string, city: CITY) {
     setModalData(city);
@@ -29,8 +35,11 @@ export default function App() {
     openModal, closeModal,
   };
 
-  const stores = {
-    modalType, modalData,
+  const stores: STORES = {
+    modalType,
+    modalData,
+    cities,
+    states,
   };
 
   return (

@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import {
   ScrollView, TouchableHighlight, Image, Text,
 } from 'react-native';
-import cities from '../definitions/cities';
-import states from '../definitions/states';
+import PROPS from '../types/props';
 import gameStyle from '../styles/game';
 
-export default function Game({ stores, actions }) {
+export default function Game({ stores, actions }: PROPS) {
   return (
     <ScrollView horizontal>
       <Image
@@ -15,7 +14,7 @@ export default function Game({ stores, actions }) {
         style={gameStyle.map}
       />
       {
-        cities.map((city) => [
+        stores.cities.map((city) => [
           <Text
             key={`pos${city.code}`}
             style={{
@@ -34,11 +33,11 @@ export default function Game({ stores, actions }) {
               ...gameStyle.city,
               left: city.location.left,
               top: city.location.top,
-              backgroundColor: states[city.stateCode].color,
+              backgroundColor: stores.states[city.stateCode].color,
             }}
           >
             <Text style={gameStyle.cityLoc}>
-              {states[city.stateCode].name}
+              {stores.states[city.stateCode].name}
             </Text>
           </TouchableHighlight>,
         ])
