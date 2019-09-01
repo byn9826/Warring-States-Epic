@@ -12,6 +12,8 @@ declare class CITY {
   nearby: Array<number>;
 
   stateCode: number;
+
+  statesControl: Array<number>;
 }
 
 export default CITY;

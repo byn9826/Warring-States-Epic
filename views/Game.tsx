@@ -4,6 +4,7 @@ import {
 } from 'react-native';
 import PROPS from '../types/props';
 import gameStyle from '../styles/game';
+import StateName from '../components/StateName';
 
 export default function Game({ stores, actions }: PROPS) {
   return (
@@ -33,12 +34,9 @@ export default function Game({ stores, actions }: PROPS) {
               ...gameStyle.city,
               left: city.location.left,
               top: city.location.top,
-              backgroundColor: stores.states[city.stateCode].color,
             }}
           >
-            <Text style={gameStyle.cityLoc}>
-              {stores.states[city.stateCode].name}
-            </Text>
+            <StateName state={stores.states[city.stateCode]} />
           </TouchableHighlight>,
         ])
       }

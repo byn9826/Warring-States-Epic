@@ -15,12 +15,6 @@ const gameStyle = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  cityLoc: {
-    color: 'white',
-    padding: 5,
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
 });
 
 export default gameStyle;

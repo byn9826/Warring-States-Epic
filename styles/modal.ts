@@ -22,8 +22,17 @@ const modalStyle = StyleSheet.create({
     alignItems: 'center',
   },
   headerTitle: {
-    fontSize: 20,
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  titleMain: {
+    fontSize: 26,
     fontWeight: 'bold',
+    marginRight: 5,
+  },
+  titleSub: {
+    fontSize: 16,
   },
   headerClose: {
     width: 25,

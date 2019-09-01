@@ -1,4 +1,5 @@
 import CITY from '../types/city';
+import states from './states';
 
 const cities: CITY[] = [
   {
@@ -325,6 +326,13 @@ const cities: CITY[] = [
     nearby: [33, 34],
     stateCode: 0,
   },
-];
+].map((rawCity) => {
+  const statesControl = new Array(states.length).fill(0);
+  statesControl[rawCity.stateCode] = 100;
+  return {
+    ...rawCity,
+    statesControl,
+  };
+});
 
 export default cities;
