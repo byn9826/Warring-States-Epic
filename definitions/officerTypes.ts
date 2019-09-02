@@ -1,7 +1,7 @@
 const officerTypes = [
   {
     code: 0,
-    name: '官僚',
+    name: '官家',
   },
   {
     code: 1,

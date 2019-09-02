@@ -36,6 +36,10 @@ const cityModalStyle = StyleSheet.create({
     marginLeft: 20,
     marginTop: 5,
   },
+  acceptanceDetail: {
+    marginRight: 20,
+    marginTop: 5,
+  },
 });
 
 export default cityModalStyle;

@@ -56,7 +56,24 @@ export default function CityModal({ stores, actions }: PROPS) {
         }
       </View>
       <View style={cityModalStyle.cityModalSection}>
-        <Text style={cityModalStyle.sectionTitle}>诸子</Text>
+        <Text style={cityModalStyle.sectionTitle}>民心</Text>
+        <View style={cityModalStyle.sectionContainer}>
+          {
+            city.statesAcceptance.map((stateAcceptance, code) => {
+              if (stateAcceptance === 0) {
+                return null;
+              }
+              return (
+                <Text key={officerTypes[code].code} style={cityModalStyle.acceptanceDetail}>
+                  {`${officerTypes[code].name}:${stateAcceptance}%`}
+                </Text>
+              );
+            })
+          }
+        </View>
+      </View>
+      <View style={cityModalStyle.cityModalSection}>
+        <Text style={cityModalStyle.sectionTitle}>百家</Text>
         {
           city.statesOfficer.map((stateOfficer, code) => {
             if (stateOfficer === 0) {
@@ -65,7 +82,7 @@ export default function CityModal({ stores, actions }: PROPS) {
             return (
               <View key={stores.states[code].code} style={cityModalStyle.sectionContainer}>
                 <StateName state={stores.states[code]} />
-                <Text style={cityModalStyle.armyDetail}>
+                <Text style={cityModalStyle.officerDetail}>
                   {`${officerTypes[stores.states[code].officerCode].name}*${stateOfficer}`}
                 </Text>
               </View>

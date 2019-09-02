@@ -26,6 +26,7 @@
     "import/no-unresolved": 0,
     "global-require": 0,
     "no-unused-vars": 0,
-    "react/prop-types": 0
+    "react/prop-types": 0,
+    "arrow-body-style": 0
   }
 }

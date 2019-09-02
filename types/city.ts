@@ -19,6 +19,8 @@ declare class CITY {
 
   statesArmyGroup: Array<Array<ARMY_GROUP>>;
 
+  statesAcceptance: Array<number>;
+
   statesOfficer: Array<number>;
 }
 

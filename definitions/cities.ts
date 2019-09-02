@@ -1,5 +1,6 @@
 import CITY from '../types/city';
 import states from './states';
+import officerTypes from './officerTypes';
 
 const cities: CITY[] = [
   {
@@ -338,11 +339,15 @@ const cities: CITY[] = [
     ];
     statesOfficer[rawCity.stateCode] = 2;
   }
+  const statesAcceptance = officerTypes.map((officer) => {
+    return officer.code === 0 ? 100 : 0;
+  });
   return {
     ...rawCity,
     statesControl,
     statesArmyGroup,
     statesOfficer,
+    statesAcceptance,
   };
 });
 
