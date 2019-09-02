@@ -4,6 +4,7 @@ import ProgressBar from 'react-native-progress/Bar';
 import PROPS from '../../types/props';
 import CITY from '../../types/city';
 import cityModalStyle from '../../styles/cityModal';
+import armies from '../../definitions/armies';
 import StateName from '../StateName';
 
 export default function CityModal({ stores, actions }: PROPS) {
@@ -26,6 +27,28 @@ export default function CityModal({ stores, actions }: PROPS) {
                 <View style={cityModalStyle.controlBar}>
                   <ProgressBar progress={stateControl / 100} height={10} width={null} />
                 </View>
+              </View>
+            );
+          })
+        }
+      </View>
+      <View style={cityModalStyle.cityModalSection}>
+        <Text style={cityModalStyle.sectionTitle}>军营</Text>
+        {
+          city.statesArmyGroup.map((stateArmyGroup, code) => {
+            if (stateArmyGroup.length === 0) {
+              return null;
+            }
+            return (
+              <View key={stores.states[code].code} style={cityModalStyle.sectionArmy}>
+                <StateName state={stores.states[code]} />
+                {
+                  stateArmyGroup.map((army) => (
+                    <Text key={army.code} style={cityModalStyle.armyDetail}>
+                      {`${armies[army.code].name}*${army.total} : ${army.morale}`}
+                    </Text>
+                  ))
+                }
               </View>
             );
           })

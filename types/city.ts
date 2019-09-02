@@ -1,3 +1,5 @@
+import ARMY_GROUP from './armyGroup';
+
 declare class CITY {
   code: number;
 
@@ -14,6 +16,8 @@ declare class CITY {
   stateCode: number;
 
   statesControl: Array<number>;
+
+  statesArmyGroup: Array<Array<ARMY_GROUP>>;
 }
 
 export default CITY;
