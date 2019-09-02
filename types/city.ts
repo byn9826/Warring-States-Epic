@@ -22,6 +22,8 @@ declare class CITY {
   statesAcceptance: Array<number>;
 
   statesOfficer: Array<number>;
+
+  statesBusinessman: Array<number>;
 }
 
 export default CITY;

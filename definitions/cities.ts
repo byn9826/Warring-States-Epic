@@ -332,12 +332,14 @@ const cities: CITY[] = [
   statesControl[rawCity.stateCode] = 100;
   const statesArmyGroup = new Array(states.length).fill(null).map(() => []);
   const statesOfficer = new Array(states.length).fill(0);
+  const statesBusinessman = new Array(states.length).fill(0);
   if (rawCity.stateCode !== 0) {
     statesArmyGroup[rawCity.stateCode] = [
       { code: states[rawCity.stateCode].armySpecial, total: 1 },
       { code: 0, total: 2 },
     ];
     statesOfficer[rawCity.stateCode] = 2;
+    statesBusinessman[rawCity.stateCode] = 2;
   }
   const statesAcceptance = officerTypes.map((officer) => {
     return officer.code === 0 ? 100 : 0;
@@ -348,6 +350,7 @@ const cities: CITY[] = [
     statesArmyGroup,
     statesOfficer,
     statesAcceptance,
+    statesBusinessman,
   };
 });
 

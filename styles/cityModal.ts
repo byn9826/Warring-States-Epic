@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 const cityModalStyle = StyleSheet.create({
   cityModal: {
     display: 'flex',
+    marginBottom: 30,
   },
   cityModalSection: {
     display: 'flex',
@@ -38,6 +39,10 @@ const cityModalStyle = StyleSheet.create({
   },
   acceptanceDetail: {
     marginRight: 20,
+    marginTop: 5,
+  },
+  businessmanDetail: {
+    marginLeft: 20,
     marginTop: 5,
   },
 });

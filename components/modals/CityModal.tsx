@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text } from 'react-native';
+import { ScrollView, View, Text } from 'react-native';
 import ProgressBar from 'react-native-progress/Bar';
 import PROPS from '../../types/props';
 import CITY from '../../types/city';
@@ -11,7 +11,7 @@ import officerTypes from '../../definitions/officerTypes';
 export default function CityModal({ stores, actions }: PROPS) {
   const city: CITY = stores.modalData;
   return (
-    <View style={cityModalStyle.cityModal}>
+    <ScrollView style={cityModalStyle.cityModal}>
       <View style={cityModalStyle.cityModalSection}>
         <Text style={cityModalStyle.sectionTitle}>势力</Text>
         {
@@ -90,6 +90,24 @@ export default function CityModal({ stores, actions }: PROPS) {
           })
         }
       </View>
-    </View>
+      <View style={cityModalStyle.cityModalSection}>
+        <Text style={cityModalStyle.sectionTitle}>工商</Text>
+        {
+          city.statesBusinessman.map((stateBusinessman, code) => {
+            if (stateBusinessman === 0) {
+              return null;
+            }
+            return (
+              <View key={stores.states[code].code} style={cityModalStyle.sectionContainer}>
+                <StateName state={stores.states[code]} />
+                <Text style={cityModalStyle.businessmanDetail}>
+                  {`商人*${stateBusinessman}`}
+                </Text>
+              </View>
+            );
+          })
+        }
+      </View>
+    </ScrollView>
   );
 }
