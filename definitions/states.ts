@@ -57,6 +57,12 @@ const states: STATE[] = [
     motto: '执敲扑而鞭笞天下，威振四海',
     armySpecial: 7,
   },
-];
+].map((rawState) => {
+  const officerCode = 0;
+  return {
+    ...rawState,
+    officerCode,
+  };
+});
 
 export default states;

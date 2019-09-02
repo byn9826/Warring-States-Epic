@@ -1,4 +1,4 @@
-declare class ARMY {
+declare class ARMY_TYPE {
   code: number;
 
   name: string;
@@ -6,4 +6,4 @@ declare class ARMY {
   special: boolean;
 }
 
-export default ARMY;
+export default ARMY_TYPE;

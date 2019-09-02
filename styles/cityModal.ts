@@ -13,7 +13,7 @@ const cityModalStyle = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5,
   },
-  sectionControl: {
+  sectionContainer: {
     display: 'flex',
     flexDirection: 'row',
     alignContent: 'center',
@@ -28,13 +28,11 @@ const cityModalStyle = StyleSheet.create({
     justifyContent: 'center',
     width: 300,
   },
-  sectionArmy: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignContent: 'center',
-    justifyContent: 'flex-start',
-  },
   armyDetail: {
+    marginLeft: 20,
+    marginTop: 5,
+  },
+  officerDetail: {
     marginLeft: 20,
     marginTop: 5,
   },

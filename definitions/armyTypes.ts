@@ -1,6 +1,6 @@
-import ARMY from '../types/army';
+import ARMY_TYPE from '../types/armyType';
 
-const armies: ARMY[] = [
+const armyTypes: ARMY_TYPE[] = [
   {
     code: 0,
     name: '民兵',
@@ -48,4 +48,4 @@ const armies: ARMY[] = [
   },
 ];
 
-export default armies;
+export default armyTypes;

@@ -18,6 +18,8 @@ declare class CITY {
   statesControl: Array<number>;
 
   statesArmyGroup: Array<Array<ARMY_GROUP>>;
+
+  statesOfficer: Array<number>;
 }
 
 export default CITY;

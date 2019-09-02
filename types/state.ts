@@ -10,6 +10,8 @@ declare class STATE {
   motto: string;
 
   armySpecial: number;
+
+  officerCode: number;
 }
 
 export default STATE;

@@ -4,22 +4,23 @@ import ProgressBar from 'react-native-progress/Bar';
 import PROPS from '../../types/props';
 import CITY from '../../types/city';
 import cityModalStyle from '../../styles/cityModal';
-import armies from '../../definitions/armies';
+import armyTypes from '../../definitions/armyTypes';
 import StateName from '../StateName';
+import officerTypes from '../../definitions/officerTypes';
 
 export default function CityModal({ stores, actions }: PROPS) {
   const city: CITY = stores.modalData;
   return (
     <View style={cityModalStyle.cityModal}>
       <View style={cityModalStyle.cityModalSection}>
-        <Text style={cityModalStyle.sectionTitle}>势力范围</Text>
+        <Text style={cityModalStyle.sectionTitle}>势力</Text>
         {
           city.statesControl.map((stateControl, code) => {
             if (stateControl === 0) {
               return null;
             }
             return (
-              <View key={stores.states[code].code} style={cityModalStyle.sectionControl}>
+              <View key={stores.states[code].code} style={cityModalStyle.sectionContainer}>
                 <StateName state={stores.states[code]} />
                 <Text style={cityModalStyle.controlPercent}>
                   {`${stateControl}%`}
@@ -40,15 +41,33 @@ export default function CityModal({ stores, actions }: PROPS) {
               return null;
             }
             return (
-              <View key={stores.states[code].code} style={cityModalStyle.sectionArmy}>
+              <View key={stores.states[code].code} style={cityModalStyle.sectionContainer}>
                 <StateName state={stores.states[code]} />
                 {
                   stateArmyGroup.map((army) => (
                     <Text key={army.code} style={cityModalStyle.armyDetail}>
-                      {`${armies[army.code].name}*${army.total} : ${army.morale}`}
+                      {`${armyTypes[army.code].name}*${army.total}`}
                     </Text>
                   ))
                 }
+              </View>
+            );
+          })
+        }
+      </View>
+      <View style={cityModalStyle.cityModalSection}>
+        <Text style={cityModalStyle.sectionTitle}>诸子</Text>
+        {
+          city.statesOfficer.map((stateOfficer, code) => {
+            if (stateOfficer === 0) {
+              return null;
+            }
+            return (
+              <View key={stores.states[code].code} style={cityModalStyle.sectionContainer}>
+                <StateName state={stores.states[code]} />
+                <Text style={cityModalStyle.armyDetail}>
+                  {`${officerTypes[stores.states[code].officerCode].name}*${stateOfficer}`}
+                </Text>
               </View>
             );
           })
