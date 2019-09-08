@@ -9,6 +9,12 @@ import StateName from '../components/StateName';
 export default function Game({ stores, actions }: PROPS) {
   return (
     <ScrollView horizontal>
+      <TouchableHighlight
+        onPress={() => actions.openModal('INFO')}
+        style={gameStyle.info}
+      >
+        <Image source={require('../assets/icons/statistics.png')} />
+      </TouchableHighlight>
       <Image
         source={require('../assets/map.jpg')}
         resizeMode="stretch"

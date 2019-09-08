@@ -5,8 +5,9 @@ import Game from './views/Game';
 import CITY from './types/city';
 import STORES from './types/stores';
 import Modal from './components/modals/Modal';
-import rawCities from './definitions/cities';
-import rawStates from './definitions/states';
+import originCities from './definitions/cities';
+import originStates from './definitions/states';
+import originPlayer from './definitions/player';
 
 export default function App() {
   const setScreenOrientation = () => {
@@ -18,11 +19,19 @@ export default function App() {
   const [modalType, setModalType] = useState('');
   const [modalData, setModalData] = useState(null);
 
-  const [cities, setCities] = useState(rawCities);
-  const [states, setStates] = useState(rawStates);
+  const [cities, setCities] = useState(originCities);
+  const [states, setStates] = useState(originStates);
+  const [player, setPlayer] = useState(originPlayer);
 
   function openModal(type: string, city: CITY) {
-    setModalData(city);
+    switch (type) {
+      case 'CITY':
+        setModalData(city);
+        break;
+      case 'info':
+      default:
+        break;
+    }
     setModalType(type);
   }
 
@@ -40,6 +49,7 @@ export default function App() {
     modalData,
     cities,
     states,
+    player,
   };
 
   return (

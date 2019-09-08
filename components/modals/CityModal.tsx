@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 import ProgressBar from 'react-native-progress/Bar';
 import PROPS from '../../types/props';
 import CITY from '../../types/city';
@@ -11,7 +11,7 @@ import officerTypes from '../../definitions/officerTypes';
 export default function CityModal({ stores, actions }: PROPS) {
   const city: CITY = stores.modalData;
   return (
-    <ScrollView style={cityModalStyle.cityModal}>
+    <>
       <View style={cityModalStyle.cityModalSection}>
         <Text style={cityModalStyle.sectionTitle}>势力</Text>
         {
@@ -108,6 +108,6 @@ export default function CityModal({ stores, actions }: PROPS) {
           })
         }
       </View>
-    </ScrollView>
+    </>
   );
 }

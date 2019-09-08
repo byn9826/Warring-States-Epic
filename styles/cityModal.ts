@@ -1,10 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 const cityModalStyle = StyleSheet.create({
-  cityModal: {
-    display: 'flex',
-    marginBottom: 30,
-  },
   cityModalSection: {
     display: 'flex',
     marginTop: 15,

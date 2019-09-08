@@ -1,5 +1,6 @@
 import CITY from './city';
 import STATE from './state';
+import PLAYER from './player';
 
 declare class STORES {
   modalType: string;
@@ -9,6 +10,8 @@ declare class STORES {
   cities: CITY[];
 
   states: STATE[];
+
+  player: PLAYER;
 }
 
 export default STORES;

@@ -1,6 +1,12 @@
 import { StyleSheet } from 'react-native';
 
 const gameStyle = StyleSheet.create({
+  info: {
+    zIndex: 3,
+    position: 'absolute',
+    left: 5,
+    top: 5,
+  },
   map: {
     width: 852,
     height: '100%',

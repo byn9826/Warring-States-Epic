@@ -41,6 +41,10 @@ const modalStyle = StyleSheet.create({
     width: 25,
     height: 25,
   },
+  modalMain: {
+    display: 'flex',
+    marginBottom: 20,
+  },
 });
 
 export default modalStyle;

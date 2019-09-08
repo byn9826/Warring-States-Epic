@@ -1,8 +1,9 @@
 import React from 'react';
 import {
-  View, Text, Image, TouchableHighlight,
+  View, Text, Image, TouchableHighlight, ScrollView,
 } from 'react-native';
 import CityModal from './CityModal';
+import InfoModal from './InfoModal';
 import PROPS from '../../types/props';
 import CITY from '../../types/city';
 import cityTypes from '../../definitions/cityTypes';
@@ -27,6 +28,16 @@ export default function Modal({ stores, actions }: PROPS) {
       modalBody = <CityModal stores={stores} actions={actions} />;
       break;
     }
+    case 'INFO':
+      modalTitle = (
+        <View style={modalStyle.headerTitle}>
+          <Text style={modalStyle.titleMain}>
+            局势
+          </Text>
+        </View>
+      );
+      modalBody = <InfoModal stores={stores} actions={actions} />;
+      break;
     default:
       return null;
   }
@@ -41,9 +52,9 @@ export default function Modal({ stores, actions }: PROPS) {
           />
         </TouchableHighlight>
       </View>
-      <View>
+      <ScrollView style={modalStyle.modalMain}>
         {modalBody}
-      </View>
+      </ScrollView>
     </View>
   );
 }
