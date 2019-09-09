@@ -73,7 +73,7 @@ export default function CityModal({ stores, actions }: PROPS) {
         </View>
       </View>
       <View style={cityModalStyle.cityModalSection}>
-        <Text style={cityModalStyle.sectionTitle}>百家</Text>
+        <Text style={cityModalStyle.sectionTitle}>诸子</Text>
         {
           city.statesOfficer.map((stateOfficer, code) => {
             if (stateOfficer === 0) {

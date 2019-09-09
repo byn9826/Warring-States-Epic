@@ -5,6 +5,8 @@ const commonStyle = StyleSheet.create({
     color: 'white',
     padding: 5,
     fontSize: 16,
+    width: 26,
+    height: 26,
     fontWeight: 'bold',
   },
 });
